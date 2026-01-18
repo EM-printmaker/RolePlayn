@@ -118,9 +118,15 @@ GEM
     debug (1.11.1)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    diff-lcs (1.6.2)
     drb (2.2.3)
     erb (6.0.1)
     erubi (1.13.1)
+    factory_bot (6.5.6)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.5.1)
+      factory_bot (~> 6.5)
+      railties (>= 6.1.0)
     ffi (1.17.3-aarch64-linux-gnu)
     ffi (1.17.3-aarch64-linux-musl)
     ffi (1.17.3-arm-linux-gnu)
@@ -264,6 +270,23 @@ GEM
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
+    rspec-core (3.13.6)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.5)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.7)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-rails (7.1.1)
+      actionpack (>= 7.0)
+      activesupport (>= 7.0)
+      railties (>= 7.0)
+      rspec-core (~> 3.13)
+      rspec-expectations (~> 3.13)
+      rspec-mocks (~> 3.13)
+      rspec-support (~> 3.13)
+    rspec-support (3.13.6)
     rubocop (1.82.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -278,6 +301,9 @@ GEM
     rubocop-ast (1.49.0)
       parser (>= 3.3.7.2)
       prism (~> 1.7)
+    rubocop-factory_bot (2.28.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     rubocop-performance (1.26.1)
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
@@ -292,6 +318,9 @@ GEM
       rubocop (>= 1.72)
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
+    rubocop-rspec (3.9.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.81)
     ruby-progressbar (1.13.0)
     ruby-vips (2.3.0)
       ffi (~> 1.12)
@@ -349,13 +378,17 @@ DEPENDENCIES
   bootsnap
   brakeman
   debug
+  factory_bot_rails
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.2.3)
+  rspec-rails (~> 7.1, >= 7.1.1)
+  rubocop-factory_bot
   rubocop-rails-omakase
+  rubocop-rspec
   sprockets-rails
   stimulus-rails
   turbo-rails
