@@ -13,21 +13,40 @@
     "ghcr.io/rails/devcontainer/features/postgres-client": {}
   },
 
+  "remoteUser": "vscode",
+
   "containerEnv": {
     "REDIS_URL": "redis://redis:6379/1",
-    "DB_HOST": "postgres"
+    "DB_HOST": "postgres",
+    "AWS_ACCESS_KEY_ID": "${localEnv:AWS_ACCESS_KEY_ID}",
+    "AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}"
   },
 
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [3000, 5432, 6379],
 
-  // Configure tool-specific properties.
-  // "customizations": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode", // Prettier
+        "shopify.ruby-lsp", // Ruby LSP
+        "stylelint.vscode-stylelint" // Stylelint
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[ruby]": {
+          "editor.defaultFormatter": "Shopify.ruby-lsp"
+        },
+        "[css]": {
+        "editor.defaultFormatter": "stylelint.vscode-stylelint"
+        },
+        "stylelint.validate": ["css", "scss"],
+        "editor.codeActionsOnSave": {
+          "source.fixAll.stylelint": "always"
+        }
+      }
+    }
+  },
 
-  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-  // "remoteUser": "root",
-
-
-  // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "bin/setup"
 }
