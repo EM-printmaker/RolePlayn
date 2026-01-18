@@ -1,24 +1,25 @@
-# README
+# RolePlayn
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+「誰でもない誰かとして語る、ナラティブSNS」  
 
-Things you may want to cover:
+このアプリは、物語の世界に紛れ込んで今の自分を呟けるロールプレイ型SNSです。  
 
-* Ruby version
+その日その時ランダムに贈られる「配役（キャラクター）」を演じることで、ユーザーは自身の物語を自由にキャラクターに託して綴ることができます。  
 
-* System dependencies
+日常をキャラクターに託すことで自分の感情を軽くするための投稿や、創作の練習のためにキャラクターの台詞を綴る投稿が、誰かの物語と静かに共鳴する。  
 
-* Configuration
+そんな「日常と非日常が重なる対話」を支えるために設計された、新しい形のSNSプラットフォームです。
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## 技術スタック
+| カテゴリ | 使用技術 |
+| :--- | :--- |
+| **バックエンド** | Ruby on Rails 7.2.3 |
+| **言語** | Ruby 3.3.10 |
+| **データベース** | PostgreSQL |
+| **インフラ** | Docker / Docker Compose |
+| **認証** | Devise (Google OAuth2) |
+| **ストレージ / CDN** | Active Storage (AWS S3 + CloudFront) |
+| **ホスティング** | Render |
+| **CI / CD** | GitHub Actions |
+| **テスト / 静的解析** | RSpec / RuboCop |
+| **メール配信** | Resend |
