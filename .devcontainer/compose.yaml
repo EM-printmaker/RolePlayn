@@ -7,32 +7,37 @@ services:
       dockerfile: .devcontainer/Dockerfile
 
     volumes:
-    - ../..:/workspaces:cached
+      - ../..:/workspaces:cached
 
     command: sleep infinity
 
     user: vscode
 
+    environment:
+      DB_HOST: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
     depends_on:
-    - redis
-    - postgres
+      - redis
+      - postgres
 
   redis:
     image: redis:7.2
     restart: unless-stopped
     volumes:
-    - redis-data:/data
+      - redis-data:/data
 
   postgres:
     image: postgres:16.1
     restart: unless-stopped
     networks:
-    - default
+      - default
     volumes:
-    - postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
 
 volumes:
   redis-data:
