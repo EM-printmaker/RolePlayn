@@ -28,17 +28,13 @@
     "vscode": {
       "extensions": [
         "esbenp.prettier-vscode", // Prettier
-        "shopify.ruby-lsp", // Ruby LSP
         "stylelint.vscode-stylelint" // Stylelint
       ],
       "settings": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "[ruby]": {
-          "editor.defaultFormatter": "Shopify.ruby-lsp"
-        },
         "[css]": {
-        "editor.defaultFormatter": "stylelint.vscode-stylelint"
+          "editor.defaultFormatter": "stylelint.vscode-stylelint"
         },
         "stylelint.validate": ["css", "scss"],
         "editor.codeActionsOnSave": {

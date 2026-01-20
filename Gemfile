@@ -27,4 +27,6 @@ end
 
 group :development do
   gem "web-console"
+  gem "prism", "1.2.0"
+  gem "ruby-lsp", require: false
 end
