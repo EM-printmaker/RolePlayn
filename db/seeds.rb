@@ -21,12 +21,10 @@ characters_data.each_with_index do |data, i|
       level: lvl
     )
 
-    unless expression.image.attached?
-      expression.image.attach(
-        io: image_path.open,
-        filename: filename,
-        content_type: 'image/png'
-      )
-    end
+    expression.image.attach(
+      io: image_path.open,
+      filename: filename,
+      content_type: 'image/png'
+    )
   end
 end
