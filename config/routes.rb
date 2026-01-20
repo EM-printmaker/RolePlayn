@@ -9,6 +9,17 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  root "top#index"
+
+  direct :cdn_image do |model, options|
+    target = model.respond_to?(:processed) ? model.processed : model
+    key = target.respond_to?(:key) ? target.key : (target.respond_to?(:blob) ? target.blob.key : nil)
+    cdn_host = ENV.fetch("CDN_HOST", nil)
+
+    if key.present? && cdn_host.present?
+      "https://#{cdn_host}/#{key}"
+    else
+      route_for(:rails_blob, model, options)
+    end
+  end
 end
