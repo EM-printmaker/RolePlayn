@@ -20,10 +20,13 @@ characters_data.each_with_index do |data, i|
       emotion_type: data[:emotion_type],
       level: lvl
     )
-    expression.image.attach(
-      io: image_path.open,
-      filename: filename,
-      content_type: 'image/png'
-    )
+
+    unless expression.image.attached?
+      expression.image.attach(
+        io: image_path.open,
+        filename: filename,
+        content_type: 'image/png'
+      )
+    end
   end
 end
