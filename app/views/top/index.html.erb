@@ -1,0 +1,37 @@
+<h1>モデル表示確認</h1>
+
+<% @worlds.each do |world| %>
+  <section class="world-section" style="border: 2px solid #333; padding: 20px; margin-bottom: 30px;">
+    <h2>世界: <%= world.name %></h2>
+
+    <% world.cities.each do |city| %>
+      <div class="city-box" style="margin-left: 20px; border-left: 2px solid #ccc; padding-left: 20px;">
+        <h3>街: <%= city.name %></h3>
+
+        <% city.characters.each do |character| %>
+          <div class="character-card" style="margin-top: 15px; background: #f9f9f9; padding: 10px;">
+            <h4>キャラクター: <%= character.name %></h4>
+            <p><%= character.description %></p>
+
+            <div class="expressions-grid" style="display: flex; gap: 15px; flex-wrap: wrap;">
+              <% character.expressions.each do |expression| %>
+                <div class="expression-item" style="text-align: center;">
+                  <p style="font-size: 0.8em; margin-bottom: 5px;">
+                    <%= expression.emotion_type %> (Lv.<%= expression.level %>)
+                  </p>
+                  
+                  <% if expression.image.attached? %>
+                    <%# 画像の表示 %>
+                    <%= image_tag cdn_image_url(expression.image.variant(:display)), style: "width: 100px; height: 100px; background: #eee; line-height: 100px;" %>
+                  <% else %>
+                    <div style="width: 100px; height: 100px; background: #eee; line-height: 100px;">画像なし</div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </section>
+<% end %>
