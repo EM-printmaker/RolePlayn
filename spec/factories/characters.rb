@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :character do
     name { "MyString" }
     description { "MyText" }
-    city { nil }
+    city
   end
 end

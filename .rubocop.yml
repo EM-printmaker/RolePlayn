@@ -28,3 +28,6 @@ Rails:
 
 Security:
   Enabled: true
+
+RSpec/ContextWording:
+  Enabled: false
