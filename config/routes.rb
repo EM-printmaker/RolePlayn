@@ -9,6 +9,31 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  root "top#index"
+
+  direct :cdn_image do |model, options|
+    expires_in = options.delete(:expires_in) { ActiveStorage.urls_expire_in }
+    host_option = ENV["CDN_HOST"].present? ? { host: ENV["CDN_HOST"], protocol: :https } : {}
+
+    if model.respond_to?(:signed_id)
+      route_for(
+        :rails_service_blob_proxy,
+        model.signed_id(expires_in: expires_in),
+        model.filename,
+        options.merge(host_option)
+      )
+    else
+      signed_blob_id = model.blob.signed_id(expires_in: expires_in)
+      variation_key  = model.variation.key
+      filename       = model.blob.filename
+
+      route_for(
+        :rails_blob_representation_proxy,
+        signed_blob_id,
+        variation_key,
+        filename,
+        options.merge(host_option)
+      )
+    end
+  end
 end
