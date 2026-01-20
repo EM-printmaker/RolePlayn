@@ -14,9 +14,10 @@ Rails.application.routes.draw do
   direct :cdn_image do |model, options|
     target = model.respond_to?(:processed) ? model.processed : model
     key = target.respond_to?(:key) ? target.key : (target.respond_to?(:blob) ? target.blob.key : nil)
+    cdn_host = ENV.fetch("CDN_HOST", nil)
 
-    if key.present? && ENV["CDN_HOST"].present?
-      "https://#{ENV["CDN_HOST"]}/#{key}"
+    if key.present? && cdn_host.present?
+      "https://#{cdn_host}/#{key}"
     else
       route_for(:rails_blob, model, options)
     end
