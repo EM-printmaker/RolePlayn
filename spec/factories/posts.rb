@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :post do
     content { "MyText" }
-    character { nil }
-    expression { nil }
-    city { nil }
+    character
+    expression
+    city
   end
 end

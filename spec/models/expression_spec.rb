@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Expression, type: :model do
-  describe "associations" do
-    let(:expression) { create(:expression) }
+  subject(:expression) { create(:expression) }
 
-    it "Characterに属していること" do
-      expect(expression.character).to be_a(Character)
-    end
+  describe "associations" do
+    it_behaves_like "belongs_to_association", :character, Character
   end
 
   describe "image attachment" do
