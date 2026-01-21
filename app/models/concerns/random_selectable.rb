@@ -1,5 +1,5 @@
 module RandomSelectable
-  extend ActionSupport::Concern
+  extend ActiveSupport::Concern
 
   class_methods do
     def pick_random
