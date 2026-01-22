@@ -5,6 +5,7 @@ gem "bootsnap", require: false
 gem "jbuilder"
 gem "dartsass-rails"
 gem "sprockets-rails"
+gem "bootstrap", "~> 5.3.0"
 gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
