@@ -1,0 +1,30 @@
+{
+  "name": "roleplayn",
+  "version": "1.0.0",
+  "description": "「誰でもない誰かとして語る、ナラティブSNS」",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EM-printmaker/RolePlayn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EM-printmaker/RolePlayn/issues"
+  },
+  "homepage": "https://github.com/EM-printmaker/RolePlayn#readme",
+  "devDependencies": {
+    "stylelint": "^17.0.0",
+    "stylelint-config-prettier-scss": "^1.0.0",
+    "stylelint-config-recess-order": "^7.6.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-config-standard-scss": "^17.0.0"
+  }
+}
