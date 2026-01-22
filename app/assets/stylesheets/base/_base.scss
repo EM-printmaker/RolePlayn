@@ -1,0 +1,31 @@
+/* =================================================================
+    Base Styles
+   ================================================================= */
+
+
+html {
+  scrollbar-gutter: stable;
+}
+
+a {
+  text-decoration: none;
+
+  &:visited {
+    color: inherit;
+  }
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+label {
+  &:has(+ input:not([type="radio"], [type="checkbox"]), select, textarea) {
+    display: block;
+  }
+}
+
+[type="search"] {
+  -webkit-appearance: none;
+  appearance: none;
+}

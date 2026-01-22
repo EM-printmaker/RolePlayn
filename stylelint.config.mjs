@@ -5,4 +5,8 @@ export default {
     "stylelint-config-recess-order",
     "stylelint-config-prettier-scss",
   ],
+  rules: {
+    "property-no-vendor-prefix": null,
+    "value-no-vendor-prefix": null,
+  },
 };
