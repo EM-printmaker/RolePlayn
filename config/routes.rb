@@ -9,8 +9,14 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
+  # root
   root "top#index"
 
+  # post
+  resources :posts, only: [ :create, :destroy ]
+
+
+  # CDNを用いた画像表示用のURL作成
   direct :cdn_image do |model, options|
     target = model.respond_to?(:processed) ? model.processed : model
     key = target.respond_to?(:key) ? target.key : (target.respond_to?(:blob) ? target.blob.key : nil)
