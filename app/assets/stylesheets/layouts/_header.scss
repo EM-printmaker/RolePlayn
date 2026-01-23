@@ -1,0 +1,21 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 0.5em;
+  background-color: white;
+  border-bottom: 1px solid;
+}
+
+.header-logo {
+  font-family: serif;
+  font-size: 2em;
+}
+
+.world-select {
+  text-align: center;
+}
+
+.notification {
+  text-align: right;
+}

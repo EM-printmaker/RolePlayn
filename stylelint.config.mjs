@@ -8,5 +8,7 @@ export default {
   rules: {
     "property-no-vendor-prefix": null,
     "value-no-vendor-prefix": null,
+    "selector-class-pattern":
+      "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
   },
 };

@@ -1,0 +1,13 @@
+@use "../global" as *;
+
+.current-character {
+  display: flex;
+  @include media-breakpoint-down(sm) {
+        justify-content: center;
+  }
+
+  &__image {
+    width: 150px;
+    height: 150px;
+  }
+}

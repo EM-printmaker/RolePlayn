@@ -1,0 +1,8 @@
+<ol class="feed" role='list'>
+  <% posts.each do |post| %>
+    <li class="feed-item">
+      <%= render 'posts/post', post: post %>
+    </li>
+  <% end %>
+</ol>
+

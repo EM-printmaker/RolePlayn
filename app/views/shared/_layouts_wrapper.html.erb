@@ -1,0 +1,14 @@
+<div class="layouts-wrapper">
+  <div class="side-nav-container">
+    <%= render 'shared/side_nav' %>
+  </div>
+  <div class="main-wrapper">
+    <div class="main-container">
+      <main class="main">
+        <%= yield %>
+      </main>
+      <aside class="d-none d-xl-block sub-container">
+      </aside>
+    </div>
+  </div>
+</div>
