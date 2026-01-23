@@ -28,3 +28,18 @@ characters_data.each_with_index do |data, i|
     )
   end
 end
+
+
+# Post
+city.reload.characters.each do |character|
+  5.times do
+    content = Faker::Lorem.sentence(word_count: 3)
+    Post.create!(
+      city: city,
+      character: character,
+      expression: character.expressions.pick_random,
+      content: content,
+      created_at: Faker::Time.backward(days: 7)
+    )
+  end
+end
