@@ -1,0 +1,15 @@
+<% if @post.persisted? %>
+  <%= turbo_stream.prepend "feed" do %>
+  <div class="feed-item">
+    <%= render partial: "posts/post", locals: { post: @post } %>
+  </div>
+  <% end %>
+  <%= turbo_stream.replace "post_form", partial: "posts/form", locals: { post: Post.new, city: @post.city } %>
+
+<% else %>
+  <%= turbo_stream.update "flash_messages" do %>
+    <div class="alert alert-danger">
+      <%= @post.errors.full_messages.to_sentence %>
+    </div>
+  <% end %>
+<% end %>

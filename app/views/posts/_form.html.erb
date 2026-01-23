@@ -1,0 +1,7 @@
+<%= form_with(model: post, id: "post_form", data: { turbo_stream: true }) do |f| %>
+  <%= f.hidden_field :city_id, value: city.id %>
+  <%= f.hidden_field :character_id, value: current_character.id %>
+  <%= f.hidden_field :expression_id, value: current_expression.id %>
+  <%= f.text_area :content, class: "'form-control'" %>
+  <%= f.submit "Post", class: "btn btn-primary" %>
+<% end %>

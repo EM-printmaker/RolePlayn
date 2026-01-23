@@ -3,5 +3,6 @@
     <%= image_tag cdn_image_url(current_expression.image.variant(:display)), class: "current-character__image" %>
   </div>
   <div class="col-sm-8">
+    <%= render 'posts/form', post: post, city: city %>
   </div>
 </div>
