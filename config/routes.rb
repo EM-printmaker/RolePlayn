@@ -25,7 +25,10 @@ Rails.application.routes.draw do
 
   # expression
   resources :expressions, only: [] do
-    post :change_face, on: :collection
+    collection do
+      post :change_face
+      post :preview
+    end
   end
 
 

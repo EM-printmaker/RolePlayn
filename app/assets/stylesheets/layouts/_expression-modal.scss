@@ -21,6 +21,7 @@
 }
 
 .expression-item {
+  width: fit-content;
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s;
@@ -30,7 +31,6 @@
   }
 
   img {
-    /* 固定値(150px)ではなく、親要素の幅(100%)に合わせる */
     width: 100%; 
     max-width: 150px;
     aspect-ratio: 1 / 1;
@@ -38,3 +38,14 @@
     border-radius: 4px;
   }
 }
+
+.preview-display {
+  display: flex;
+  justify-content: center;
+}
+
+.text--joy { color: #f4d065; }
+.text--angry { color: #f14c4c; }
+.text--sad { color: #8ac4d2; }
+.text--fun { color: #ffa176; }
+.text-normal { color: #b1ada1; }

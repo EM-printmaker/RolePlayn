@@ -1,33 +1,21 @@
 <div class="row" data-controller="modal">
   <div id="current_expression" class="current-character col-sm-4">
     <%= image_tag cdn_image_url(current_expression.image.variant(:display)), class: "current-character__image" %>
-    <button type="button" class="btn btn-outline-dark" data-action="click->modal#open">表情を変更</button>
+    <button type="button" class="btn btn-outline-dark current-character__button" data-action="click->modal#open">表情を変更</button>
   </div>
-  <div data-controller="post-form" class="col-sm-8">
-    <%= form_with(model: post, id: "post_form", 
+  <div data-controller="post-form" class="col-sm-8 post-form-container">
+    <%= form_with(model: post, id: "post-form",
                   data: { 
                     action: "turbo:submit-end->post-form#reset" 
                   }) do |f| %>
-      <%= f.text_area :content, class: "'form-control'" %>
+      <%= f.text_area :content, class: "form-control", rows: 5 %>
       <%= f.submit "Post", class: "btn btn-primary" %>
     <% end %>
   </div>
 
-  <dialog data-modal-target="dialog"
-          data-action="click->modal#clickOutside"
-          id="expression-modal-dialog"
-          class="expression-modal p-0 rounded shadow border-0">
-    <div class="modal-header p-3 border-bottom d-flex justify-content-between align-items-center">
-      <h5 class="m-0">表情を選択</h5>
-      <button type="button" class="btn-close" data-action="click->modal#close"></button>
-    </div>
-
-    <div class="modal-body">
-      <div class="expression-grid">
-        <% current_character.expressions.each do |expression| %>
-          <%= expression_select_link(expression) %>
-        <% end %>
-      </div>
+  <dialog data-modal-target="dialog" id="expression-modal" data-action="click->modal#clickOutside" class="expression-modal">
+    <div id="expression-modal-content">
+      <%= render 'expressions/modal_inner' %>
     </div>
   </dialog>
 </div>

@@ -4,11 +4,15 @@
   display: flex;
   flex-direction: column;
   @include media-breakpoint-down(sm) {
-        justify-content: center;
+    align-items: center;
   }
 
   &__image {
     width: 150px;
     height: 150px;
+  }
+
+  &__button {
+    width: 150px;
   }
 }

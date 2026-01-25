@@ -1,6 +1,26 @@
+@use "../global" as *;
+
 .main-form {
   height: 200px;
   padding-bottom: 5em;
   margin: 0 1em;
   border-radius: 20px;
+
+  @include media-breakpoint-down(sm) {
+    height: fit-content;
+  }
+}
+
+.post-form-container {
+  max-width: 400px;
+}
+
+#post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  @include media-breakpoint-down(sm) {
+    align-items: center;
+  }
 }

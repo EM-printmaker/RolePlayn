@@ -1,0 +1,69 @@
+<div class="modal-header">
+  <h5 class="m-0">表情を選択</h5>
+  <ul class="nav nav-tabs card-header-tabs">
+    <li class="nav-item"><%= modal_tab_link("感情を追加", "emotions") %></li>
+    <li class="nav-item"><%= modal_tab_link("一覧から選ぶ", "all") %></li>
+  </ul>
+  <button type="button" class="btn-close" data-action="click->modal#close"></button>
+</div>
+
+<div class="modal-body p-3">
+  <% if current_tab == "all" %>
+    <div class="expression-grid">
+      <% current_character.expressions.each do |expression| %>
+        <%= expression_select_link(expression) %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if current_tab == "emotions" %>
+    <div class="d-flex justify-content-between mb-4">
+    <% Expression.emotion_types.keys.each do |type| %>
+      <%= emotion_toggle_link(type) %>
+    <% end %>
+    </div>
+
+    <div class="selection-indicator text-center mb-4 p-3 rounded-pill bg-light border position-relative">
+      <% if params[:view_type].present? && params[:view_level].to_i > 0 %>
+        <div class="d-flex align-items-center justify-content-center">
+          <span class="h3 mb-0 me-3">
+            <% params[:view_level].to_i.times do %>
+              <%= emotion_icon(params[:view_type], class: "me-1") %>
+            <% end %>
+          </span>
+          <%= button_to preview_expressions_path(view_type: nil, view_level: nil, tab: "emotions"),
+                        method: :post, 
+                        class: "btn-close small shadow-none" do %>
+          <% end %>
+        </div>
+      <% else %>
+        <span class="text-muted small italic">今の心は？</span>
+      <% end %>
+    </div>
+
+    <div class="preview-display text-center">
+      <% 
+        target = current_character.expressions.find_by(
+          emotion_type: params[:view_type], 
+          level: params[:view_level]
+        )
+      %>
+      <% if target %>
+        <%= link_to change_face_expressions_path(expression_id: target.id),
+                    data: { turbo_method: :post, turbo_frame: "_top", action: "click->modal#close" },
+                    class: "preview-card d-block text-decoration-none expression-item" do %>
+          <div class="image-wrapper mb-3 position-relative">
+            <%= image_tag cdn_image_url(target.image.variant(:display)), 
+                          class: "img-fluid rounded shadow-sm border", 
+                          style: "max-height: 250px; transition: transform 0.2s;" %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-state py-5 border rounded bg-light border-dashed">
+          <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+          <p class="mt-2 text-muted">画像が生成されていません</p>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

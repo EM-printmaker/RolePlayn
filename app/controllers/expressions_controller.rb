@@ -11,4 +11,10 @@ class ExpressionsController < ApplicationController
 
     redirect_back fallback_location: root_path
   end
+
+  def preview
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.update("expression-modal-content", partial: "expressions/modal_inner") }
+    end
+  end
 end
