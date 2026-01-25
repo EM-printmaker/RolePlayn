@@ -2,6 +2,7 @@
 
 .current-character {
   display: flex;
+  flex-direction: column;
   @include media-breakpoint-down(sm) {
         justify-content: center;
   }

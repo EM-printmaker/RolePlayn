@@ -1,0 +1,40 @@
+/* モーダルのサイズ調整 */
+.expression-modal {
+  width: 90%;
+  max-width: 700px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+}
+
+.expression-modal::backdrop {
+  background: rgb(0 0 0 / 50%);
+}
+
+.expression-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 10px;
+  max-height: 300px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.expression-item {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  img {
+    /* 固定値(150px)ではなく、親要素の幅(100%)に合わせる */
+    width: 100%; 
+    max-width: 150px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+}

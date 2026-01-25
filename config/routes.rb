@@ -20,8 +20,12 @@ Rails.application.routes.draw do
     collection do
       post :shuffle
       post :re_roll
-      post :change_face
     end
+  end
+
+  # expression
+  resources :expressions, only: [] do
+    post :change_face, on: :collection
   end
 
 
