@@ -3,7 +3,21 @@ module CharacterSessionManageable
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_character, :current_expression
+    helper_method :current_character, :current_expression, :viewing_city
+  end
+
+  def transition_to_city(target_city = nil)
+    @city = target_city || City.joins(:world).where(worlds: { is_global: false }).pick_random
+
+    if @city
+      session[:viewing_city_id] = @city.id
+      refresh_character(@city)
+    end
+    @city
+  end
+
+  def viewing_city
+    @viewing_city ||= City.find_by(id: session[:viewing_city_id]) || transition_to_city
   end
 
   def set_active_character(city)
