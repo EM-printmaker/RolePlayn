@@ -6,18 +6,13 @@ class PostsController < ApplicationController
     @post.city_id = viewing_city.id
     @post.character_id = current_character&.id
     @post.expression_id = current_expression&.id
-    respond_to do |format|
-      if @post.save
-        format.turbo_stream
-        format.html { redirect_back fallback_location: root_path }
-      else
-        @city = viewing_city
-        @posts = @city.posts.includes(:character, :expression).order(created_at: :desc)
-        format.turbo_stream { render :create }
-        format.html {
-        redirect_back fallback_location: root_path, status: :unprocessable_entity
-        }
-      end
+    if @post.save
+      redirect_back fallback_location: root_path
+    else
+      @city = viewing_city
+      @posts = @city.posts.includes(:character, :expression).order(created_at: :desc)
+      flash[:error] = @post.errors.full_messages.to_sentence
+      redirect_back fallback_location: root_path, status: :see_other
     end
   end
 
