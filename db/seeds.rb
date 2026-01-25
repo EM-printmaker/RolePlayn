@@ -1,3 +1,9 @@
+# global
+global_world = World.find_or_create_by!(name: "アセラ・ポリス", is_global: true)
+City.find_or_create_by!(name: "境界観測点 [Node.00]", world: global_world)
+
+# first World
+
 world = World.find_or_create_by!(name: "ヴェルストリア")
 
 city = world.cities.find_or_create_by!(name: "ルミノア")
