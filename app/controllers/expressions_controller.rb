@@ -1,0 +1,2 @@
+class ExpressionsController < ApplicationController
+end
