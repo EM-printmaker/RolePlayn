@@ -15,6 +15,15 @@ Rails.application.routes.draw do
   # post
   resources :posts, only: [ :create, :destroy ]
 
+  # city
+  resources :cities, only: [ :show ] do
+    collection do
+      post :shuffle
+      post :re_roll
+      post :change_face
+    end
+  end
+
 
   # CDNを用いた画像表示用のURL作成
   direct :cdn_image do |model, options|
