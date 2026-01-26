@@ -3,7 +3,10 @@ class TopController < ApplicationController
   def index
     @city = viewing_city
     set_active_character(@city)
-    @posts = @city.posts.includes(:character, :expression).order(created_at: :desc)
+    @pagy, @posts = pagy(
+      Post.from_local_cities.includes(:character, :expression).order(created_at: :desc),
+      items: 10
+    )
     @post = Post.new
   end
 end

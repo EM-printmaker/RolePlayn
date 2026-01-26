@@ -1,19 +1,19 @@
-<ol id="feed" class="feed" role='list'>
-  <% posts.each do |post| %>
+<%= turbo_stream.append "feed" do %>
+  <% @posts.each do |post| %>
     <li class="feed-item">
       <%= render 'posts/post', post: post %>
     </li>
   <% end %>
-</ol>
+<% end %>
 
-<div id="pagination-footer">
+<%= turbo_stream.replace "pagination_frame" do %>
   <% if @pagy.next %>
     <%= turbo_frame_tag "pagination_frame", 
                         src: url_for(page: @pagy.next, format: :turbo_stream), 
                         loading: :lazy do %>
-      <div class="text-center p-4">
-        <span>読み込み中...</span>
-      </div>
+      <div class="text-center p-4">読み込み中...</div>
     <% end %>
+  <% else %>
+    <div class="text-center p-4 text-muted small">すべての投稿を読み込みました</div>
   <% end %>
-</div>
+<% end %>

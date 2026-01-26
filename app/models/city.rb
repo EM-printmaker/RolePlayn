@@ -5,4 +5,6 @@ class City < ApplicationRecord
   has_one_attached :image
 
   include RandomSelectable
+
+  scope :local, -> { where(world_id: World.local.select(:id)) }
 end

@@ -16,6 +16,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "active_storage_validations"
 gem "image_processing", "~> 1.2"
 gem "aws-sdk-s3", require: false
+gem "pagy", "~> 43.2"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
