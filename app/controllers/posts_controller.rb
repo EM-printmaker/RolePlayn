@@ -6,6 +6,7 @@ class PostsController < ApplicationController
     @post.city_id = viewing_city.id
     @post.character_id = current_character&.id
     @post.expression_id = current_expression&.id
+    @post.sender_session_token = helpers.session_token(session.id)
     if @post.save
       redirect_back fallback_location: root_path, status: :see_other
     else

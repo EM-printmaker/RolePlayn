@@ -6,3 +6,6 @@ import { application } from "./application"
 
 import ModalController from "./modal_controller"
 application.register("modal", ModalController)
+
+import PostAlertController from "./post_alert_controller"
+application.register("post-alert", PostAlertController)

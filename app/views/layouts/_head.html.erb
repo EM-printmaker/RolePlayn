@@ -14,3 +14,4 @@
 <%= stylesheet_link_tag "vendor", "data-turbo-track": "reload" %>
 <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 <%= javascript_importmap_tags %>
+<meta name="current-session-id" content="<%= session_token(session.id) %>">
