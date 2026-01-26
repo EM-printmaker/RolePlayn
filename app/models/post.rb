@@ -5,7 +5,9 @@ class Post < ApplicationRecord
 
   validates :content, presence: true, length: { maximum: 300 }
 
-  scope :from_local_cities, -> { where(city_id: City.local.select(:id)) }
+  scope :from_local_worlds, -> { joins(city: :world).merge(World.local) }
+  scope :from_world, ->(w_id) { joins(:city).where(cities: { world_id: w_id }) }
+  scope :from_city, ->(c_id) { where(city_id: c_id) }
 
   attr_accessor :sender_session_token
   after_create_commit :broadcast_new_post_notification
