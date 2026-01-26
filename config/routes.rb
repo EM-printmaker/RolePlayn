@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   resources :posts, only: [ :create, :destroy ]
 
   # city
-  resources :cities, only: [ :show ] do
+  resources :cities, only: [ :index, :show ] do
     collection do
       post :shuffle
       post :re_roll

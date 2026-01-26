@@ -6,5 +6,6 @@ class City < ApplicationRecord
 
   include RandomSelectable
 
+  scope :global, -> { where(world_id: World.global.select(:id)) }
   scope :local, -> { where(world_id: World.local.select(:id)) }
 end
