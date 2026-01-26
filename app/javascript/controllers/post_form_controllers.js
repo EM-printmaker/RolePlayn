@@ -1,9 +1,7 @@
-import { Controller } from "@hotwire/stimulus";
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  reset(event) {
-    if (event.detail.success) {
-      event.target.reset();
-    }
+  reset() {
+    this.element.reset();
   }
 }

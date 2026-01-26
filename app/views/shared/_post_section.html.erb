@@ -3,9 +3,10 @@
     <%= image_tag cdn_image_url(current_expression.image.variant(:display)), class: "current-character__image" %>
     <button type="button" class="btn btn-outline-dark current-character__button" data-action="click->modal#open">表情を変更</button>
   </div>
-  <div data-controller="post-form" class="col-sm-8 post-form-container">
+  <div class="col-sm-8 post-form-container">
     <%= form_with(model: post, id: "post-form",
-                  data: { 
+                  data: {
+                    controller: "post-form",
                     action: "turbo:submit-end->post-form#reset" 
                   }) do |f| %>
       <%= f.text_area :content, class: "form-control", rows: 5 %>

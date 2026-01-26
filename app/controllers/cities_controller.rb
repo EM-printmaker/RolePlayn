@@ -11,11 +11,11 @@ class CitiesController < ApplicationController
   def shuffle
     transition_to_city
     @city = viewing_city
-    redirect_to city_path(viewing_city)
+    redirect_to city_path(viewing_city), status: :see_other
   end
 
   def re_roll
     refresh_character(viewing_city)
-    redirect_back fallback_location: root_path
+    redirect_back fallback_location: root_path(format: :html), status: :see_other
   end
 end

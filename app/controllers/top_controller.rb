@@ -1,5 +1,7 @@
 class TopController < ApplicationController
   include CharacterSessionManageable
+  include PostPaginatable
+
   def index
     @city = viewing_city
     set_active_character(@city)
@@ -8,5 +10,9 @@ class TopController < ApplicationController
       items: 10
     )
     @post = Post.new
+  end
+
+  def load_more
+    paginate_posts(Post.from_local_cities)
   end
 end

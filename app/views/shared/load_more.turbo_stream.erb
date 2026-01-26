@@ -1,3 +1,5 @@
+<% return unless turbo_frame_request_id == "pagination_frame" %>
+
 <%= turbo_stream.append "feed" do %>
   <% @posts.each do |post| %>
     <li class="feed-item">

@@ -31,6 +31,10 @@ Rails.application.routes.draw do
     end
   end
 
+  # ページネーション
+  get "load_more", to: "top#load_more"
+
+
 
   # CDNを用いた画像表示用のURL作成
   direct :cdn_image do |model, options|

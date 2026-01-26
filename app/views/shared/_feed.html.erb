@@ -9,7 +9,7 @@
 <div id="pagination-footer">
   <% if @pagy.next %>
     <%= turbo_frame_tag "pagination_frame", 
-                        src: url_for(page: @pagy.next, format: :turbo_stream), 
+                        src: load_more_path(page: @pagy.next, format: :turbo_stream), 
                         loading: :lazy do %>
       <div class="text-center p-4">
         <span>読み込み中...</span>
