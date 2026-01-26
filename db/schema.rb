@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_25_085720) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_26_133713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,6 +56,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_25_085720) do
     t.bigint "world_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "target_scope_type", default: 0
+    t.bigint "target_world_id"
+    t.index ["target_world_id"], name: "index_cities_on_target_world_id"
     t.index ["world_id"], name: "index_cities_on_world_id"
   end
 
