@@ -1,7 +1,7 @@
 class Post < ApplicationRecord
   belongs_to :city
   belongs_to :character
-  belongs_to :expression
+  belongs_to :expression, -> { with_attached_images }, inverse_of: :posts
 
   validates :content, presence: true, length: { maximum: 300 }
 

@@ -2,17 +2,24 @@ class TopController < ApplicationController
   include CharacterSessionManageable
   include PostPaginatable
 
+  before_action :prepare_viewing_context
+
   def index
-    @city = viewing_city
-    set_active_character(@city)
-    @pagy, @posts = pagy(
-      @city.posts.includes(:character, :expression).order(created_at: :desc),
-      items: 10
-    )
+    paginate_posts(@city.feed_posts)
     @post = Post.new
   end
 
   def load_more
-    paginate_posts(Post.from_local_cities)
+    paginate_posts(@city.feed_posts)
+    respond_to do |format|
+      format.html
+      format.turbo_stream { render "shared/load_more" }
+    end
   end
+
+  private
+    def prepare_viewing_context
+      @city = viewing_city
+      set_active_character(@city)
+    end
 end

@@ -31,17 +31,19 @@ Rails.application.routes.draw do
     end
   end
 
-  # ページネーション
-  get "load_more", to: "top#load_more"
-
-
 
   # CDNを用いた画像表示用のURL作成
   direct :cdn_image do |model, options|
-    target = model.respond_to?(:processed) ? model.processed : model
-    key = target.respond_to?(:key) ? target.key : (target.respond_to?(:blob) ? target.blob.key : nil)
-    cdn_host = ENV.fetch("CDN_HOST", nil)
+    if model.respond_to?(:key)
+      key = model.key
+    elsif model.respond_to?(:variation)
+      variant = model.blob.variant_records.find { |vr| vr.variation_digest == model.variation.digest }
+      key = variant&.key || model.blob.key
+    else
+      key = model.respond_to?(:blob) ? model.blob.key : nil
+    end
 
+    cdn_host = ENV.fetch("CDN_HOST", nil)
     if key.present? && cdn_host.present?
       "https://#{cdn_host}/#{key}"
     else

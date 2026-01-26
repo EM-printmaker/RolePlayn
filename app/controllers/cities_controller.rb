@@ -4,27 +4,21 @@ class CitiesController < ApplicationController
 
   def index
     @city = City.global.first
-    @pagy, @posts = pagy(
-      Post.from_local_cities.includes(:character, :expression).order(created_at: :desc),
-      items: 10
-    )
+    paginate_posts(@city.feed_posts)
     @post = Post.new
   end
 
   def show
     @city = City.find(params[:id])
     set_active_character(@city)
-    @pagy, @posts = pagy(
-      @city.posts.includes(:character, :expression).order(created_at: :desc),
-      items: 10
-    )
+    paginate_posts(@city.feed_posts)
     @post = Post.new
   end
 
   def shuffle
     transition_to_city
     @city = viewing_city
-    redirect_to city_path(viewing_city), status: :see_other
+    redirect_to city_path(@city), status: :see_other
   end
 
   def re_roll
@@ -33,6 +27,11 @@ class CitiesController < ApplicationController
   end
 
   def load_more
-    paginate_posts(Post.from_local_cities)
+    @city = viewing_city
+    paginate_posts(@city.feed_posts)
+    respond_to do |format|
+      format.html
+      format.turbo_stream { render "shared/load_more" }
+    end
   end
 end
