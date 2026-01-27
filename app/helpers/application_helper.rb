@@ -4,9 +4,11 @@ module ApplicationHelper
     OpenSSL::HMAC.hexdigest("SHA256", Rails.application.secret_key_base, "#{session_id}#{salt}")
   end
 
-  def infinite_scroll_load_more_url(pagy, city = nil)
+  def infinite_scroll_load_more_url(pagy, city = nil, subject = nil)
     path =
-      if city.present?
+      if subject.present? && city.present?
+        load_more_observation_path(city, subject)
+      elsif city.present?
         load_more_city_path(city)
       else
         load_more_top_path

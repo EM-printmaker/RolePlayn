@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     resources :expressions, only: [ :create ]
   end
 
-  # セキュリティのためこれより下に追加しないこと
+  # セキュリティのためこれより下に通常のルーティング設定を追加しないこと
 
   get "/:slug",
       to: "worlds#show",
@@ -56,12 +56,40 @@ Rails.application.routes.draw do
       as: :load_more_world_city,
       constraints: { world_slug: /[a-z0-9\-]+/, slug: /[a-z0-9\-]+/ }
 
+  get "/:world_slug/:city_slug/observations/:subject_id",
+    to: "observations#show",
+    as: :world_city_observation,
+    constraints: { world_slug: /[a-z0-9\-]+/, city_slug: /[a-z0-9\-]+/ }
+
+  get "/:world_slug/:city_slug/observations/:subject_id/load_more",
+    to: "observations#load_more",
+    as: :load_more_world_city_observation,
+    constraints: { world_slug: /[a-z0-9\-]+/, city_slug: /[a-z0-9\-]+/ }
+
   direct :city do |city|
     world_city_path(city.world, city)
   end
 
   direct :load_more_city do |city|
     load_more_world_city_path(city.world, city)
+  end
+
+  direct :observation do |character|
+    target_world = character.city.world
+    observer_city = City.observer_for(target_world) || target_world.observation_city
+    world_city_observation_path(
+      world_slug: observer_city.world.slug,
+      city_slug: observer_city.slug,
+      subject_id: character.id
+    )
+  end
+
+  direct :load_more_observation do |city, character|
+    load_more_world_city_observation_path(
+      world_slug: city.world.slug,
+      city_slug: city.slug,
+      subject_id: character.id
+    )
   end
 
 
