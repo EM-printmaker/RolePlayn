@@ -1,22 +1,22 @@
 # global
-global_world = World.find_or_create_by!(name: "アセラ・ポリス", is_global: true)
+global_world = World.find_or_create_by!(name: "アセラ・ポリス", is_global: true, slug: "acerapolis")
 
-node_00 = global_world.cities.find_or_create_by!(name: "境界観測点 [Node.00]")
-node_01 = global_world.cities.find_or_create_by!(name: "境界観測点 [Node.01]")
-node_02 = global_world.cities.find_or_create_by!(name: "境界観測点 [Node.02]")
+node_00 = global_world.cities.find_or_create_by!(name: "境界観測点 [Node.00]", slug: "node00")
+node_01 = global_world.cities.find_or_create_by!(name: "境界観測点 [Node.01]", slug: "node01")
+node_02 = global_world.cities.find_or_create_by!(name: "境界観測点 [Node.02]", slug: "node02")
 
 # local World
-velstria = World.find_or_create_by!(name: "ヴェルストリア")
+velstria = World.find_or_create_by!(name: "ヴェルストリア", slug: "velstria")
 
-test_world = World.find_or_create_by!(name: "テストワールド")
+test_world = World.find_or_create_by!(name: "テストワールド", slug: "test-world")
 
 # City
 # ヴェルストリア(velstria)
-luminoir      = velstria.cities.find_or_create_by!(name: "ルミノア")
-velstria_city = velstria.cities.find_or_create_by!(name: "ヴェルストリア所属City")
+luminoir      = velstria.cities.find_or_create_by!(name: "ルミノア", slug: "luminoir")
+velstria_city = velstria.cities.find_or_create_by!(name: "ヴェルストリア所属City", slug: "velstria-city")
 
 # テストワールド(test_world)
-test_city = test_world.cities.find_or_create_by!(name: "テストワールド所属City")
+test_city = test_world.cities.find_or_create_by!(name: "テストワールド所属City", slug: "test-city")
 
 
 # feed_posts(postの参照先)
@@ -39,9 +39,9 @@ node_02.update!(
 characters_data = [
   { name: "村人", city: luminoir,      emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] },
   { name: "騎士", city: luminoir,      emotion_types: [ :fun, :sad,   :normal ] },
-  { name: "衛兵", city: velstria_city, emotion_types: [ :fun, :angry, :normal ] },
+  { name: "衛兵", city: velstria_city, emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] },
   { name: "商人", city: velstria_city, emotion_types: [ :joy, :fun,   :normal ] },
-  { name: "町人", city: test_city,     emotion_types: [ :joy, :angry, :sad    ] },
+  { name: "町人", city: test_city,     emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] },
   { name: "旅人", city: test_city,     emotion_types: [ :sad, :fun,   :normal ] }
 ]
 
