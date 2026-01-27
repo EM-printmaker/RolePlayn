@@ -38,13 +38,27 @@ module CharacterSessionManageable
   end
 
   def current_character
-    # find_byがnilを返すケース（キャラ削除時など）でもDB再検索を防ぐためdefined?を使用
     return @current_character if defined?(@current_character)
-    @current_character = Character.includes(:expressions).find_by(id: session[:active_character_id])
+
+    id = session[:active_character_id]
+    if id.blank?
+      return @current_character = nil
+    end
+
+    @current_character = Character.includes(:expressions).find_by(id: id)
+
+    # 3. IDはあるのにキャラが見つからないとき
+    if @current_character.nil?
+      reset_character_session
+      @current_character = nil
+    end
+
+    @current_character
   end
 
   def current_expression
     return @current_expression if defined?(@current_expression)
+    return @current_expression = nil if current_character.nil?
 
     @current_expression = current_character&.expressions&.find { |e| e.id == session[:active_expression_id].to_i }
 
@@ -60,13 +74,15 @@ module CharacterSessionManageable
 
     def character_shuffle(city)
       character = city.characters.pick_random
-      return unless character
       expression = character.expressions.pick_random
 
       if character
         session[:active_character_id] = character.id
         session[:active_expression_id] = expression&.id
         session[:assigned_date] = Time.zone.today.to_s
+      else
+        session.delete(:active_character_id)
+        session.delete(:active_expression_id)
       end
 
       @current_character = character
@@ -84,6 +100,8 @@ module CharacterSessionManageable
     end
 
     def set_modal_expression
+      return if current_character.nil?
+
       if params[:view_type].present? && params[:view_level].present?
         @target_expression = current_character.expressions.find do |e|
         e.emotion_type == params[:view_type] &&
