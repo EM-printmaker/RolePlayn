@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_01_26_133713) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_27_060646) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -58,6 +58,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_01_26_133713) do
     t.datetime "updated_at", null: false
     t.integer "target_scope_type", default: 0
     t.bigint "target_world_id"
+    t.string "slug"
+    t.index ["slug"], name: "index_cities_on_slug", unique: true
     t.index ["target_world_id"], name: "index_cities_on_target_world_id"
     t.index ["world_id"], name: "index_cities_on_world_id"
   end
