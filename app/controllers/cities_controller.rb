@@ -3,8 +3,7 @@ class CitiesController < ApplicationController
   include PostPaginatable
 
   def index
-    target_city = City.global.first
-    redirect_to city_path(target_city), status: :found
+    redirect_to city_path(City.global_node), status: :found
   end
 
   def show

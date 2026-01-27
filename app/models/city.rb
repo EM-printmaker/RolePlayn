@@ -21,6 +21,16 @@ class City < ApplicationRecord
 
   delegate :global?, :local?, to: :world, allow_nil: true
 
+  # 指定されたworldのpostを表示するCityを返す
+  def self.observer_for(world)
+    find_by(target_scope_type: :specific_world, target_world_id: world.id)
+  end
+
+  # 全てのworldのpostを表示するCityを返す
+  def self.global_observer
+    find_by(target_scope_type: :all_local) || global.first
+  end
+
   def feed_posts
     base_scope =
     case target_scope_type
