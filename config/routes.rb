@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   # root
   root "top#index"
 
+  # top
+  get "top/load_more", to: "top#load_more", as: :load_more_top
+
   # post
   resources :posts, only: [ :create, :destroy ]
 
@@ -20,6 +23,9 @@ Rails.application.routes.draw do
     collection do
       post :shuffle
       post :re_roll
+    end
+    member do
+      get :load_more
     end
   end
 

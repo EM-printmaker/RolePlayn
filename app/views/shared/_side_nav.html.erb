@@ -3,7 +3,7 @@
     <li>
       <p>現在のCity： <%= viewing_city.name %></p>
       <%#= Cityが増えたら追加 %>
-      <%#= button_to "他の街へ移動", shuffle_cities_path, method: :post, class: "btn btn-outline-dark" %>
+      <%= button_to "他の街へ移動", shuffle_cities_path, method: :post, class: "btn btn-outline-dark" %>
     </li>
     <li>
       <p>現在のCharacter: <%= current_character.name %></p>

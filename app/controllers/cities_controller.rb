@@ -27,11 +27,12 @@ class CitiesController < ApplicationController
   end
 
   def load_more
-    @city = viewing_city
+    @city = City.find(params[:id])
     paginate_posts(@city.feed_posts)
     respond_to do |format|
-      format.html
-      format.turbo_stream { render "shared/load_more" }
+      format.any(:html, :turbo_stream) do
+        render "shared/load_more", formats: [ :turbo_stream ], content_type: "text/vnd.turbo-stream.html"
+      end
     end
   end
 end

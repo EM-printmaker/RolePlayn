@@ -8,14 +8,16 @@
   <% end %>
 <% end %>
 
-<%= turbo_stream.replace "pagination_frame" do %>
-  <% if @pagy.next %>
-    <%= turbo_frame_tag "pagination_frame", 
-                        src: url_for(page: @pagy.next, format: :turbo_stream), 
-                        loading: :lazy do %>
-      <div class="text-center p-4">読み込み中...</div>
+<%= turbo_stream.replace "pagination-footer" do %>
+  <div id="pagination-footer">
+    <% if @pagy.next %>
+      <%= turbo_frame_tag "pagination_frame", 
+          src: "#{request.path}?page=#{@pagy.next}", 
+          loading: :lazy do %>
+        <div class="text-center p-4 text-muted">読み込み中...</div>
+      <% end %>
+    <% else %>
+      <div class="text-center p-4 text-muted small">すべての投稿を読み込みました</div>
     <% end %>
-  <% else %>
-    <div class="text-center p-4 text-muted small">すべての投稿を読み込みました</div>
-  <% end %>
+  </div>
 <% end %>
