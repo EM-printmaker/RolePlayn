@@ -21,7 +21,7 @@ module ExpressionsHelper
     is_active = current_expression&.id == expression.id
     active_class = is_active ? "border border-primary border-3" : "border border-transparent"
 
-    link_to change_face_expressions_path(expression_id: expression.id),
+    button_to expressions_path(expression_id: expression.id),
             id: "expression_link_#{expression.id}",
             data: {
               turbo_method: :post,

@@ -51,6 +51,11 @@ module CharacterSessionManageable
     @current_expression ||= Expression.with_attached_images.find_by(id: session[:active_expression_id])
   end
 
+  # 書き換えが発生した時に、古いキャッシュを捨てる
+  def reset_active_expression
+    remove_instance_variable(:@current_expression) if defined?(@current_expression)
+  end
+
   private
 
     def character_shuffle(city)

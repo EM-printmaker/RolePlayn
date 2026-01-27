@@ -3,12 +3,12 @@
     <li>
       <p>現在のCity： <%= viewing_city.name %></p>
       <%#= Cityが増えたら追加 %>
-      <%= button_to "他の街へ移動", shuffle_cities_path, method: :post, class: "btn btn-outline-dark" %>
+      <%= button_to "他の街へ移動", shuffles_path, method: :post, class: "btn btn-outline-dark" %>
     </li>
     <li>
       <p>現在のCharacter: <%= current_character.name %></p>
       <%= image_tag cdn_image_url(current_expression.image.variant(:display)), class: "post__avatar" %>
-      <%= button_to "キャラクターの更新", re_roll_cities_path, method: :post, class: "btn btn-outline-dark" %>
+      <%= button_to "キャラクターの更新", re_rolls_path, method: :post, class: "btn btn-outline-dark" %>
     </li>
   </ul>
 </nav>

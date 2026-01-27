@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "observations/show"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -18,26 +19,25 @@ Rails.application.routes.draw do
   # post
   resources :posts, only: [ :create, :destroy ]
 
-  # expression
-  resources :expressions, only: [] do
-    collection do
-      post :change_face
-      post :preview
-    end
-  end
-
   # world
   get "/worlds", to: "worlds#index", as: :worlds_index
 
   # city
-  resources :cities, param: :slug, only: [] do
+  get "/cities", to: "cities#index", as: :cities_index
+
+  # expression
+  resources :expressions, only: [] do
     collection do
-      post :shuffle
-      post :re_roll
+      post :preview
     end
   end
 
-  get "/cities", to: "cities#index", as: :cities_index
+  # operations
+  scope module: :operations do
+    resources :shuffles,   only: [ :create ]
+    resources :re_rolls,   only: [ :create ]
+    resources :expressions, only: [ :create ]
+  end
 
   # セキュリティのためこれより下に追加しないこと
 
