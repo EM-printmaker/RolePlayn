@@ -19,6 +19,8 @@ class City < ApplicationRecord
   scope :global, -> { joins(:world).merge(World.global) }
   scope :local, -> { joins(:world).merge(World.local) }
 
+  delegate :global?, :local?, to: :world, allow_nil: true
+
   def feed_posts
     base_scope =
     case target_scope_type

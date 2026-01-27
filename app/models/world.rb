@@ -6,4 +6,12 @@ class World < ApplicationRecord
 
   scope :global, -> { where(is_global: true)  }
   scope :local,  -> { where(is_global: false) }
+
+  def global?
+    is_global
+  end
+
+  def local?
+    !is_global?
+  end
 end
