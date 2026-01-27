@@ -1,22 +1,23 @@
 class City < ApplicationRecord
+  include RandomSelectable
+  include HasSlug
+
   belongs_to :world
   belongs_to :target_world, class_name: "World", optional: true
   has_many :characters, dependent: :restrict_with_error
   has_many :posts, dependent: :restrict_with_error
   has_one_attached :image
 
-  include RandomSelectable
-
-  scope :global, -> { joins(:world).merge(World.global) }
-  scope :local, -> { joins(:world).merge(World.local) }
-
   enum :target_scope_type, {
-    self_only: 0,      # 自分自身の投稿のみ
-    all_local: 1,      # すべてのLocal Worldの投稿
-    specific_world: 2  # 特定のWorld配下の投稿
+    self_only:      0,      # 自分自身の投稿のみ
+    all_local:      1,      # すべてのLocal Worldの投稿
+    specific_world: 2       # 特定のWorld配下の投稿
   }, default: :self_only
 
   validates :target_world_id, presence: true, if: :specific_world?
+
+  scope :global, -> { joins(:world).merge(World.global) }
+  scope :local, -> { joins(:world).merge(World.local) }
 
   def feed_posts
     base_scope =

@@ -18,23 +18,47 @@ Rails.application.routes.draw do
   # post
   resources :posts, only: [ :create, :destroy ]
 
-  # city
-  resources :cities, only: [ :index, :show ] do
-    collection do
-      post :shuffle
-      post :re_roll
-    end
-    member do
-      get :load_more
-    end
-  end
-
   # expression
   resources :expressions, only: [] do
     collection do
       post :change_face
       post :preview
     end
+  end
+
+  # city
+  resources :cities, param: :slug, only: [] do
+    collection do
+      post :shuffle
+      post :re_roll
+    end
+  end
+
+  get "/cities", to: "cities#index", as: :cities_index
+
+  # セキュリティのためこれより下に追加しないこと
+
+  get "/:slug",
+      to: "worlds#show",
+      as: :world,
+      constraints: { slug: /[a-z0-9\-]+/ }
+
+  get "/:world_slug/:slug",
+      to: "cities#show",
+      as: :world_city,
+      constraints: { world_slug: /[a-z0-9\-]+/, slug: /[a-z0-9\-]+/ }
+
+  get "/:world_slug/:slug/load_more",
+      to: "cities#load_more",
+      as: :load_more_world_city,
+      constraints: { world_slug: /[a-z0-9\-]+/, slug: /[a-z0-9\-]+/ }
+
+  direct :city do |city|
+    world_city_path(city.world, city)
+  end
+
+  direct :load_more_city do |city|
+    load_more_world_city_path(city.world, city)
   end
 
 

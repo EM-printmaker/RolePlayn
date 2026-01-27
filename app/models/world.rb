@@ -1,4 +1,6 @@
 class World < ApplicationRecord
+  include HasSlug
+
   has_many :cities, dependent: :restrict_with_error
   has_one_attached :image
 

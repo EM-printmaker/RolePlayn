@@ -3,13 +3,12 @@ class CitiesController < ApplicationController
   include PostPaginatable
 
   def index
-    @city = City.global.first
-    paginate_posts(@city.feed_posts)
-    @post = Post.new
+    target_city = City.global.first
+    redirect_to city_path(target_city), status: :found
   end
 
   def show
-    @city = City.find(params[:id])
+    @city = City.find_by!(slug: params[:slug])
     set_active_character(@city)
     paginate_posts(@city.feed_posts)
     @post = Post.new
@@ -27,7 +26,7 @@ class CitiesController < ApplicationController
   end
 
   def load_more
-    @city = City.find(params[:id])
+    @city = City.find_by!(slug: params[:slug])
     paginate_posts(@city.feed_posts)
     respond_to do |format|
       format.any(:html, :turbo_stream) do
