@@ -26,6 +26,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # world
+  get "/worlds", to: "worlds#index", as: :worlds_index
+
   # city
   resources :cities, param: :slug, only: [] do
     collection do
