@@ -3,7 +3,7 @@ class CitiesController < ApplicationController
   include PostPaginatable
 
   def index
-    redirect_to city_path(City.global_node), status: :found
+    redirect_to city_path(City.global_observer), status: :found
   end
 
   def show
