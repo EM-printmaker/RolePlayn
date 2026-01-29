@@ -19,12 +19,20 @@ RSpec.describe Expression, type: :model do
     end
 
     context "variant :display" do
-      it "リサイズ処理(resize_to_limit: [400, 400])が定義されていること"
+      let(:attachment) { described_class.reflect_on_attachment(:image) }
+
+      it "display バリアントが正しく設定されていること" do
+        variant = attachment.named_variants[:display]
+        expect(variant).not_to be_nil
+        expect(variant.transformations).to eq(resize_to_limit: [ 400, 400 ])
+      end
     end
   end
 
   describe "enums" do
-    it "emotion_typeが正しく定義されていること(joy, angry, sad, fun, normal)"
+    it "emotion_typeが正しく定義されていること(joy, angry, sad, fun, normal)" do
+      expect(described_class.emotion_types.keys).to match_array(%w[joy angry sad fun normal])
+    end
   end
 
   describe "deletion restrictions" do
@@ -46,6 +54,8 @@ RSpec.describe Expression, type: :model do
   end
 
   describe ".with_attached_images" do
-    it "エラーにならずスコープが実行できること"
+    it "エラーにならずスコープが実行できること" do
+      expect { described_class.with_attached_images }.not_to raise_error
+    end
   end
 end
