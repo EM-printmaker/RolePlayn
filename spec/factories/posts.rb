@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :post do
-    content { "MyText" }
+    sequence(:content) { |n| "MyText #{n}" }
     character
     expression
     city
