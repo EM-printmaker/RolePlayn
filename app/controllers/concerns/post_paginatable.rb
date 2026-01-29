@@ -6,8 +6,7 @@ module PostPaginatable
   def paginate_posts(scope)
     @pagy, @posts = pagy(
       :countish,
-      scope.includes(:character, :expression)
-      .order(created_at: :desc),
+      scope.includes(:character, :expression),
       limit: 10
     )
   end
