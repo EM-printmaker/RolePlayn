@@ -15,8 +15,8 @@ class World < ApplicationRecord
     !is_global?
   end
 
-  # Worldのフィードを表示するglobalなCityを返し、nillなら最初のCityを返す
+  # Worldのフィードを表示するglobalなCityを返し、nillならglobalな最初のCityを返す
   def observation_city
-    City.observer_for(self) || cities.order(:id).first
+    City.observer_for(self) || City.global.first
   end
 end
