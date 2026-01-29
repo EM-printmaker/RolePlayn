@@ -2,7 +2,7 @@ RSpec.shared_examples "character_session_manageable" do |path_proc|
   let(:city) { create(:city) }
   let(:target_path) { path_proc.respond_to?(:call) ? instance_exec(&path_proc) : send(path_proc) }
   before do
-    create_list(:character, 2, :with_expressions, city: city)
+    create(:character, :with_expressions, city: city)
     get target_path
   end
 
@@ -22,6 +22,8 @@ RSpec.shared_examples "character_session_manageable" do |path_proc|
   end
 
   describe "セッションによるキャラクター管理" do
+    before { create(:character, :with_expressions, city: city) }
+
     it "アクセスするたびに同じキャラクターが保持されること" do
       expect { get target_path }.not_to(change { session[:active_character_id] })
     end
