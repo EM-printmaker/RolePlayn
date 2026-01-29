@@ -24,4 +24,20 @@ RSpec.describe World, type: :model do
       end
     end
   end
+
+  describe "#slug(HasSlug)" do
+    it "除外した文字列を使用すると保存に失敗すること"
+  end
+
+  describe "is_global" do
+    it "global スコープが is_global: true のレコードのみを返すこと"
+    it "local スコープが is_global: false のレコードのみを返すこと"
+    it "is_global が true のとき、global? が true を返すこと"
+    it "is_global が false のとき、local? が true を返すこと"
+  end
+
+  describe "#observation_city" do
+    it "自身を観測対象としている街(node)を返すこと"
+    it "自身を観測対象としている街がない場合、ID順で最初の都市を返すこと"
+  end
 end

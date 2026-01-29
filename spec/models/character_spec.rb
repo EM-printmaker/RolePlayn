@@ -33,4 +33,9 @@ RSpec.describe Character, type: :model do
       end
     end
   end
+
+  describe ".pick_random (RandomSelectable)" do
+    it "登録されているキャラクターから 1 件が取得されること"
+    it "レコードがない場合は nil を返すこと"
+  end
 end
