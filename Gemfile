@@ -35,3 +35,8 @@ group :development do
   gem "prism", "1.2.0"
   gem "ruby-lsp", require: false
 end
+
+group :test do
+  gem "capybara"
+  gem "simplecov", require: false
+end
