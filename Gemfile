@@ -17,20 +17,21 @@ gem "active_storage_validations"
 gem "image_processing", "~> 1.2"
 gem "aws-sdk-s3", require: false
 gem "pagy", "~> 43.2"
+gem "rails-i18n"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
-  gem "brakeman", require: false
-  gem "rubocop-rails-omakase", require: false
   gem "rspec-rails", "~> 7.1", ">= 7.1.1"
   gem "factory_bot_rails"
-  gem "rubocop-rspec", require: false
-  gem "rubocop-factory_bot", require: false
   gem "faker"
 end
 
 group :development do
   gem "web-console"
+  gem "rubocop-rails-omakase", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-factory_bot", require: false
+  gem "brakeman", require: false
   gem "prism", "1.2.0"
   gem "ruby-lsp", require: false
 end

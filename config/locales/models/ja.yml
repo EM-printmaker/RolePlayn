@@ -1,0 +1,34 @@
+ja:
+  activerecord:
+    models:
+      world: "世界"
+      city: "都市"
+      character: "キャラクター"
+      expression: "表情"
+      post: "投稿"
+    attributes:
+      character:
+        name: "名前"
+        description: "自己紹介"
+      post:
+        content: "内容"
+      city:
+        slug: "識別子(Slug)"
+    errors:
+      models:
+        city:
+          attributes:
+            slug:
+              exclusion: "「%{value}」はシステムで使用されているため利用できません"
+        world:
+          attributes:
+            slug:
+              exclusion: "「%{value}」はシステムで使用されているため利用できません"
+  enums:
+    expression:
+      emotion_type:
+        joy: "喜"
+        angry: "怒"
+        sad: "哀"
+        fun: "楽"
+        normal: "通常"

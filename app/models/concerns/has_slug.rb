@@ -16,8 +16,7 @@ module HasSlug
       uniqueness: true,
       format: { with: /\A[a-z0-9\-]+\z/ },
       exclusion: {
-        in: RESERVED_SLUGS,
-        message: "「%{value}」はシステムで使用されているため利用できません"
+        in: RESERVED_SLUGS
       }
   end
 
