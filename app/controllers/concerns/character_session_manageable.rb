@@ -7,14 +7,20 @@ module CharacterSessionManageable
     helper_method :current_character, :current_expression, :viewing_city
   end
 
-  def transition_to_city(target_city = nil)
-    @city = target_city || City.local.pick_random
+  def transition_to_city(target_city = nil, exclude_city: nil)
+    if target_city
+      @city = target_city
+    else
+      @city = City.local.other_than(exclude_city).pick_random || City.local.pick_random
+    end
 
     if @city
       session[:viewing_city_id] = @city.id
+      @viewing_city = @city
       refresh_character(@city)
     else
       session.delete(:viewing_city_id)
+      reset_character_session
     end
     @city
   end
@@ -25,10 +31,12 @@ module CharacterSessionManageable
 
   def set_active_character(city)
     # 0時を回ったタイミングでセッションを切り替える仕様のため
-    reset_character_session if session[:assigned_date] != Time.zone.today.to_s
+    if session[:assigned_date] != Time.zone.today.to_s
+      rotate_daily_session(city)
+      return
+    end
 
     return if session[:active_character_id].present? || city.blank?
-
     character_shuffle(city)
   end
 
@@ -72,17 +80,36 @@ module CharacterSessionManageable
 
   private
 
+    def rotate_daily_session(old_city)
+      old_character_id = session[:active_character_id]
+      new_city = transition_to_city
+      new_character = current_character
+
+      if new_city.id == old_city.id && new_character&.id == old_character_id
+        other_character = new_city.characters.where.not(id: old_character_id).pick_random
+
+        if other_character
+          update_session_for_character(other_character)
+        else
+          transition_to_city(exclude_city: old_city)
+        end
+      end
+    end
+
     def character_shuffle(city)
       character = city.characters.pick_random
-      expression = character.expressions.pick_random
+      update_session_for_character(character)
+    end
+
+    def update_session_for_character(character)
+      expression = character&.expressions&.pick_random
 
       if character
         session[:active_character_id] = character.id
         session[:active_expression_id] = expression&.id
         session[:assigned_date] = Time.zone.today.to_s
       else
-        session.delete(:active_character_id)
-        session.delete(:active_expression_id)
+        reset_character_session
       end
 
       @current_character = character

@@ -20,7 +20,8 @@ class TopController < ApplicationController
 
   private
     def prepare_viewing_context
+      current_viewing_city = viewing_city
+      set_active_character(current_viewing_city)
       @city = viewing_city
-      set_active_character(@city)
     end
 end

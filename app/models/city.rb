@@ -18,6 +18,7 @@ class City < ApplicationRecord
 
   scope :global, -> { joins(:world).merge(World.global) }
   scope :local, -> { joins(:world).merge(World.local) }
+  scope :other_than, ->(city) { where.not(id: city.id) if city }
 
   delegate :global?, :local?, to: :world, allow_nil: true
 
