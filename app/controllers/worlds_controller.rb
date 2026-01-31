@@ -5,7 +5,7 @@ class WorldsController < ApplicationController
 
   def show
     world = World.find_by!(slug: params[:slug])
-    target_city = world.observation_city
+    target_city = world.observation_city || world.cities.first
 
     if target_city
       redirect_to city_path(target_city), status: :found
