@@ -43,13 +43,16 @@ RSpec.describe Post, type: :model do
   end
 
   describe "#broadcast_new_post_notification" do
+    let(:city) { create(:city) }
+    let(:character) { create(:character, city: city) }
+    let(:expression) { create(:expression, :with_image, character: character) }
     let(:token) { "test_session_token_123" }
-    let(:post) { build(:post, sender_session_token: token) }
+    let(:post) { build(:post, city: city, character: character, expression: expression, sender_session_token: token) }
 
   it "通知が正しい内容でブロードキャストされること" do
     expect {
       post.save!
-    }.to(have_broadcasted_to("posts_channel").with { |data|
+    }.to(have_broadcasted_to("posts_channel_city_#{city.id}").with { |data|
       expect(data).to include('target="new-posts-alert"')
       expect(data).to include(token)
     })
