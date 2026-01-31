@@ -4,8 +4,9 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    city = viewing_city
-    @post.city_id = city.id
+    @city = viewing_city
+    return redirect_to root_path, alert: t(".city_not_found") if @city.nil?
+    @post.city_id = @city.id
     @post.character_id = current_character&.id
     @post.expression_id = current_expression&.id
     @post.sender_session_token = helpers.session_token(session.id)
@@ -37,18 +38,18 @@ class PostsController < ApplicationController
 
   def prepare_page_data(target)
     case target
-    when "cities/show" then prepare_city_show
-    when "top/index"    then prepare_top_index
+    when "cities/show"
+      prepare_city_show
+    else
+      prepare_top_index
     end
   end
 
   def prepare_city_show
-    @city = viewing_city
     paginate_posts(@city.feed_posts)
   end
 
   def prepare_top_index
-    @city = viewing_city
-    paginate_posts(@city&.feed_posts)
+    paginate_posts(@city.feed_posts)
   end
 end

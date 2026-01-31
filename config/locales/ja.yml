@@ -1,0 +1,3 @@
+posts:
+  create:
+    city_not_found: "街が見つかりませんでした"
