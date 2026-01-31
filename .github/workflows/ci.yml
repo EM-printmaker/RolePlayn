@@ -63,7 +63,9 @@ jobs:
         run: bin/rails dartsass:build
 
       - name: Database setup
-        run: bin/rails db:prepare
+        run: |
+          bin/rails db:create
+          bin/rails db:migrate
 
       - name: Run RSpec tests
         run: bundle exec rspec
