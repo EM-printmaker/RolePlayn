@@ -1,4 +1,4 @@
-<%= turbo_stream_from "posts_channel", session_id: session.id.to_s %>
+<%= turbo_stream_from "posts_channel_city_#{city.id}" %>
 <% if city.local? %>
   <div class="main-form container-fluid">
     <%= render 'shared/post_section', post: post, city: city %>

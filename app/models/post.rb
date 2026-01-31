@@ -18,7 +18,7 @@ class Post < ApplicationRecord
 
     def broadcast_new_post_notification
       broadcast_replace_to(
-        "posts_channel",
+        "posts_channel_city_#{city_id}",
         target: "new-posts-alert",
         partial: "shared/new_post_notification",
         locals: { sender_session_token: sender_session_token }
