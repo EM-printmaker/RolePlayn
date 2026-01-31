@@ -13,6 +13,12 @@ RSpec.describe "Posts", type: :request do
 
     let(:headers) { { "HTTP_REFERER" => city_path(city) } }
 
+    def perform_post(overrides = {})
+      post posts_path,
+        params: valid_post_params.merge(overrides),
+        headers: headers,
+        as: :turbo_stream
+    end
 
     before do
       create(:city, :observer, target_world_id: world.id)
@@ -21,24 +27,24 @@ RSpec.describe "Posts", type: :request do
 
     it "新しい投稿が作成され、レコード数が1増えること" do
       expect {
-        post posts_path, params: valid_post_params, headers: headers
+        perform_post
       }.to change(Post, :count).by(1)
     end
 
     it "正常なレスポンスが返ること" do
-      post posts_path, params: valid_post_params, headers: headers
+      perform_post
       expect(response).to redirect_to(city_path(city))
       expect(response).to have_http_status(:see_other)
     end
 
     it "フィードに新しい投稿が追加されること" do
-      post posts_path, params: valid_post_params, headers: headers
+      perform_post
       follow_redirect!
       expect(response.body).to include("テスト投稿です。")
     end
 
     it "入力フォームがリセットされること" do
-      post posts_path, params: valid_post_params, headers: headers
+      perform_post
       follow_redirect!
       expect(response.body).to include('name="post[content]"')
       expect(response.body).not_to include("テスト投稿です。</textarea>")
@@ -46,12 +52,12 @@ RSpec.describe "Posts", type: :request do
 
     it "投稿後に通知がブロードキャストされること" do
       expect {
-        post posts_path, params: valid_post_params, headers: headers
+        perform_post
       }.to have_broadcasted_to("posts_channel_city_#{city.id}")
     end
 
     it "作成された投稿のデータ（街・キャラ・表情）が正しいこと" do
-      post posts_path, params: valid_post_params, headers: headers
+      perform_post
       last_post = Post.last
       expect(last_post.city_id).to eq city.id
       expect(last_post.character_id).to eq character.id
@@ -59,28 +65,28 @@ RSpec.describe "Posts", type: :request do
     end
 
     context "投稿に失敗した場合" do
-      let(:invalid_params) { { post: { content: "" }, render_target: "cities/show" } }
+      let(:invalid_params) { { post: { content: "" } } }
 
       it "レコードが作成されないこと" do
         expect {
-          post posts_path, params: invalid_params, headers: headers
+          perform_post(invalid_params)
         }.not_to change(Post, :count)
       end
 
       it "エラーメッセージが表示されること" do
-        post posts_path, params: invalid_params, headers: headers
+        perform_post(invalid_params)
         expect(response.body).to include("内容を入力してください")
       end
 
-      it "422 Unprocessable Entity が返り、元のページがレンダリングされること" do
-        post posts_path, params: invalid_params, headers: headers
+      it "422 Unprocessable Entity が返り、フォームが再描画されること" do
+        perform_post(invalid_params)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to include(city.name)
+        expect(response.body).to include('turbo-stream action="replace" target="post-form"')
       end
 
       it "入力済みの内容を保持したままであること" do
         long_content = "a" * 1001
-        post posts_path, params: { post: { content: long_content }, render_target: "cities/show" }, headers: headers
+        perform_post(post: { content: long_content })
         expect(response.body).to include(long_content)
       end
     end
@@ -89,7 +95,7 @@ RSpec.describe "Posts", type: :request do
       let(:invalid_params) { { post: { content: "" } } }
 
       it "422ステータスと正しい Turbo Stream レスポンスを返すこと" do
-        post posts_path, params: invalid_params, headers: headers, as: :turbo_stream
+        perform_post(invalid_params)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.media_type).to eq "text/vnd.turbo-stream.html"
         expect(response.body).to include('turbo-stream action="replace" target="post-form"')
@@ -98,11 +104,9 @@ RSpec.describe "Posts", type: :request do
 
     context "短時間に連続して投稿した場合" do
       it "エラーになること" do
-        post posts_path, params: { post: { content: "1回目" }, render_target: "top/index" }, headers: headers
+        perform_post(post: { content: "1回目" })
         expect {
-          post posts_path,
-            params: { post: { content: "2回目" }, render_target: "top/index" },
-            headers: headers
+          perform_post(post: { content: "2回目" })
         }.not_to change(Post, :count)
 
         expect(response).to have_http_status(:unprocessable_entity)

@@ -8,7 +8,6 @@
                 <div id="post_error_messages">
     <%= render "shared/error_messages", object: post %>
   </div>
-    <%= hidden_field_tag :render_target, local_assigns[:render_target] %>
     <%= f.text_area :content, class: "form-control", rows: 5 %>
     <%= f.submit "Post", class: "btn btn-primary" %>
   <% end %>

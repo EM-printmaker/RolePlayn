@@ -13,11 +13,9 @@ class PostsController < ApplicationController
     if @post.save
       redirect_back fallback_location: root_path, status: :see_other
     else
-      prepare_page_data(params[:render_target])
-
       respond_to do |format|
-        format.turbo_stream { render status: :unprocessable_entity }
-        format.html { render params[:render_target] || "top/index", status: :unprocessable_entity }
+        format.turbo_stream { render :create, status: :unprocessable_content }
+        format.html { redirect_to root_path, alert: t(".failure") }
       end
     end
   end
@@ -28,28 +26,6 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(
-      :content,
-      :city_id,
-      :character_id,
-      :expression_id
-    )
-  end
-
-  def prepare_page_data(target)
-    case target
-    when "cities/show"
-      prepare_city_show
-    else
-      prepare_top_index
-    end
-  end
-
-  def prepare_city_show
-    paginate_posts(@city.feed_posts)
-  end
-
-  def prepare_top_index
-    paginate_posts(@city.feed_posts)
+    params.require(:post).permit(:content)
   end
 end

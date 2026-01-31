@@ -1,3 +1,4 @@
 posts:
   create:
+    failure: "投稿に失敗しました。"
     city_not_found: "街が見つかりませんでした"
