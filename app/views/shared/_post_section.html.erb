@@ -4,16 +4,7 @@
     <button type="button" class="btn btn-outline-dark current-character__button" data-action="click->modal#open">表情を変更</button>
   </div>
   <div class="col-sm-8 post-form-container">
-    <% if @post.present? %>
-      <%= form_with(model: post, id: "post-form",
-                    data: {
-                      controller: "post-form",
-                      action: "turbo:submit-end->post-form#reset" 
-                    }) do |f| %>
-        <%= f.text_area :content, class: "form-control", rows: 5 %>
-        <%= f.submit "Post", class: "btn btn-primary" %>
-      <% end %>
-    <% end %>
+    <%= render 'posts/form', post: post %>
   </div>
 
   <dialog data-modal-target="dialog" id="expression-modal" data-action="click->modal#clickOutside" class="expression-modal">

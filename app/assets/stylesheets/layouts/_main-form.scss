@@ -1,8 +1,10 @@
 @use "../global" as *;
 
 .main-form {
-  height: 200px;
-  padding-bottom: 5em;
+  width: auto;
+  height: fit-content;
+  min-height: 200px;
+  padding-bottom: 2em;
   margin: 0 1em;
   border-radius: 20px;
 
