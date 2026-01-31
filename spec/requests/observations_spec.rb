@@ -72,7 +72,6 @@ RSpec.describe "Observations", type: :request do
       let(:lonely_character) { create(:character, city: city) }
 
       it "エラーにならず、専用のメッセージが表示されること" do
-        skip "未実装"
         get observation_path(lonely_character)
         expect(response).to have_http_status(:success)
         expect(response.body).to include("投稿はまだありません")
