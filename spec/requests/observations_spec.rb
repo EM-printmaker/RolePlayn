@@ -1,37 +1,94 @@
 require 'rails_helper'
 
 RSpec.describe "Observations", type: :request do
-  describe "GET /:world_slug/:city_slug/observations/:subject_id" do
-    it "正常なレスポンスが返ること"
-    it "街(node)の名前が含まれていること"
-    it "投稿に含まれるキャラクターの名前が同じであること"
-    it "表情の画像が正しく表示されていること"
+  let(:world) { create(:world) }
+  let(:city) { create(:city, world: world) }
 
-    context "存在しないsubject_idを指定した場合" do
-      it "存在しないリソースのため、404 Not Found が返ること"
+  describe "GET /:world_slug/:city_slug/observations/:subject_id" do
+    let!(:global_city) { create(:city, :observer, target_world_id: world.id) }
+    let(:character) { create(:character, city: city) }
+    let!(:post) do
+      create(:post, :with_full_data,
+        parent_city: city,
+        given_character: character,
+      )
     end
 
-    context "アクセスした街(city_slug)がis_global:true所属の街(node)ではない場合" do
-      it "該当するis_global:trueの街にリダイレクトされること"
+    before do
+      get observation_path(character)
+    end
+
+    it "正常なレスポンスが返ること" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "期待通りのURLが生成されること" do
+      expected_path = "/#{global_city.world.slug}/#{global_city.slug}/observations/#{character.id}"
+      expect(observation_path(character)).to eq expected_path
+    end
+
+    it "街(node)の名前が含まれていること" do
+      expect(response.body).to include(global_city.name)
+    end
+
+    it "対象キャラクターの名前・投稿内容・画像が含まれていること" do
+        expect(response.body).to include(character.name)
+        expect(response.body).to include(post.content)
+        expect(response.body).to include(post.expression.image.filename.to_s)
+    end
+
+    context "不正なアクセス（キャラが所属する街など、観測用ではない街から）の場合" do
+      it "公式な観測用の街のURLへリダイレクトされること" do
+        wrong_path = "/#{world.slug}/#{city.slug}/observations/#{character.id}"
+        get wrong_path
+
+        expect(response).to redirect_to(observation_path(character))
+        expect(response).to have_http_status(:moved_permanently)
+      end
+    end
+
+    context "存在しないsubject_idを指定した場合" do
+      it "存在しないリソースのため、404 Not Found が返ること" do
+        get "/#{global_city.world.slug}/#{global_city.slug}/observations/999999"
+        expect(response).to have_http_status(:not_found)
+      end
     end
 
     context "対象の世界を観測する街(node)が存在しない場合" do
-      it "全ての世界の投稿を表示する街(node)で正常に表示されること"
+      let!(:all_local_city) { create(:city, :all_local, :global) }
+
+      before do
+        global_city.delete
+        get observation_path(character)
+      end
+
+      it "全ての世界の投稿を表示する街(node)で正常に表示されること" do
+        expected_path = "/#{all_local_city.world.slug}/#{all_local_city.slug}/observations/#{character.id}"
+        expect(observation_path(character)).to eq expected_path
+      end
     end
 
     context "対象キャラクターに投稿が1つもない場合" do
-      it "エラーならないこと"
+      let(:lonely_character) { create(:character, city: city) }
+
+      it "エラーにならず、専用のメッセージが表示されること" do
+        skip "未実装"
+        get observation_path(lonely_character)
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include("投稿はまだありません")
+      end
     end
   end
 
   describe "GET /:world_slug/:city_slug/observations/:subject_id/load_more" do
-    it "Turbo Stream形式で2ページ目のコンテンツを返すこと"
-    it "2ページ目の読み込みで、重複しない投稿が返ってくること"
-    it "2ページ目の読み込みで、URLが現在の街と一致していること"
-    it "最後のページで、「すべての投稿を読み込みました」の表示が返ること"
+    let(:character) { create(:character, city: city) }
+    let(:global_city) { create(:city, :observer, target_world_id: world.id)  }
 
-    context "存在しないページ番号を指定した場合" do
-      it "エラーにならず、空のコンテンツが返ること"
+    before do
+      create_list(:post, 11, :with_full_data, parent_city: city, given_character: character)
+      get observation_path(character)
     end
+
+    it_behaves_like "posts_load_more_behavior", -> { load_more_observation_path(global_city, character) }
   end
 end

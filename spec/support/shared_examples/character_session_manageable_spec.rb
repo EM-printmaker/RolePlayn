@@ -19,6 +19,11 @@ RSpec.shared_examples "character_session_manageable" do |path_proc|
       expected_filename = current_expression.image.filename.to_s
       expect(response.body).to have_selector(".side-nav img[src*='#{expected_filename}']")
     end
+
+    context "セッションにキャラクターが保存されていない場合" do
+      # セッションの管理を変更後に実装
+      xit "「キャラクターを作成」ボタンがサイドバーに表示されること"
+    end
   end
 
   describe "セッションによるキャラクター管理" do
