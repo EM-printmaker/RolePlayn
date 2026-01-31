@@ -1,7 +1,6 @@
 module ApplicationHelper
   def session_token(session_id)
-    salt = Time.zone.now.strftime("%Y-%m-%d")
-    OpenSSL::HMAC.hexdigest("SHA256", Rails.application.secret_key_base, "#{session_id}#{salt}")
+    OpenSSL::HMAC.hexdigest("SHA256", Rails.application.secret_key_base, session_id.to_s)
   end
 
   def infinite_scroll_load_more_url(pagy, city = nil, subject = nil)

@@ -1,6 +1,6 @@
 <% if object.errors.any? %>
   <div class="alert alert-danger">
-    <ul>
+    <ul role="list">
       <% object.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
