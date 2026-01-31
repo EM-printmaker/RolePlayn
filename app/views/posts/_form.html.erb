@@ -1,0 +1,14 @@
+<% if post.present? %>
+  <%= form_with(model: post, id: "post-form",
+                data: {
+                  turbo_submitting: "false",
+                  controller: "post-form",
+                  action: "turbo:submit-end->post-form#reset" 
+                }) do |f| %>
+                <div id="post_error_messages">
+    <%= render "shared/error_messages", object: post %>
+  </div>
+    <%= f.text_area :content, class: "form-control", rows: 5 %>
+    <%= f.submit "Post", class: "btn btn-primary" %>
+  <% end %>
+<% end %>

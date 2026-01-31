@@ -1,0 +1,10 @@
+@use "../global" as *;
+
+.side-nav {
+  width: 150px;
+  padding-top: 1em;
+
+  @include media-breakpoint-down(lg) {
+    width: 0;
+  }
+}

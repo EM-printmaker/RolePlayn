@@ -1,0 +1,18 @@
+@use "../global" as *;
+
+.current-character {
+  display: flex;
+  flex-direction: column;
+  @include media-breakpoint-down(sm) {
+    align-items: center;
+  }
+
+  &__image {
+    width: 150px;
+    height: 150px;
+  }
+
+  &__button {
+    width: 150px;
+  }
+}

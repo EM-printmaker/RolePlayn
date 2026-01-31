@@ -33,4 +33,14 @@ RSpec.describe Character, type: :model do
       end
     end
   end
+
+  describe ".pick_random (RandomSelectable)" do
+    before { create_list(:character, 2) }
+
+    it "登録されているキャラクターから 1 件が取得されること" do
+      result = described_class.pick_random
+      expect(result).to be_a(described_class)
+      expect(result).not_to be_nil
+    end
+  end
 end

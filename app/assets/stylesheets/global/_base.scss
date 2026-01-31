@@ -1,0 +1,34 @@
+/* =================================================================
+    Base Styles
+   ================================================================= */
+
+
+html {
+  scrollbar-gutter: stable;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+ul[role='list'],
+ol[role='list'] {
+  padding: 0;
+  margin: 0;
+}
+
+label {
+  &:has(+ input:not([type="radio"], [type="checkbox"]), select, textarea) {
+    display: block;
+  }
+}
+
+[type="search"] {
+  -webkit-appearance: none;
+  appearance: none;
+}

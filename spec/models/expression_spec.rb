@@ -17,5 +17,45 @@ RSpec.describe Expression, type: :model do
     it 'アタッチされたファイルの形式が正しいこと' do
       expect(expression.image.content_type).to eq('image/png')
     end
+
+    context "variant :display" do
+      let(:attachment) { described_class.reflect_on_attachment(:image) }
+
+      it "display バリアントが正しく設定されていること" do
+        variant = attachment.named_variants[:display]
+        expect(variant).not_to be_nil
+        expect(variant.transformations).to eq(resize_to_limit: [ 400, 400 ])
+      end
+    end
+  end
+
+  describe "enums" do
+    it "emotion_typeが正しく定義されていること(joy, angry, sad, fun, normal)" do
+      expect(described_class.emotion_types.keys).to match_array(%w[joy angry sad fun normal])
+    end
+  end
+
+  describe "deletion restrictions" do
+    context "紐づく投稿が存在する場合" do
+      before { create(:post, expression: expression) }
+
+      it "削除しようとすると例外が発生して保護されること" do
+        expect { expression.destroy! }.to raise_error(ActiveRecord::RecordNotDestroyed)
+      end
+    end
+
+    context "紐づくレコードが存在しない場合" do
+      let!(:expression_without_associations) { create(:expression) }
+
+      it "正常に削除できること" do
+        expect { expression_without_associations.destroy! }.to change(described_class, :count).by(-1)
+      end
+    end
+  end
+
+  describe ".with_attached_images" do
+    it "エラーにならずスコープが実行できること" do
+      expect { described_class.with_attached_images }.not_to raise_error
+    end
   end
 end

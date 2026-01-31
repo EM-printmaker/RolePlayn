@@ -1,0 +1,52 @@
+/* モーダルのサイズ調整 */
+.expression-modal {
+  width: 90%;
+  max-width: 700px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+}
+
+.expression-modal::backdrop {
+  background: rgb(0 0 0 / 50%);
+}
+
+.expression-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 10px;
+  max-height: 300px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.expression-item {
+  width: fit-content;
+  text-align: center;
+  background: none;
+  border: none;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  img {
+    width: 100%; 
+    max-width: 150px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+}
+
+.preview-display {
+  display: flex;
+  justify-content: center;
+}
+
+.text--joy { color: #f4d065; }
+.text--angry { color: #f14c4c; }
+.text--sad { color: #8ac4d2; }
+.text--fun { color: #ffa176; }
+.text-normal { color: #b1ada1; }

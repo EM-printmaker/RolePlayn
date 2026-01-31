@@ -1,0 +1,15 @@
+<ol id="feed" class="feed" role='list'>
+  <% if posts.any? %>
+    <% posts.each do |post| %>
+      <li class="feed-item">
+        <%= render 'posts/post', post: post %>
+      </li>
+    <% end %>
+  <% else %>
+    <div class="py-10 text-center text-gray-500">
+      <p>投稿はまだありません</p>
+    </div>
+  <% end %>
+</ol>
+
+<%= render 'shared/infinite_scroll_trigger' %>
