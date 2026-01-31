@@ -5,7 +5,7 @@ gem "bootsnap", require: false
 gem "jbuilder"
 gem "dartsass-rails"
 gem "sprockets-rails"
-gem "bootstrap", "~> 5.3.0"
+gem "bootstrap", "~> 5.3.0", require: false
 gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -20,7 +20,6 @@ gem "pagy", "~> 43.2"
 gem "rails-i18n"
 
 group :development, :test do
-  gem "sassc-rails"
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
   gem "rspec-rails", "~> 7.1", ">= 7.1.1"
   gem "factory_bot_rails"
