@@ -7,14 +7,14 @@ class CitiesController < ApplicationController
   end
 
   def show
-    @city = City.find_by!(slug: params[:slug])
+    set_city
     set_active_character(@city)
     paginate_posts(@city.feed_posts)
     @post = Post.new
   end
 
   def load_more
-    @city = City.find_by!(slug: params[:slug])
+    set_city
     paginate_posts(@city.feed_posts)
     respond_to do |format|
       format.any(:html, :turbo_stream) do
@@ -22,4 +22,10 @@ class CitiesController < ApplicationController
       end
     end
   end
+
+  private
+    def set_city
+      @world = World.find_by!(slug: params[:world_slug])
+      @city = @world.cities.find_by!(slug: params[:slug])
+    end
 end
