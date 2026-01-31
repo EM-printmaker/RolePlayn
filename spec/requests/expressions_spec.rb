@@ -6,7 +6,7 @@ RSpec.describe "Expressions", type: :request do
 
   describe "POST expressions/preview" do
     let(:character) { create(:character, city: city) }
-    let!(:joy_expression) do
+    let(:joy_expression) do
     create(:expression,
       :with_image,
       character: character,
@@ -19,11 +19,13 @@ RSpec.describe "Expressions", type: :request do
     end
 
     it "正常なレスポンスが返ること" do
+      joy_expression
       post preview_expressions_path, params: valid_params, as: :turbo_stream
       expect(response).to have_http_status(:ok)
     end
 
     it "Turbo Stream形式でモーダルの内容が返ってくること" do
+      joy_expression
       post preview_expressions_path, params: valid_params, as: :turbo_stream
       expect(response.body).to include('turbo-stream action="update" target="expression-modal-content"')
     end

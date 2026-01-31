@@ -22,10 +22,12 @@ RSpec.describe "Worlds", type: :request do
     end
 
     context "ワールドを観測する街(node)がなく、Slugのワールドに所属する街が存在する場合" do
-      before { world_observer.delete }
-
       let!(:first_city) { create(:city, world: world) }
-      let!(:second_city) { create(:city, world: world) }
+
+      before do
+        world_observer.delete
+        create(:city, world: world)
+      end
 
       it "その世界内の最初の街へリダイレクトされること" do
         get world_path(world)
