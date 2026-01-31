@@ -7,4 +7,10 @@ class Character < ApplicationRecord
     dependent: :destroy,
     inverse_of: :character
   has_many :posts, dependent: :restrict_with_error
+
+  delegate :world, to: :city, allow_nil: true
+
+  def primary_observer
+    world&.observation_city
+  end
 end

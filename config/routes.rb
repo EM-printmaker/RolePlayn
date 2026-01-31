@@ -75,8 +75,7 @@ Rails.application.routes.draw do
   end
 
   direct :observation do |character|
-    target_world = character.city.world
-    observer_city = City.observer_for(target_world) || target_world.observation_city
+    observer_city = character.primary_observer || character.city
     world_city_observation_path(
       world_slug: observer_city.world.slug,
       city_slug: observer_city.slug,
