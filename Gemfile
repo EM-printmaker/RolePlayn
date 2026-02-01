@@ -19,6 +19,7 @@ gem "aws-sdk-s3", require: false
 gem "pagy", "~> 43.2"
 gem "rails-i18n"
 gem "devise"
+gem "devise-i18n"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
