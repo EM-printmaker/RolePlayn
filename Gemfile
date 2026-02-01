@@ -18,6 +18,7 @@ gem "image_processing", "~> 1.2"
 gem "aws-sdk-s3", require: false
 gem "pagy", "~> 43.2"
 gem "rails-i18n"
+gem "devise"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
