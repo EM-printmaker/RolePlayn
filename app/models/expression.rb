@@ -13,4 +13,17 @@ class Expression < ApplicationRecord
   scope :with_attached_images, -> {
     includes(image_attachment: { blob: { variant_records: { image_attachment: :blob } } })
   }
+
+  # 引数のキャラクターの自身と同じ表情を検索する
+  def find_equivalent_for(target_character)
+    return nil if target_character.nil?
+
+  found = target_character.expressions.detect { |e| e.emotion_type == emotion_type && e.level == level }
+  return found if found
+
+  found = target_character.expressions.detect { |e| e.emotion_type == emotion_type && e.level == 1 }
+  return found if found
+
+    target_character.expressions.pick_random || target_character.expressions.first
+  end
 end

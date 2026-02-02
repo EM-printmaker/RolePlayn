@@ -14,4 +14,13 @@ class Character < ApplicationRecord
   def primary_observer
     world&.observation_city
   end
+
+  def main_image
+    target = expressions.detect { |e| e.normal? && e.level == 1 } || expressions.first
+    target&.image
+  end
+
+  def match_expression(template_expression)
+    template_expression&.find_equivalent_for(self) || expressions.pick_random
+  end
 end

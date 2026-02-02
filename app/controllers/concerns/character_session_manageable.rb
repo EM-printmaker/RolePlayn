@@ -5,10 +5,10 @@ module CharacterSessionManageable
 
   included do
     before_action :set_modal_expression, if: -> { params[:tab] == "emotions" }
-    helper_method :current_character, :current_expression, :viewing_city
+    helper_method :current_character, :current_expression, :viewing_city, :characters
   end
 
-  # 街の切り替え
+  # 場所(City)の管理
   def transition_to_city(target_city = nil, exclude_city: nil)
     @city = target_city || City.local.other_than(exclude_city).pick_random || City.local.pick_random
 
@@ -35,6 +35,7 @@ module CharacterSessionManageable
     @viewing_city
   end
 
+  # 配役（Character/Expression）の管理
   def current_character(city = viewing_city)
     return nil if city.blank?
 
@@ -61,6 +62,10 @@ module CharacterSessionManageable
     else
       fetch_session_assignment(city)&.dig(:expression)
     end
+  end
+
+  def characters
+    @_characters ||= viewing_city.characters.includes(:expressions)
   end
 
   # operations/re_rolls
@@ -105,9 +110,18 @@ module CharacterSessionManageable
     CharacterAssignment.transfer_from_guest!(current_user, session[:guest_assignments])
 
     session.delete(:guest_assignments)
-    @database_assignment = {}
-    @current_character = {}
-    @current_expression = {}
+    reset_character_caches
+  end
+
+  def update_active_character(new_character, city = viewing_city)
+    return if new_character.blank? || city.blank?
+
+    new_expression = new_character.match_expression(current_expression(city))
+
+    assignment = CharacterAssignment.ensure_for_today!(current_user, city)
+    assignment.update!(character: new_character, expression: new_expression)
+
+    reset_character_caches
   end
 
   private
@@ -161,6 +175,12 @@ module CharacterSessionManageable
       @current_character[city.id] = character
       @current_expression ||= {}
       @current_expression[city.id] = expression
+    end
+
+    def reset_character_caches
+      @database_assignment = {}
+      @current_character = {}
+      @current_expression = {}
     end
 
     # 表情モーダル

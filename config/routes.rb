@@ -41,6 +41,7 @@ Rails.application.routes.draw do
     resources :shuffles,   only: [ :create ]
     resources :re_rolls,   only: [ :create ]
     resources :expressions, only: [ :create ]
+    resources :character_selections, only: [ :create ]
   end
 
   # セキュリティのためこれより下に通常のルーティング設定を追加しないこと
