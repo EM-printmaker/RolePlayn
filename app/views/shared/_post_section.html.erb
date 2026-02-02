@@ -1,6 +1,8 @@
 <div class="row" data-controller="modal">
   <div id="current_expression" class="current-character col-sm-4">
-    <%= render 'expressions/current_display' %>
+    <% if current_character && current_expression %>
+      <%= render 'expressions/current_display' %>
+    <% end %>
   </div>
   <div class="col-sm-8 post-form-container">
     <%= render 'posts/form', post: post %>
