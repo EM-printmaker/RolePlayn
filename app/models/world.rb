@@ -3,6 +3,11 @@ class World < ApplicationRecord
 
   has_many :cities, dependent: :restrict_with_error
   has_one_attached :image
+  has_one :observation_city_association, -> { where(target_scope_type: :specific_world) },
+          class_name: "City",
+          foreign_key: :target_world_id,
+          dependent: :nullify,
+          inverse_of: :target_world
 
   scope :global, -> { where(is_global: true)  }
   scope :local,  -> { where(is_global: false) }
@@ -17,6 +22,6 @@ class World < ApplicationRecord
 
   # Worldのフィードを表示するglobalなCityを返し、nillならglobalな最初のCityを返す
   def observation_city
-    City.observer_for(self) || City.global.first
+    observation_city_association || City.global_observer
   end
 end
