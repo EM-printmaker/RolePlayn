@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
 
     def after_sign_in_path_for(resource)
       if resource.sign_in_count == 1 && resource.login_id.blank?
-        flash[:notice] = "ログインありがとうございます！まずはユーザーIDを設定しましょう。"
+        flash[:notice] = t("flash.sessions.welcome_and_setup_id")
         edit_user_registration_path
       else
         super
