@@ -25,13 +25,12 @@ class City < ApplicationRecord
 
   # 指定されたworldのpostを表示するCityを返す
   def self.observer_for(world)
-    @_observers ||= {}
-    @_observers[world.id] ||= find_by(target_scope_type: :specific_world, target_world_id: world.id)
+    find_by(target_scope_type: :specific_world, target_world_id: world.id)
   end
 
   # 全てのworldのpostを表示するCityを返す
   def self.global_observer
-    @_global_observer ||= (find_by(target_scope_type: :all_local) || global.first)
+    find_by(target_scope_type: :all_local) || global.first
   end
 
   # 既存のキャラを除外してランダムに取得、いなければ全体から取得
