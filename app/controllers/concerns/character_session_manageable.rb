@@ -25,8 +25,9 @@ module CharacterSessionManageable
     return @viewing_city if defined?(@viewing_city)
 
     city = City.find_by(id: session[:viewing_city_id])
+    is_assigned_today = city && session.dig(:guest_assignments, city.id.to_s, "assigned_date") == Time.zone.today.to_s
 
-    if city
+    if city && is_assigned_today
       ensure_assignment(city)
       @viewing_city = city
     else
@@ -143,14 +144,18 @@ module CharacterSessionManageable
       @database_assignment[city.id] ||= CharacterAssignment.for_viewing(current_user, city)
     end
 
+    # ゲストユーザー
     def ensure_session_assignment(city)
       if fetch_session_assignment(city).nil?
-        character, expression = city.pick_random_character_with_expression
+        raw_data = session.dig(:guest_assignments, city.id.to_s)
+        old_character_id = raw_data&.dig("character_id")
+        old_character = Character.find_by(id: old_character_id)
+
+        character, expression = city.pick_random_character_with_expression(exclude: old_character)
         update_session_assignment(city, character, expression) if character
       end
     end
 
-    # ゲストユーザー
     def fetch_session_assignment(city)
       return nil if city.blank? || session[:guest_assignments].nil?
 

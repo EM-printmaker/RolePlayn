@@ -22,9 +22,15 @@ class CharacterAssignment < ApplicationRecord
     assignment = find_or_initialize_by(user: user, city: city, assigned_date: Time.zone.today)
     return assignment unless assignment.new_record?
 
-    char, expr = city.pick_random_character_with_expression
-    if char && expr
-      assignment.update!(character: char, expression: expr)
+    last_assignment = where(user: user, city: city, assigned_date: ...Time.zone.today).
+                      order(assigned_date: :desc).first
+
+    character, expression = city.pick_random_character_with_expression(exclude: last_assignment&.character)
+
+    if character && expression
+      assignment.character = character
+      assignment.expression = expression
+      assignment.save!
     end
     assignment
   end
