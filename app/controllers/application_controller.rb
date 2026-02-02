@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   allow_browser versions: :modern
   include Pagy::Method
+  include CharacterSessionManageable
 
   before_action :set_all_worlds
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -23,8 +24,10 @@ class ApplicationController < ActionController::Base
     def after_sign_in_path_for(resource)
       if resource.sign_in_count == 1 && resource.login_id.blank?
         flash[:notice] = "ログインありがとうございます！まずはユーザーIDを設定しましょう。"
+        transfer_guest_assignments_to_db
         edit_user_registration_path
       else
+        transfer_guest_assignments_to_db
         super
       end
     end
