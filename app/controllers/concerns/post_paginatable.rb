@@ -4,7 +4,7 @@ module PostPaginatable
   private
 
   def paginate_posts(scope)
-    optimized_scope = scope.model.respond_to?(:with_details) ? scope.with_details : scope
+    optimized_scope = scope.respond_to?(:with_details) ? scope.with_details : scope
     @pagy, @posts = pagy(
       :countish,
       optimized_scope,
