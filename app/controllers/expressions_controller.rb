@@ -1,5 +1,5 @@
 class ExpressionsController < ApplicationController
-    include CharacterSessionManageable
+  include CharacterSessionManageable
 
   def preview
     respond_to do |format|

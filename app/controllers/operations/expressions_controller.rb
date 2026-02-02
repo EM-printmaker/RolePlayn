@@ -1,6 +1,6 @@
 module Operations
   class ExpressionsController < ApplicationController
-      include CharacterSessionManageable
+    include CharacterSessionManageable
 
     def create
       if current_character && params[:expression_id].present?
