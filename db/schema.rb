@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_01_091134) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_02_044324) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,21 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_01_091134) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "character_assignments", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "city_id", null: false
+    t.bigint "character_id", null: false
+    t.bigint "expression_id", null: false
+    t.date "assigned_date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_id"], name: "index_character_assignments_on_character_id"
+    t.index ["city_id"], name: "index_character_assignments_on_city_id"
+    t.index ["expression_id"], name: "index_character_assignments_on_expression_id"
+    t.index ["user_id", "city_id", "assigned_date"], name: "unique_character_per_user_city_day", unique: true
+    t.index ["user_id"], name: "index_character_assignments_on_user_id"
   end
 
   create_table "characters", force: :cascade do |t|
@@ -126,6 +141,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_01_091134) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "character_assignments", "characters"
+  add_foreign_key "character_assignments", "cities"
+  add_foreign_key "character_assignments", "expressions"
+  add_foreign_key "character_assignments", "users"
   add_foreign_key "characters", "cities"
   add_foreign_key "cities", "worlds"
   add_foreign_key "expressions", "characters"
