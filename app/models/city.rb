@@ -33,6 +33,15 @@ class City < ApplicationRecord
     find_by(target_scope_type: :all_local) || global.first
   end
 
+  # 既存のキャラを除外してランダムに取得、いなければ全体から取得
+  def pick_random_character_with_expression(exclude: nil)
+    character = characters.where.not(id: exclude&.id).pick_random || characters.pick_random
+    return nil if character.nil?
+
+    expression = character.expressions.pick_random
+    [ character, expression ]
+  end
+
   def feed_posts
     base_scope =
     case target_scope_type

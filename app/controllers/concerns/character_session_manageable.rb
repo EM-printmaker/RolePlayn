@@ -1,4 +1,5 @@
-# ユーザーごとのキャラクター抽選をセッションで保持・管理する。
+# ゲストユーザーのキャラクター抽選をセッションで保持・管理する。
+# ログインユーザーはCharacterAssignmentを介して保存・管理する。
 module CharacterSessionManageable
   extend ActiveSupport::Concern
 
@@ -7,132 +8,169 @@ module CharacterSessionManageable
     helper_method :current_character, :current_expression, :viewing_city
   end
 
+  # 街の切り替え
   def transition_to_city(target_city = nil, exclude_city: nil)
-    if target_city
-      @city = target_city
-    else
-      @city = City.local.other_than(exclude_city).pick_random || City.local.pick_random
-    end
+    @city = target_city || City.local.other_than(exclude_city).pick_random || City.local.pick_random
 
     if @city
       session[:viewing_city_id] = @city.id
-      @viewing_city = @city
-      refresh_character(@city)
+      ensure_assignment(@city)
     else
       session.delete(:viewing_city_id)
-      reset_character_session
     end
     @city
   end
 
   def viewing_city
-    @viewing_city ||= City.find_by(id: session[:viewing_city_id]) || transition_to_city
-  end
+    return @viewing_city if defined?(@viewing_city)
 
-  def set_active_character(city)
-    # 0時を回ったタイミングでセッションを切り替える仕様のため
-    if session[:assigned_date] != Time.zone.today.to_s
-      rotate_daily_session(city)
-      return
+    city = City.find_by(id: session[:viewing_city_id])
+
+    if city
+      ensure_assignment(city)
+      @viewing_city = city
+    else
+      @viewing_city = transition_to_city
     end
-
-    return if session[:active_character_id].present? || city.blank?
-    character_shuffle(city)
+    @viewing_city
   end
 
+  def current_character(city = viewing_city)
+    return nil if city.blank?
+
+    @current_character ||= {}
+    return @current_character[city.id] if @current_character.key?(city.id)
+
+    @current_character[city.id] =
+    if user_signed_in?
+      fetch_db_assignment(city)&.character
+    else
+      fetch_session_assignment(city)&.dig(:character)
+    end
+  end
+
+  def current_expression(city = viewing_city)
+    return nil if city.blank?
+
+    @current_expression ||= {}
+    return @current_expression[city.id] if @current_expression.key?(city.id)
+
+    @current_expression[city.id] =
+    if user_signed_in?
+      fetch_db_assignment(city)&.expression
+    else
+      fetch_session_assignment(city)&.dig(:expression)
+    end
+  end
+
+  # operations/re_rolls
   def refresh_character(city)
-    reset_character_session
-    character_shuffle(city)
-  end
+    return if city.blank?
 
-  def current_character
-    return @current_character if defined?(@current_character)
-
-    id = session[:active_character_id]
-    if id.blank?
-      return @current_character = nil
+    if user_signed_in?
+      character, expression = city.pick_random_character_with_expression(exclude: current_character(city))
+      CharacterAssignment.ensure_for_today!(current_user, city).update!(character: character, expression: expression) if character
+    else
+      character, expression = city.pick_random_character_with_expression(exclude: current_character(city))
+      update_session_assignment(city, character, expression) if character
     end
 
-    @current_character = Character.includes(:expressions).find_by(id: id)
+    @database_assignment = {}
+    @current_character = {}
+    @current_expression = {}
+  end
 
-    # 3. IDはあるのにキャラが見つからないとき
-    if @current_character.nil?
-      reset_character_session
-      @current_character = nil
+  # operations/expressions
+  def update_active_expression(expression, city = viewing_city)
+    return if expression.blank? || city.blank?
+
+    if user_signed_in?
+      assignment = fetch_db_assignment(city)
+      assignment.update!(expression: expression) if assignment
+    else
+      session[:guest_assignments] ||= {}
+      if session[:guest_assignments][city.id.to_s]
+        session[:guest_assignments][city.id.to_s]["expression_id"] = expression.id
+      end
     end
 
-    @current_character
+    @current_expression ||= {}
+    @current_expression[city.id] = expression
   end
 
-  def current_expression
-    return @current_expression if defined?(@current_expression)
-    return @current_expression = nil if current_character.nil?
+  # ログイン時
+  def transfer_guest_assignments_to_db
+    return unless user_signed_in? && session[:guest_assignments].present?
 
-    @current_expression = current_character&.expressions&.find { |e| e.id == session[:active_expression_id].to_i }
+    CharacterAssignment.transfer_from_guest!(current_user, session[:guest_assignments])
 
-    @current_expression ||= Expression.with_attached_images.find_by(id: session[:active_expression_id])
-  end
-
-  # 書き換えが発生した時に、古いキャッシュを捨てる
-  def reset_active_expression
-    remove_instance_variable(:@current_expression) if defined?(@current_expression)
+    session.delete(:guest_assignments)
+    @database_assignment = {}
+    @current_character = {}
+    @current_expression = {}
   end
 
   private
 
-    def rotate_daily_session(old_city)
-      old_character_id = session[:active_character_id]
-      new_city = transition_to_city
-      new_character = current_character
-
-      if new_city.id == old_city.id && new_character&.id == old_character_id
-        other_character = new_city.characters.where.not(id: old_character_id).pick_random
-
-        if other_character
-          update_session_for_character(other_character)
-        else
-          transition_to_city(exclude_city: old_city)
-        end
-      end
-    end
-
-    def character_shuffle(city)
-      character = city.characters.pick_random
-      update_session_for_character(character)
-    end
-
-    def update_session_for_character(character)
-      expression = character&.expressions&.pick_random
-
-      if character
-        session[:active_character_id] = character.id
-        session[:active_expression_id] = expression&.id
-        session[:assigned_date] = Time.zone.today.to_s
+    # 共通
+    def ensure_assignment(city)
+      return if city.blank?
+      if user_signed_in?
+        CharacterAssignment.ensure_for_today!(current_user, city)
       else
-        reset_character_session
+        ensure_session_assignment(city)
       end
-
-      @current_character = character
-      @current_expression = expression
     end
 
-    def reset_character_session
-      session.delete(:active_character_id)
-      session.delete(:active_expression_id)
-      session.delete(:assigned_date)
-
-      # defined?によるキャッシュを無効化するため、物理的に変数を削除する必要がある
-      remove_instance_variable(:@current_character) if defined?(@current_character)
-      remove_instance_variable(:@current_expression) if defined?(@current_expression)
+    # ログインユーザー
+    def fetch_db_assignment(city)
+      return nil if city.blank? || current_user.nil?
+      @database_assignment ||= {}
+      @database_assignment[city.id] ||= CharacterAssignment.for_viewing(current_user, city)
     end
 
+    def ensure_session_assignment(city)
+      if fetch_session_assignment(city).nil?
+        character, expression = city.pick_random_character_with_expression
+        update_session_assignment(city, character, expression) if character
+      end
+    end
+
+    # ゲストユーザー
+    def fetch_session_assignment(city)
+      return nil if city.blank? || session[:guest_assignments].nil?
+
+      data = session.dig(:guest_assignments, city.id.to_s)
+      return nil if data.nil? || data["assigned_date"] != Time.zone.today.to_s
+
+      {
+        character: Character.includes(:expressions).find_by(id: data["character_id"]),
+        expression: Expression.with_attached_images.find_by(id: data["expression_id"])
+      }
+    end
+
+    def update_session_assignment(city, character, expression)
+      session[:guest_assignments] ||= {}
+      session[:guest_assignments][city.id.to_s] = {
+        "character_id" => character&.id,
+        "expression_id" => expression&.id,
+        "assigned_date" => Time.zone.today.to_s
+      }
+
+      @current_character ||= {}
+      @current_character[city.id] = character
+      @current_expression ||= {}
+      @current_expression[city.id] = expression
+    end
+
+    # 表情モーダル
     def set_modal_expression
-      return if current_character.nil?
+      character = current_character(viewing_city)
+      return if character.nil?
 
       if params[:view_type].present? && params[:view_level].present?
-        @target_expression = current_character.expressions.find do |e|
-        e.emotion_type == params[:view_type] &&
-        e.level == params[:view_level].to_i
+        @target_expression = character.expressions.find do |e|
+          e.emotion_type == params[:view_type] && e.level == params[:view_level].to_i
         end
       end
     end
