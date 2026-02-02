@@ -131,6 +131,19 @@ RSpec.describe City, type: :model do
     end
   end
 
+  describe "#pick_random_character_with_expression" do
+    let(:city) { create(:city) }
+    let!(:character) { create(:character, city: city) }
+    let!(:new_character) { create(:character, city: city) }
+
+    it "excludeで指定したキャラクターは選ばれないこと" do
+      10.times do
+        result_char, _ = city.pick_random_character_with_expression(exclude: character)
+        expect(result_char).to eq new_character
+      end
+    end
+  end
+
   describe "#global?" do
     let(:world) { city.world }
 

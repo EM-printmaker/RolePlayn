@@ -58,4 +58,45 @@ RSpec.describe Expression, type: :model do
       expect { described_class.with_attached_images }.not_to raise_error
     end
   end
+
+  describe "#find_equivalent_for(target_character)" do
+    let(:character) { create(:character) }
+    let(:target_character) { create(:character) }
+
+    let(:source_expression) { create(:expression, character: character, emotion_type: "joy", level: 2) }
+
+    context "引数が nil の場合" do
+      it "nil を返すこと" do
+        expect(source_expression.find_equivalent_for(nil)).to be_nil
+      end
+    end
+
+    context "対象のキャラクターが全く同じ表情（emotion_type と level が一致）を持っている場合" do
+      let!(:exact_match) { create(:expression, character: target_character, emotion_type: "joy", level: 2) }
+
+      before { create(:expression, character: target_character, emotion_type: "joy", level: 1) }
+
+      it "その表情を優先して返すこと" do
+        expect(source_expression.find_equivalent_for(target_character)).to eq exact_match
+      end
+    end
+
+    context "全く同じではないが、同じ emotion_type のレベル 1 を持っている場合" do
+      let!(:level_1_match) { create(:expression, character: target_character, emotion_type: "joy", level: 1) }
+
+      before { create(:expression, character: target_character, emotion_type: "fun", level: 1) }
+
+      it "レベル 1 の同種表情を返すこと" do
+        expect(source_expression.find_equivalent_for(target_character)).to eq level_1_match
+      end
+    end
+
+    context "同じ emotion_type の表情を一切持っていない場合" do
+      let!(:completely_different) { create(:expression, character: target_character, emotion_type: "angry", level: 1) }
+
+      it "相手の持つ表情の中から何か（ランダムまたは最初の一つ）を返すこと" do
+        expect(source_expression.find_equivalent_for(target_character)).to eq completely_different
+      end
+    end
+  end
 end

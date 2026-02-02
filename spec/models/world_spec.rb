@@ -5,6 +5,13 @@ RSpec.describe World, type: :model do
 
   describe "associations" do
     it_behaves_like "has_many_association", :cities, :city, :world
+
+    it "observation_city_association が City モデルと正しく紐付いていること" do
+      assoc = described_class.reflect_on_association(:observation_city_association)
+      expect(assoc.macro).to eq :has_one
+      expect(assoc.options[:class_name]).to eq "City"
+      expect(assoc.options[:dependent]).to eq :nullify
+    end
   end
 
   describe "deletion restrictions" do
