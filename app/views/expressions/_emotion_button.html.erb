@@ -1,0 +1,8 @@
+<% config = emotion_button_config(emotion_type) %>
+
+<%= button_to preview_expressions_path(config[:params]),
+      method: :post,
+      data: config[:data],
+      class: config[:class] do %>
+  <%= emotion_icon(emotion_type, class: "fs-4") %>
+<% end %>

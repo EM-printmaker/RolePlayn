@@ -1,7 +1,6 @@
 <div class="row" data-controller="modal">
   <div id="current_expression" class="current-character col-sm-4">
-    <%= image_tag cdn_image_url(current_expression.image.variant(:display)), class: "current-character__image" %>
-    <button type="button" class="btn btn-outline-dark current-character__button" data-action="click->modal#open">表情を変更</button>
+    <%= render 'expressions/current_display' %>
   </div>
   <div class="col-sm-8 post-form-container">
     <%= render 'posts/form', post: post %>
@@ -9,7 +8,7 @@
 
   <dialog data-modal-target="dialog" id="expression-modal" data-action="click->modal#clickOutside" class="expression-modal">
     <div id="expression-modal-content">
-      <%= render 'expressions/modal_inner' %>
+      <%= render 'expressions/modal_inner', city: city %>
     </div>
   </dialog>
 </div>

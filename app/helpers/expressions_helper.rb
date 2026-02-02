@@ -17,36 +17,55 @@ module ExpressionsHelper
     end
   end
 
-  def expression_select_link(expression)
-    is_active = current_expression&.id == expression.id
-    active_class = is_active ? "border border-primary border-3" : "border border-transparent"
-
-    button_to expressions_path(expression_id: expression.id),
-            id: "expression_link_#{expression.id}",
-            data: {
-              turbo_method: :post,
-              turbo_frame: "_top",
-              action: "click->modal#close"
-            },
-            class: "expression-item text-decoration-none text-dark" do
-      content_tag(:div, class: "rounded #{active_class}") do
-        image_tag(cdn_image_url(expression.image.variant(:display)), class: "img-thumbnail")
-      end
-    end
+  def character_button_params(character)
+    {
+      character_id: character.id,
+      tab: current_tab,
+      view_type: params[:view_type],
+      view_level: params[:view_level]
+    }
   end
 
-  def emotion_toggle_link(type)
+  def emotion_types_for_toggle
+    Expression.emotion_types.keys
+  end
+
+  def expression_button_config(expression)
+    is_active = current_expression&.id == expression.id
+
+    {
+      params: {
+        expression_id: expression.id,
+        tab: current_tab,
+        view_type: params[:view_type],
+        view_level: params[:view_level]
+      },
+      active_class: is_active ? "border border-primary border-3" : "border border-transparent",
+      data: {
+        turbo_method: :post,
+        turbo_frame: "_top",
+        action: "click->modal#close"
+      }
+    }
+  end
+
+  def emotion_button_config(type)
     current_type = params[:view_type]
     current_level = (current_type == type.to_s) ? params[:view_level].to_i : 0
     new_level = (current_level + 1) % 3
 
-    button_to preview_expressions_path,
-      params: { view_type: type, view_level: new_level, tab: "emotions" },
-      method: :post,
-      data: { turbo_stream: true },
-      class: "btn btn-outline-secondary px-3 py-2 transition-all" do
-      emotion_icon(type, class: "fs-4")
-    end
+    is_active = (current_type == type.to_s && params[:view_level].to_i > 0)
+    active_class = is_active ? "btn-secondary text-white" : "btn-outline-secondary"
+
+    {
+      params: {
+        view_type: type,
+        view_level: new_level,
+        tab: "emotions"
+      },
+      class: "btn #{active_class} px-3 py-2 transition-all",
+      data: { turbo_stream: true }
+    }
   end
 
   private
