@@ -7,6 +7,7 @@ class Character < ApplicationRecord
     dependent: :destroy,
     inverse_of: :character
   has_many :posts, dependent: :restrict_with_error
+  has_many :character_assignments, dependent: :destroy
 
   delegate :world, to: :city, allow_nil: true
 

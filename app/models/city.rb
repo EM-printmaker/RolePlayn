@@ -6,6 +6,7 @@ class City < ApplicationRecord
   belongs_to :target_world, class_name: "World", optional: true
   has_many :characters, dependent: :restrict_with_error
   has_many :posts, dependent: :restrict_with_error
+  has_many :character_assignments, dependent: :destroy
   has_one_attached :image
 
   enum :target_scope_type, {

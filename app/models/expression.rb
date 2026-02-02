@@ -3,6 +3,7 @@ class Expression < ApplicationRecord
 
   belongs_to :character, inverse_of: :expressions
   has_many :posts, dependent: :restrict_with_error, inverse_of: :expression
+  has_many :character_assignments, dependent: :destroy
   has_one_attached :image do |attachable|
     attachable.variant :display, resize_to_limit: [ 400, 400 ]
   end

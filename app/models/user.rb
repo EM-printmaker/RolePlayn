@@ -6,6 +6,8 @@ class User < ApplicationRecord
          :confirmable, :trackable,
          authentication_keys: [ :login ]
 
+  has_many :character_assignments, dependent: :destroy
+
   enum :role, { general: 0, admin: 10 }
 
   validates :login_id,
