@@ -22,7 +22,7 @@ class Post < ApplicationRecord
     )
   }
 
-  after_create_commit :broadcast_new_post_notification
+  # after_create_commit :broadcast_new_post_notification
 
   private
 
