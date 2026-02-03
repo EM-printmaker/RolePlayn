@@ -19,9 +19,15 @@
     <% end %>
 
     <div class="d-none" data-tabs-target="pane" data-tab-name="all">
-      <div class="expression-grid">
-        <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression %>
-      </div>
+      <% if current_character.present? %>
+        <div class="expression-grid">
+          <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression %>
+        </div>
+      <% else %>
+        <div class="text-center py-5">
+          <p class="text-muted">表示できるキャラクターがいません</p>
+        </div>
+      <% end %>
     </div>
 
     <div class="" data-tabs-target="pane" data-tab-name="emotions">
