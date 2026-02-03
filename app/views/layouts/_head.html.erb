@@ -3,7 +3,7 @@
 <%= csrf_meta_tags %>
 <%= csp_meta_tag %>
 
-<%= yield :head %>
+<%= javascript_importmap_tags %>
 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/icon.png" type="image/png">
@@ -11,7 +11,9 @@
 <link rel="apple-touch-icon" href="/icon.png">
 <meta name="turbo-refresh-method" content="morph">
 <meta name="turbo-refresh-scroll" content="preserve">
+<meta name="current-session-id" content="<%= session_token(session.id) %>">
+
+<%= yield :head %>
+
 <%= stylesheet_link_tag "vendor", "data-turbo-track": "reload" %>
 <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-<%= javascript_importmap_tags %>
-<meta name="current-session-id" content="<%= session_token(session.id) %>">
