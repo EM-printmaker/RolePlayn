@@ -3,7 +3,9 @@ module RandomSelectable
 
   class_methods do
     def pick_random
-      order("RANDOM()").first
+      ids = pluck(:id)
+      return nil if ids.empty?
+      find_by(id: ids.sample)
     end
   end
 end
