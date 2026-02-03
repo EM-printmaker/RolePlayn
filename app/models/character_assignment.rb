@@ -17,6 +17,12 @@ class CharacterAssignment < ApplicationRecord
     ).find_by(user: user, city: city, assigned_date: Time.zone.today)
   end
 
+  def self.exists_for_today?(user, city)
+    return false if user.blank? || city.blank?
+
+    exists?(user: user, city: city, assigned_date: Time.zone.today)
+  end
+
   # その日の割り当てを確保または更新する
   def self.ensure_for_today!(user, city)
     assignment = find_or_initialize_by(user: user, city: city, assigned_date: Time.zone.today)
