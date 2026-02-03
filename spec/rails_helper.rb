@@ -81,6 +81,8 @@ RSpec.configure do |config|
 
   config.include Capybara::RSpecMatchers, type: :request
 
+  config.include Devise::Test::IntegrationHelpers, type: :request
+
   config.define_derived_metadata do |meta|
     meta[:aggregate_failures] = true unless meta.key?(:aggregate_failures)
   end

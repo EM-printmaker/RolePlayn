@@ -24,7 +24,22 @@
     </div>
 
     <div class="col-md-3 notification text-end">
-      <p>通知</p>
+      <% if user_signed_in? %>
+        <span>
+          <% if current_user.login_id.present? %>
+            <%= current_user.login_id %>
+          <% else %>
+            <%= current_user.email %>
+          <% end %>
+          でログイン中</span>
+        <%= link_to "設定", edit_user_registration_path %>
+        <%= link_to "ログアウト", destroy_user_session_path, 
+          data: { turbo_method: :delete, turbo_confirm: "ログアウトしますか？" }, 
+          class: "btn-logout" %>
+        <% else %>
+          <%= link_to "ログイン", new_user_session_path, class: "btn-login" %>
+          <%= link_to "新規登録", new_user_registration_path, class: "btn-signup" %>
+        <% end %>
     </div>
   </div>
 </header>

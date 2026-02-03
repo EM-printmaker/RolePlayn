@@ -18,6 +18,9 @@ gem "image_processing", "~> 1.2"
 gem "aws-sdk-s3", require: false
 gem "pagy", "~> 43.2"
 gem "rails-i18n"
+gem "devise"
+gem "devise-i18n"
+gem "resend"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -34,6 +37,7 @@ group :development do
   gem "brakeman", require: false
   gem "prism", "1.2.0"
   gem "ruby-lsp", require: false
+  gem "letter_opener_web"
 end
 
 group :test do

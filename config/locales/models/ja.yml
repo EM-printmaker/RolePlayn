@@ -14,6 +14,9 @@ ja:
         content: "内容"
       city:
         slug: "識別子(Slug)"
+      user:
+        login: "ユーザーID・メールアドレス"
+        login_id: "ユーザーID"
     errors:
       models:
         city:

@@ -84,7 +84,6 @@ characters_data.each do |data|
     character.posts.find_or_create_by!(content: content) do |p|
       p.city = character.city
       p.expression = character.expressions.pick_random
-      p.created_at = Faker::Time.backward(days: 7)
     end
   end
 end
