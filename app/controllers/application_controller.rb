@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   allow_browser versions: :modern
-  include Pagy::Method
+  include Pagy::Backend
   include CharacterSessionManageable
 
   before_action :set_all_worlds

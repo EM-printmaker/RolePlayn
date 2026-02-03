@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Pagy::Frontend
   def session_token(session_id)
     OpenSSL::HMAC.hexdigest("SHA256", Rails.application.secret_key_base, session_id.to_s)
   end
