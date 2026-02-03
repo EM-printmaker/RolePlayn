@@ -437,6 +437,11 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
+    solid_cable (3.0.12)
+      actioncable (>= 7.2)
+      activejob (>= 7.2)
+      activerecord (>= 7.2)
+      railties (>= 7.2)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -518,6 +523,7 @@ DEPENDENCIES
   rubocop-rspec
   ruby-lsp
   simplecov
+  solid_cable
   sprockets-rails
   stimulus-rails
   turbo-rails

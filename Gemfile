@@ -21,6 +21,7 @@ gem "rails-i18n"
 gem "devise"
 gem "devise-i18n"
 gem "resend"
+gem "solid_cable"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
