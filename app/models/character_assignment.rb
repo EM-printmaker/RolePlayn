@@ -48,14 +48,16 @@ class CharacterAssignment < ApplicationRecord
     guest_assignments_hash.each do |city_id, data|
       next if data["character_id"].blank? || data["expression_id"].blank?
 
-      find_or_create_by!(
+      assignment = find_or_initialize_by(
         user: user,
         city_id: city_id,
-        assigned_date: data["assigned_date"]
-      ) do |a|
-        a.character_id = data["character_id"]
-        a.expression_id = data["expression_id"]
-      end
+        assigned_date: data["assigned_date"].to_date
+      )
+
+      assignment.character_id = data["character_id"]
+      assignment.expression_id = data["expression_id"]
+
+      assignment.save!
     end
   end
 end
