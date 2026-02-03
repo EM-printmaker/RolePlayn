@@ -10,14 +10,29 @@ module CharacterSessionManageable
 
   # 場所(City)の管理
   def viewing_city
-    @viewing_city ||= (find_city_from_params || find_city_from_session)
+    return @city if @city
+
+    @viewing_city ||= begin
+      city = find_city_from_params
+
+      if city.nil?
+        city = find_city_from_session
+        city = nil if city&.global? && params[:slug].blank? && params[:city_id].blank?
+      end
+
+      city
+    end
   end
 
   def ensure_viewing_setup
     city = viewing_city
 
-    if session[:viewing_city_id].blank? || !assigned_today?(city)
-      city.nil? ? transition_to_city : ensure_assignment(city)
+    if city.nil? || !assigned_today?(city)
+      if city.nil?
+        city = transition_to_city
+      else
+        ensure_assignment(city)
+      end
     end
 
     session[:viewing_city_id] = city.id if city
