@@ -1,8 +1,3 @@
-Post.destroy_all
-Expression.destroy_all
-Character.destroy_all
-City.destroy_all
-World.destroy_all
 # global
 global_world = World.find_or_create_by!(name: "アセラ・ポリス", is_global: true, slug: "acerapolis")
 
