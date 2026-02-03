@@ -10,5 +10,5 @@ test:
 
 production:
   adapter: solid_cable
-  polling_interval: 0.1.seconds
+  polling_interval: 0.1
   message_retention: 86400

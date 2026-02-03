@@ -1,4 +1,4 @@
-Post.skip_callback(:create, :after, :broadcast_new_post_notification)
+Post.skip_callback(:commit, :after, :broadcast_new_post_notification)
 # global
 global_world = World.find_or_create_by!(name: "アセラ・ポリス", is_global: true, slug: "acerapolis")
 
@@ -88,4 +88,4 @@ characters_data.each do |data|
     end
   end
 end
-Post.set_callback(:create, :after, :broadcast_new_post_notification)
+Post.set_callback(:commit, :after, :broadcast_new_post_notification)
