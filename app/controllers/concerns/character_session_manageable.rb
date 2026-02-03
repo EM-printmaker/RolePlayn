@@ -17,7 +17,9 @@ module CharacterSessionManageable
 
       if city.nil?
         city = find_city_from_session
-        city = nil if city&.global? && params[:slug].blank? && params[:city_id].blank?
+        if city&.global? && params[:slug].blank? && params[:city_id].blank?
+          city = find_last_local_city || nil
+        end
       end
 
       city
@@ -36,6 +38,7 @@ module CharacterSessionManageable
     end
 
     session[:viewing_city_id] = city.id if city
+    session[:last_local_city_id] = city.id if city&.local?
     @viewing_city = city
   end
 
@@ -213,15 +216,19 @@ module CharacterSessionManageable
       City.find_by(id: session[:viewing_city_id])
     end
 
-  def assigned_today?(city)
-    return false if city.blank?
-
-    if user_signed_in?
-      CharacterAssignment.exists_for_today?(current_user, city)
-    else
-      session.dig(:guest_assignments, city.id.to_s, "assigned_date") == Time.zone.today.to_s
+    def find_last_local_city
+      City.find_by(id: session[:last_local_city_id])
     end
-  end
+
+    def assigned_today?(city)
+      return false if city.blank?
+
+      if user_signed_in?
+        CharacterAssignment.exists_for_today?(current_user, city)
+      else
+        session.dig(:guest_assignments, city.id.to_s, "assigned_date") == Time.zone.today.to_s
+      end
+    end
 
     # 表情モーダル
     def set_modal_expression
