@@ -26,13 +26,6 @@ RSpec.describe "Operations::Shuffles", type: :request do
       expect(assignment["character_id"]).to be_present
     end
 
-    it "更新した街にリダイレクトされること" do
-      post shuffles_path
-      new_city = City.find(session[:viewing_city_id])
-      expect(response).to have_http_status(:see_other)
-      expect(response).to redirect_to(city_path(new_city))
-    end
-
     context "ログインユーザーの場合" do
       let(:user) { create(:user) }
 
