@@ -6,13 +6,15 @@ class User < ApplicationRecord
          :confirmable, :trackable,
          authentication_keys: [ :login ]
 
+  has_many :character_assignments, dependent: :destroy
+
   enum :role, { general: 0, admin: 10 }
 
   validates :login_id,
             uniqueness: { case_sensitive: false },
             format: { with: /\A[a-z0-9_]+\z/i },
             length: { in: 3..20 },
-            allow_blank: true
+            if: -> { login_id.present? }
 
   before_validation :downcase_login_id
 
@@ -35,6 +37,10 @@ class User < ApplicationRecord
   private
 
   def downcase_login_id
-    self.login_id = login_id.downcase if login_id.present?
+    if login_id.present?
+      self.login_id = login_id.downcase
+    else
+      self.login_id = nil
+    end
   end
 end

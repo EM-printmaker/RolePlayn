@@ -5,16 +5,16 @@ RSpec.describe "Cities", type: :request do
   let(:city) { create(:city, world: world) }
 
   describe "GET /cities" do
+    let!(:observer_city) { create(:city, :all_local) }
+
     it "正常なレスポンスが返ること" do
-      create(:city, :all_local)
       get cities_index_path
       expect(response).to have_http_status(:found)
     end
 
     it "全都市の投稿を表示する都市へリダイレクトされること" do
-      observer_city = create(:city, :all_local)
       get cities_index_path
-      expect(response).to redirect_to(world_city_path(observer_city.world, observer_city))
+      expect(response).to redirect_to(city_path(observer_city))
     end
 
     context "表示可能な都市が1つもない場合" do
@@ -39,7 +39,7 @@ RSpec.describe "Cities", type: :request do
 
     before do
       create(:city, :observer, target_world_id: world.id)
-      get world_city_path(world, city)
+      get city_path(city)
     end
 
     it_behaves_like "character_session_manageable", -> { city_path(city) }
@@ -60,8 +60,11 @@ RSpec.describe "Cities", type: :request do
     end
 
     it "その街に所属するキャラクターがセッションにセットされること" do
-      expect(session[:active_character_id]).not_to be_nil
-      expect(Character.find(session[:active_character_id]).city).to eq city
+      expect(session[:guest_assignments]).to be_present
+      assignment_data = session[:guest_assignments][city.id.to_s]
+      expect(assignment_data).not_to be_nil
+      assigned_character_id = assignment_data["character_id"]
+      expect(Character.find(assigned_character_id).city).to eq city
     end
 
     context "街の所属する世界がis_global:trueの場合" do

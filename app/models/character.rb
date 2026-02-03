@@ -7,10 +7,20 @@ class Character < ApplicationRecord
     dependent: :destroy,
     inverse_of: :character
   has_many :posts, dependent: :restrict_with_error
+  has_many :character_assignments, dependent: :destroy
 
   delegate :world, to: :city, allow_nil: true
 
   def primary_observer
     world&.observation_city
+  end
+
+  def main_image
+    target = expressions.detect { |e| e.normal? && e.level == 1 } || expressions.first
+    target&.image
+  end
+
+  def match_expression(template_expression)
+    template_expression&.find_equivalent_for(self) || expressions.pick_random
   end
 end

@@ -1,12 +1,12 @@
 module Operations
   class ExpressionsController < ApplicationController
-      include CharacterSessionManageable
+    include CharacterSessionManageable
 
     def create
       if current_character && params[:expression_id].present?
-        if current_character.expressions.exists?(params[:expression_id])
-          session[:active_expression_id] = params[:expression_id]
-          reset_active_expression
+        target_expression = current_character.expressions.find_by(id: params[:expression_id])
+        if target_expression
+          update_active_expression(target_expression)
         end
       end
 

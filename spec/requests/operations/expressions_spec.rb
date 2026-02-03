@@ -23,6 +23,10 @@ RSpec.describe "Operations::Expressions", type: :request do
       )
     end
 
+    def current_guest_assignment
+      session.dig(:guest_assignments, city.id.to_s)
+    end
+
     before do
       allow(Expression).to receive(:pick_random).and_return(fun_expression)
       get root_path
@@ -33,7 +37,7 @@ RSpec.describe "Operations::Expressions", type: :request do
         params: { expression_id: joy_expression.id },
         headers: { "HTTP_REFERER" => root_path }
 
-      expect(session[:active_expression_id]).to eq joy_expression.id.to_s
+      expect(current_guest_assignment["expression_id"]).to eq joy_expression.id
 
       expect(response).to have_http_status(:found)
       expect(response).to redirect_to(root_path)
@@ -47,10 +51,32 @@ RSpec.describe "Operations::Expressions", type: :request do
       expect(response.body).to include(joy_expression.image.filename.to_s)
     end
 
+    context "ログインユーザーの場合" do
+      let(:user) { create(:user) }
+
+      before { sign_in user }
+
+      it "データベース(CharacterAssignment)の表情IDが更新されること" do
+        get root_path
+
+        post expressions_path,
+          params: { expression_id: joy_expression.id, city_id: city.id }
+
+        assignment = CharacterAssignment.find_by(user: user, city: city)
+        expect(assignment.expression_id).to eq joy_expression.id
+      end
+    end
+
     context "存在しない表情IDが送られた場合" do
       it "セッションは更新されないこと" do
-        post expressions_path, params: { expression_id: 999_999 }
-        expect(session[:active_expression_id]).to eq fun_expression.id
+        initial_id = current_guest_assignment["expression_id"]
+        post expressions_path, params: { expression_id: 999_999, city_id: city.id }
+        expect(current_guest_assignment["expression_id"]).to eq initial_id
+      end
+
+      it "city_id が欠落している場合、エラーにならず元のページ等へ戻ること" do
+        post expressions_path, params: { expression_id: joy_expression.id }
+        expect(response).to have_http_status(:redirect)
       end
     end
   end

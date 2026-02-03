@@ -59,6 +59,7 @@ RSpec.describe "Observations", type: :request do
 
       before do
         global_city.delete
+        character.reload
         get observation_path(character)
       end
 

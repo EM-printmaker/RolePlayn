@@ -8,7 +8,6 @@ class CitiesController < ApplicationController
 
   def show
     set_city
-    set_active_character(@city)
     paginate_posts(@city.feed_posts)
     @post = Post.new
   end
@@ -27,5 +26,6 @@ class CitiesController < ApplicationController
     def set_city
       @world = World.find_by!(slug: params[:world_slug])
       @city = @world.cities.find_by!(slug: params[:slug])
+      transition_to_city(@city)
     end
 end

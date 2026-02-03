@@ -3,9 +3,10 @@ class City < ApplicationRecord
   include HasSlug
 
   belongs_to :world
-  belongs_to :target_world, class_name: "World", optional: true
+  belongs_to :target_world, class_name: "World", optional: true, inverse_of: :observation_city_association
   has_many :characters, dependent: :restrict_with_error
   has_many :posts, dependent: :restrict_with_error
+  has_many :character_assignments, dependent: :destroy
   has_one_attached :image
 
   enum :target_scope_type, {
@@ -30,6 +31,15 @@ class City < ApplicationRecord
   # 全てのworldのpostを表示するCityを返す
   def self.global_observer
     find_by(target_scope_type: :all_local) || global.first
+  end
+
+  # 既存のキャラを除外してランダムに取得、いなければ全体から取得
+  def pick_random_character_with_expression(exclude: nil)
+    character = characters.where.not(id: exclude&.id).pick_random || characters.pick_random
+    return nil if character.nil?
+
+    expression = character.expressions.pick_random
+    [ character, expression ]
   end
 
   def feed_posts

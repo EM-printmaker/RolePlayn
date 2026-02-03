@@ -8,19 +8,24 @@
 </div>
 
 <div class="modal-body p-3">
+  <%= turbo_frame_tag "character_expression_wrapper" do %>
+  <% if user_signed_in? %>
+    <div class="character-selector-wrapper mb-4 border-bottom pb-3">
+      <div class="d-flex flex-nowrap overflow-x-auto gap-3 pb-2" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+        <%= render partial: "expressions/character_selection_button", collection: characters, as: :character %>
+      </div>
+    </div>
+  <% end %>
+
   <% if current_tab == "all" %>
     <div class="expression-grid">
-      <% current_character.expressions.each do |expression| %>
-        <%= expression_select_link(expression) %>
-      <% end %>
+      <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression %>
     </div>
   <% end %>
 
   <% if current_tab == "emotions" %>
     <div class="d-flex justify-content-between mb-4">
-    <% Expression.emotion_types.keys.each do |type| %>
-      <%= emotion_toggle_link(type) %>
-    <% end %>
+      <%= render partial: "expressions/emotion_button", collection: emotion_types_for_toggle, as: :emotion_type %>
     </div>
 
     <div class="selection-indicator text-center mb-4 p-3 rounded-pill bg-light border position-relative">
@@ -59,5 +64,6 @@
         </div>
       <% end %>
     </div>
+  <% end %>
   <% end %>
 </div>
