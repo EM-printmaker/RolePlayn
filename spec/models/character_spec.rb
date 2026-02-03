@@ -77,7 +77,12 @@ RSpec.describe Character, type: :model do
     end
 
     context "level 1 / normal な表情がない場合" do
-      let!(:other_expressions) { create_list(:expression, 2, :with_image, character: character) }
+      let!(:other_expressions) do
+        [
+          create(:expression, :with_image, character: character, emotion_type: "joy", level: 2),
+          create(:expression, :with_image, character: character, emotion_type: "sad", level: 1)
+        ]
+      end
 
       it "最初に登録された表情の画像を返すこと" do
         expect(character.main_image).to eq other_expressions.first.image

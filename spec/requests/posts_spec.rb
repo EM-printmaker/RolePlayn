@@ -51,6 +51,7 @@ RSpec.describe "Posts", type: :request do
     end
 
     it "投稿後に通知がブロードキャストされること" do
+      skip "ブロードキャスト一時停止中のため"
       expect {
         perform_post
       }.to have_broadcasted_to("posts_channel_city_#{city.id}")
