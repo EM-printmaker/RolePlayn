@@ -22,12 +22,15 @@ class ApplicationController < ActionController::Base
     end
 
     def after_sign_in_path_for(resource)
+      if session[:guest_assignments].present?
+        CharacterAssignment.transfer_from_guest!(resource, session[:guest_assignments])
+        session.delete(:guest_assignments)
+      end
+
       if resource.sign_in_count == 1 && resource.login_id.blank?
         flash[:notice] = t("flash.sessions.welcome_and_setup_id")
-        transfer_guest_assignments_to_db
         edit_user_registration_path
       else
-        transfer_guest_assignments_to_db
         super
       end
     end

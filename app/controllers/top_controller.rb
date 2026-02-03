@@ -20,6 +20,7 @@ class TopController < ApplicationController
 
   private
     def prepare_viewing_context
+      ensure_viewing_setup
       @city = viewing_city
     end
 end

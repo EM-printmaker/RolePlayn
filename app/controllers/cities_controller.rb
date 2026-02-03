@@ -2,18 +2,19 @@ class CitiesController < ApplicationController
   include CharacterSessionManageable
   include PostPaginatable
 
+  before_action :prepare_viewing_context, only: [ :show ]
+  before_action :set_city_only, only: [ :load_more ]
+
   def index
     redirect_to city_path(City.global_observer), status: :found
   end
 
   def show
-    set_city
     paginate_posts(@city.feed_posts)
     @post = Post.new
   end
 
   def load_more
-    set_city
     paginate_posts(@city.feed_posts)
     respond_to do |format|
       format.any(:html, :turbo_stream) do
@@ -23,9 +24,15 @@ class CitiesController < ApplicationController
   end
 
   private
-    def set_city
+    def prepare_viewing_context
+      set_city_only
+      ensure_viewing_setup
+    end
+
+    def set_city_only
       @world = World.find_by!(slug: params[:world_slug])
       @city = @world.cities.find_by!(slug: params[:slug])
-      transition_to_city(@city)
+
+      session[:viewing_city_id] = @city.id
     end
 end

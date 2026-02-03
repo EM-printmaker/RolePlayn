@@ -1,69 +1,78 @@
+<div class="modal-content" data-controller="tabs" data-tabs-default-tab="emotions">
 <div class="modal-header">
   <h5 class="m-0">表情を選択</h5>
   <ul class="nav nav-tabs card-header-tabs">
-    <li class="nav-item"><%= modal_tab_link("感情を追加", "emotions") %></li>
-    <li class="nav-item"><%= modal_tab_link("一覧から選ぶ", "all") %></li>
+    <li class="nav-item"><%= modal_tab_button("感情を追加", "emotions") %></li>
+    <li class="nav-item"><%= modal_tab_button("一覧から選ぶ", "all") %></li>
   </ul>
   <button type="button" class="btn-close" data-action="click->modal#close"></button>
 </div>
 
 <div class="modal-body p-3">
   <%= turbo_frame_tag "character_expression_wrapper" do %>
-  <% if user_signed_in? %>
-    <div class="character-selector-wrapper mb-4 border-bottom pb-3">
-      <div class="d-flex flex-nowrap overflow-x-auto gap-3 pb-2" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
-        <%= render partial: "expressions/character_selection_button", collection: characters, as: :character %>
+    <% if user_signed_in? %>
+      <div class="character-selector-wrapper mb-4 border-bottom pb-3">
+        <div class="d-flex flex-nowrap overflow-x-auto gap-3 pb-2" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+          <%= render partial: "expressions/character_selection_button", collection: characters, as: :character %>
+        </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
 
-  <% if current_tab == "all" %>
-    <div class="expression-grid">
-      <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression %>
+    <div class="d-none" data-tabs-target="pane" data-tab-name="all">
+      <% if current_character.present? %>
+        <div class="expression-grid">
+          <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression %>
+        </div>
+      <% else %>
+        <div class="text-center py-5">
+          <p class="text-muted">表示できるキャラクターがいません</p>
+        </div>
+      <% end %>
     </div>
-  <% end %>
 
-  <% if current_tab == "emotions" %>
-    <div class="d-flex justify-content-between mb-4">
-      <%= render partial: "expressions/emotion_button", collection: emotion_types_for_toggle, as: :emotion_type %>
-    </div>
+    <div class="" data-tabs-target="pane" data-tab-name="emotions">
+      <div id="emotions_preview_area">
+        <div class="d-flex justify-content-between mb-4">
+          <%= render partial: "expressions/emotion_button", collection: emotion_types_for_toggle, as: :emotion_type %>
+        </div>
 
-    <div class="selection-indicator text-center mb-4 p-3 rounded-pill bg-light border position-relative">
-      <% if params[:view_type].present? && params[:view_level].to_i > 0 %>
-        <div class="d-flex align-items-center justify-content-center">
-          <span class="h3 mb-0 me-3">
-            <% params[:view_level].to_i.times do %>
-              <%= emotion_icon(params[:view_type], class: "me-1") %>
-            <% end %>
-          </span>
-          <%= button_to preview_expressions_path(view_type: nil, view_level: nil, tab: "emotions"),
-                        method: :post, 
-                        class: "btn-close small shadow-none" do %>
+        <div class="selection-indicator text-center mb-4 p-3 rounded-pill bg-light border position-relative">
+          <% if params[:view_type].present? && params[:view_level].to_i > 0 %>
+            <div class="d-flex align-items-center justify-content-center">
+              <span class="h3 mb-0 me-3">
+                <% params[:view_level].to_i.times do %>
+                  <%= emotion_icon(params[:view_type], class: "me-1") %>
+                <% end %>
+              </span>
+              <%= button_to preview_expressions_path(view_type: nil, view_level: nil, tab: "emotions"),
+                            method: :post, 
+                            class: "btn-close small shadow-none" do %>
+              <% end %>
+            </div>
+          <% else %>
+            <span class="text-muted small italic">今の心は？</span>
           <% end %>
         </div>
-      <% else %>
-        <span class="text-muted small italic">今の心は？</span>
-      <% end %>
-    </div>
 
-    <div class="preview-display text-center">
-      <% if @target_expression %>
-        <%= button_to expressions_path(expression_id: @target_expression.id),
-                    data: { turbo_method: :post, turbo_frame: "_top", action: "click->modal#close" },
-                    class: "preview-card d-block text-decoration-none expression-item" do %>
-          <div class="image-wrapper mb-3 position-relative">
-            <%= image_tag cdn_image_url(@target_expression.image.variant(:display)), 
-                          class: "img-fluid rounded shadow-sm border", 
-                          style: "max-height: 250px; transition: transform 0.2s;" %>
-          </div>
-        <% end %>
-      <% else %>
-        <div class="empty-state py-5 border rounded bg-light border-dashed">
-          <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
-          <p class="mt-2 text-muted">画像が生成されていません</p>
+        <div class="preview-display text-center">
+          <% if @target_expression %>
+            <%= button_to expressions_path(expression_id: @target_expression.id),
+                        data: { turbo_method: :post, turbo_frame: "_top", action: "click->modal#close" },
+                        class: "preview-card d-block text-decoration-none expression-item" do %>
+              <div class="image-wrapper mb-3 position-relative">
+                <%= image_tag cdn_image_url(@target_expression.image.variant(:display)), 
+                              class: "img-fluid rounded shadow-sm border", 
+                              style: "max-height: 250px; transition: transform 0.2s;" %>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="empty-state py-5 border rounded bg-light border-dashed">
+              <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+              <p class="mt-2 text-muted">画像が生成されていません</p>
+            </div>
+          <% end %>
         </div>
-      <% end %>
+      </div>
     </div>
-  <% end %>
   <% end %>
 </div>

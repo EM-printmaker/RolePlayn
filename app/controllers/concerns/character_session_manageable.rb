@@ -9,6 +9,39 @@ module CharacterSessionManageable
   end
 
   # 場所(City)の管理
+  def viewing_city
+    return @city if @city
+
+    @viewing_city ||= begin
+      city = find_city_from_params
+
+      if city.nil?
+        city = find_city_from_session
+        if city&.global? && params[:slug].blank? && params[:city_id].blank?
+          city = find_last_local_city || nil
+        end
+      end
+
+      city
+    end
+  end
+
+  def ensure_viewing_setup
+    city = viewing_city
+
+    if city.nil? || !assigned_today?(city)
+      if city.nil?
+        city = transition_to_city
+      else
+        ensure_assignment(city)
+      end
+    end
+
+    session[:viewing_city_id] = city.id if city
+    session[:last_local_city_id] = city.id if city&.local?
+    @viewing_city = city
+  end
+
   def transition_to_city(target_city = nil, exclude_city: nil)
     @city = target_city || City.local.other_than(exclude_city).pick_random || City.local.pick_random
 
@@ -19,21 +52,6 @@ module CharacterSessionManageable
       session.delete(:viewing_city_id)
     end
     @city
-  end
-
-  def viewing_city
-    return @viewing_city if defined?(@viewing_city)
-
-    city = City.find_by(id: session[:viewing_city_id])
-    is_assigned_today = city && session.dig(:guest_assignments, city.id.to_s, "assigned_date") == Time.zone.today.to_s
-
-    if city && is_assigned_today
-      ensure_assignment(city)
-      @viewing_city = city
-    else
-      @viewing_city = transition_to_city
-    end
-    @viewing_city
   end
 
   # 配役（Character/Expression）の管理
@@ -186,6 +204,30 @@ module CharacterSessionManageable
       @database_assignment = {}
       @current_character = {}
       @current_expression = {}
+    end
+
+
+    def find_city_from_params
+      return nil if params[:city_id].blank?
+      City.find_by(slug: params[:city_id]) || City.find_by(id: params[:city_id])
+    end
+
+    def find_city_from_session
+      City.find_by(id: session[:viewing_city_id])
+    end
+
+    def find_last_local_city
+      City.find_by(id: session[:last_local_city_id])
+    end
+
+    def assigned_today?(city)
+      return false if city.blank?
+
+      if user_signed_in?
+        CharacterAssignment.exists_for_today?(current_user, city)
+      else
+        session.dig(:guest_assignments, city.id.to_s, "assigned_date") == Time.zone.today.to_s
+      end
     end
 
     # 表情モーダル

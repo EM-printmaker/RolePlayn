@@ -3,18 +3,19 @@ module ExpressionsHelper
     params[:tab] || "emotions"
   end
 
-  def modal_tab_link(label, tab_name)
-    is_active = (current_tab == tab_name)
-    params_payload = { tab: tab_name }
-    params_payload.merge!(view_type: params[:view_type], view_level: params[:view_level]) if tab_name == "emotions"
+  def modal_tab_button(label, tab_name)
+    is_active = (tab_name == "emotions")
 
-    button_to preview_expressions_path,
-      params: params_payload,
-      method: :post,
+    tag.button(
+      label,
+      type: "button",
       class: "nav-link #{'active' if is_active} border-0 bg-transparent",
-      form_class: "d-inline" do
-      label
-    end
+      data: {
+        tabs_target: "link",
+        tab_name: tab_name,
+        action: "click->tabs#change"
+      }
+    )
   end
 
   def character_button_params(character)

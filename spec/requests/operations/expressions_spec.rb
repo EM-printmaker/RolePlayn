@@ -24,7 +24,8 @@ RSpec.describe "Operations::Expressions", type: :request do
     end
 
     def current_guest_assignment
-      session.dig(:guest_assignments, city.id.to_s)
+      city_id = session[:viewing_city_id].to_s
+      session.dig(:guest_assignments, city_id)
     end
 
     before do
@@ -58,10 +59,9 @@ RSpec.describe "Operations::Expressions", type: :request do
 
       it "データベース(CharacterAssignment)の表情IDが更新されること" do
         get root_path
-
         post expressions_path,
-          params: { expression_id: joy_expression.id, city_id: city.id }
-
+          params: { expression_id: joy_expression.id },
+          headers: { "HTTP_REFERER" => root_path }
         assignment = CharacterAssignment.find_by(user: user, city: city)
         expect(assignment.expression_id).to eq joy_expression.id
       end
@@ -70,7 +70,7 @@ RSpec.describe "Operations::Expressions", type: :request do
     context "存在しない表情IDが送られた場合" do
       it "セッションは更新されないこと" do
         initial_id = current_guest_assignment["expression_id"]
-        post expressions_path, params: { expression_id: 999_999, city_id: city.id }
+        post expressions_path, params: { expression_id: 999_999 }
         expect(current_guest_assignment["expression_id"]).to eq initial_id
       end
 

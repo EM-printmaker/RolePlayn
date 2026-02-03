@@ -26,6 +26,7 @@ class ObservationsController < ApplicationController
     def set_resources
       @world = World.find_by!(slug: params[:world_slug])
       @city = @world.cities.find_by!(slug: params[:city_slug])
+      session[:viewing_city_id] = @city.id
       @observed_subject = Character.find(params[:subject_id])
     end
 

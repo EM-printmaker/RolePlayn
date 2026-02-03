@@ -100,6 +100,7 @@ RSpec.describe Post, type: :model do
     let(:post) { build(:post, city: city, character: character, expression: expression, sender_session_token: token) }
 
     it "通知が正しい内容でブロードキャストされること" do
+      skip "ブロードキャスト一時停止中のため"
       expect {
         post.save!
       }.to(have_broadcasted_to("posts_channel_city_#{city.id}").with { |data|

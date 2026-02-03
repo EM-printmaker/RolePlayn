@@ -72,11 +72,11 @@ Rails.application.routes.draw do
     constraints: { world_slug: /[a-z0-9\-]+/, city_slug: /[a-z0-9\-]+/ }
 
   direct :city do |city|
-    world_city_path(city.world, city)
+    world_city_path(world_slug: city.world.slug, slug: city.slug)
   end
 
   direct :load_more_city do |city|
-    load_more_world_city_path(city.world, city)
+    load_more_world_city_path(world_slug: city.world.slug, slug: city.slug)
   end
 
   direct :observation do |character|
