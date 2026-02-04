@@ -19,11 +19,11 @@ class Avo::Resources::Expression < Avo::BaseResource
   }
   def fields
     field :id, as: :id
-    field :emotion_type, as: :select, enum: ::Expression.emotion_types
-    field :level, as: :number
-    field :character_id, as: :number
     field :image, as: :file, is_image: true
     field :character, as: :belongs_to
+    field :character_id, as: :number, hide_on: :forms
+    field :emotion_type, as: :select, enum: ::Expression.emotion_types
+    field :level, as: :number
     field :posts, as: :has_many
     field :character_assignments, as: :has_many
   end

@@ -14,6 +14,10 @@ class Avo::Resources::City < Avo::BaseResource
   def fields
     field :id, as: :id
     field :name, as: :text
+    field :slug, as: :text
+    field :image, as: :file
+    field :world, as: :belongs_to
+    field :world_id, as: :number, hide_on: :forms
     field :target_scope_type, as: :select,
           enum: ::City.target_scope_types,
           html: {
@@ -21,15 +25,13 @@ class Avo::Resources::City < Avo::BaseResource
               input: { data: { action: "change->conditional-fields#toggle" } }
             }
           }
-    field :slug, as: :text
-    field :image, as: :file
-    field :world, as: :belongs_to
     field :target_world, as: :belongs_to,
           html: {
             edit: {
               wrapper: { data: { "conditional-fields-target": "targetField" } }
             }
           }
+    field :target_world_id, as: :number, hide_on: :forms
     field :characters, as: :has_many
     field :posts, as: :has_many
     field :character_assignments, as: :has_many
