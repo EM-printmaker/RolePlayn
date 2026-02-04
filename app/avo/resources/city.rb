@@ -9,12 +9,14 @@ class Avo::Resources::City < Avo::BaseResource
 
   def fields
     field :id, as: :id
-    field :name, as: :text, sortable: true
-    field :slug, as: :text
-    field :image, as: :file
-    field :world, as: :belongs_to, sortable: -> {
-      query.joins(:world).order("worlds.name #{direction}")
-    }
+    field :name, as: :text, sortable: true, **admin_only_options
+    field :slug, as: :text, **admin_only_options
+    field :image, as: :file, **admin_only_options
+    field :world, as: :belongs_to,
+          sortable: -> {
+            query.joins(:world).order("worlds.name #{direction}")
+          },
+          **admin_only_options
     field :world_id, as: :number, hide_on: :forms
     field :target_scope_type, as: :select,
           enum: ::City.target_scope_types,
@@ -22,7 +24,9 @@ class Avo::Resources::City < Avo::BaseResource
             edit: {
               input: { data: { action: "change->conditional-fields#toggle" } }
             }
-          }, sortable: true
+          },
+          sortable: true,
+          **admin_only_options
     field :target_world, as: :belongs_to,
           html: {
             edit: {

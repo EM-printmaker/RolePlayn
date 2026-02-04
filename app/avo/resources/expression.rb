@@ -34,14 +34,17 @@ class Avo::Resources::Expression < Avo::BaseResource
   }
   def fields
     field :id, as: :id
-    field :image, as: :file, is_image: true
+    field :image, as: :file, is_image: true, **admin_only_options
     field :character, as: :belongs_to,
           sortable: -> {
             query.joins(:character).order("characters.name #{direction}")
-          }
+          },
+          **admin_only_options
     field :character_id, as: :number, hide_on: :forms
-    field :emotion_type, as: :select, enum: ::Expression.emotion_types, sortable: true
-    field :level, as: :number, sortable: true
+    field :emotion_type, as: :select, enum: ::Expression.emotion_types,
+          sortable: true,
+          **admin_only_options
+    field :level, as: :number, sortable: true, **admin_only_options
     field :city, as: :record_link,
           sortable: -> {
             query.joins(character: :city).order("cities.name #{direction}")

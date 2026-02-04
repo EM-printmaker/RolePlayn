@@ -7,13 +7,13 @@ class Avo::Resources::Post < Avo::BaseResource
 
   def fields
     field :id, as: :id
-    field :content, as: :textarea
+    field :content, as: :textarea, **admin_only_options
     field :content, as: :text, hide_on: :forms
-    field :city, as: :belongs_to
+    field :city, as: :belongs_to, **admin_only_options
     field :city_id, as: :number, hide_on: :forms
-    field :character, as: :belongs_to
+    field :character, as: :belongs_to, **admin_only_options
     field :character_id, as: :number, hide_on: :forms
-    field :expression, as: :belongs_to
+    field :expression, as: :belongs_to, **admin_only_options
     field :expression_id, as: :number, hide_on: :forms
     field :created_at, as: :date_time,
       name: "作成日時",

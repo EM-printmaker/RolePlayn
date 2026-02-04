@@ -15,15 +15,18 @@ class Avo::Resources::Character < Avo::BaseResource
 
   def fields
     field :id, as: :id
-    field :name, as: :text, sortable: true
-    field :description, as: :textarea
-    field :city, as: :belongs_to, sortable: -> {
-      query.joins(:city).order("cities.name #{direction}")
-    }
+    field :name, as: :text, sortable: true, **admin_only_options
+    field :description, as: :textarea, **admin_only_options
+    field :city, as: :belongs_to,
+          sortable: -> {
+            query.joins(:city).order("cities.name #{direction}")
+          },
+          **admin_only_options
     field :city_id, as: :number, hide_on: :forms
-    field :world, as: :record_link, sortable: -> {
-      query.joins(city: :world).order("worlds.name #{direction}")
-    }
+    field :world, as: :record_link,
+          sortable: -> {
+            query.joins(city: :world).order("worlds.name #{direction}")
+          }
     field :created_at, as: :date_time,
       name: "作成日時",
       readonly: true,
