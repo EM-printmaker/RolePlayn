@@ -15,11 +15,15 @@ class Avo::Resources::Character < Avo::BaseResource
 
   def fields
     field :id, as: :id
-    field :name, as: :text
+    field :name, as: :text, sortable: true
     field :description, as: :textarea
-    field :city, as: :belongs_to
+    field :city, as: :belongs_to, sortable: -> {
+      query.joins(:city).order("cities.name #{direction}")
+    }
     field :city_id, as: :number, hide_on: :forms
-    field :world, as: :record_link
+    field :world, as: :record_link, sortable: -> {
+      query.joins(city: :world).order("worlds.name #{direction}")
+    }
     field :expressions, as: :has_many
     field :posts, as: :has_many
     field :character_assignments, as: :has_many, hide_on: :show

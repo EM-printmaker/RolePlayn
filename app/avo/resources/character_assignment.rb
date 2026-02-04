@@ -7,7 +7,7 @@ class Avo::Resources::CharacterAssignment < Avo::BaseResource
 
   def fields
     field :id, as: :id
-    field :assigned_date, as: :date
+    field :assigned_date, as: :date, sortable: true
     field :user, as: :belongs_to
     field :city, as: :belongs_to
     field :character, as: :belongs_to
