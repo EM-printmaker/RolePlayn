@@ -5,10 +5,6 @@ class Avo::Resources::World < Avo::BaseResource
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
 
-  self.find_record_method = -> {
-    query.find_by slug: id
-  }
-
   def fields
     field :id, as: :id
     field :name, as: :text, sortable: true

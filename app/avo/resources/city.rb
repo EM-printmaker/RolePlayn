@@ -5,10 +5,6 @@ class Avo::Resources::City < Avo::BaseResource
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
 
-  self.find_record_method = -> {
-    query.find_by slug: id
-  }
-
   self.stimulus_controllers = [ "conditional-fields" ]
 
   def fields
