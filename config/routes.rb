@@ -49,7 +49,7 @@ Rails.application.routes.draw do
 
   get "/:slug",
       to: "worlds#show",
-      as: :world,
+      as: :world_show,
       constraints: { slug: /[a-z0-9\-]+/ }
 
   get "/:world_slug/:slug",
@@ -71,6 +71,10 @@ Rails.application.routes.draw do
     to: "observations#load_more",
     as: :load_more_world_city_observation,
     constraints: { world_slug: /[a-z0-9\-]+/, city_slug: /[a-z0-9\-]+/ }
+
+  direct :world do |world|
+    world_show_path(slug: world.slug)
+  end
 
   direct :city do |city|
     world_city_path(world_slug: city.world.slug, slug: city.slug)

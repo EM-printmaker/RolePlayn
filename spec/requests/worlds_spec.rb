@@ -14,7 +14,7 @@ RSpec.describe "Worlds", type: :request do
   end
 
   describe "GET /:slug" do
-    let!(:world_observer) { create(:city, :observer, world: world, target_world_id: world.id) }
+    let!(:world_observer) { create(:city, :observer, target_world_id: world.id) }
 
     it "ワールドを観測する街(node)へリダイレクトされること" do
         get world_path(world)
