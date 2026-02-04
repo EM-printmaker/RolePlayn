@@ -22,6 +22,7 @@ gem "devise"
 gem "devise-i18n"
 gem "resend"
 gem "avo", ">= 3.2"
+gem "avo-record_link_field"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

@@ -8,6 +8,8 @@ class Expression < ApplicationRecord
     attachable.variant :display, resize_to_limit: [ 400, 400 ]
   end
 
+  delegate :city, :world, to: :character, allow_nil: true
+
   enum :emotion_type, { joy: 0, angry: 1, sad: 2, fun: 3, normal: 4 }
 
   scope :with_attached_images, -> {

@@ -13,7 +13,7 @@ class Avo::Resources::Expression < Avo::BaseResource
             main_app.cdn_image_url(record.image.variant(:display))
           end,
         title: "#{record.character.name} - #{record.emotion_type} (#{record.level})",
-        body: "作成日: #{record.created_at.strftime('%Y/%m/%d')}"
+        body: "#{record.city.name}"
       }
     end
   }
@@ -24,6 +24,8 @@ class Avo::Resources::Expression < Avo::BaseResource
     field :character_id, as: :number, hide_on: :forms
     field :emotion_type, as: :select, enum: ::Expression.emotion_types
     field :level, as: :number
+    field :city, as: :record_link
+    field :world, as: :record_link
     field :posts, as: :has_many
     field :character_assignments, as: :has_many
   end

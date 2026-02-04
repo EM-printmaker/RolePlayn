@@ -11,6 +11,7 @@ class Avo::Resources::Character < Avo::BaseResource
     field :description, as: :textarea
     field :city, as: :belongs_to
     field :city_id, as: :number, hide_on: :forms
+    field :world, as: :record_link
     field :expressions, as: :has_many
     field :posts, as: :has_many
     field :character_assignments, as: :has_many
