@@ -19,6 +19,5 @@ class Avo::Resources::User < Avo::BaseResource
     field :confirmed_at, as: :date_time, **admin_only_options
     field :confirmation_sent_at, as: :date_time, **admin_only_options
     field :unconfirmed_email, as: :text, **admin_only_options
-    field :character_assignments, as: :has_many
   end
 end

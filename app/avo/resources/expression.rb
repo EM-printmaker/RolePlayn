@@ -59,6 +59,5 @@ class Avo::Resources::Expression < Avo::BaseResource
           sortable: true,
           hide_on: :forms
     field :posts, as: :has_many
-    field :character_assignments, as: :has_many, hide_on: :show
   end
 end
