@@ -1,5 +1,5 @@
 class Avo::Resources::Post < Avo::BaseResource
-  # self.includes = []
+  self.includes = [ :city, :character, :expression ]
   # self.attachments = []
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }

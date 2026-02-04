@@ -1,5 +1,5 @@
 class Avo::Resources::CharacterAssignment < Avo::BaseResource
-  # self.includes = []
+  self.includes = [ :user, :city, :character, :expression ]
   # self.attachments = []
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }

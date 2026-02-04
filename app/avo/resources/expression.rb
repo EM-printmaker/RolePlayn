@@ -1,6 +1,6 @@
 class Avo::Resources::Expression < Avo::BaseResource
-  # self.includes = []
-  # self.attachments = []
+  self.includes = [ character: { city: :world }, image_attachment: { blob: { variant_records: { image_attachment: :blob } } } ]
+  self.attachments = [ :image ]
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }

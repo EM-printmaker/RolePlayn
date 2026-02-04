@@ -1,6 +1,6 @@
 class Avo::Resources::City < Avo::BaseResource
   self.includes = [ :world ]
-  # self.attachments = []
+  self.attachments = [ :image ]
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
