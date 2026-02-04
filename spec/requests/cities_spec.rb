@@ -72,7 +72,7 @@ RSpec.describe "Cities", type: :request do
       let(:other_city) { create(:city, world: world) }
       let!(:other_post) { create(:post, :with_full_data, parent_city: other_city) }
 
-      before { get world_city_path(global_city.world, global_city) }
+      before { get city_path(global_city) }
 
       it "ターゲットにしている世界所属の街すべての投稿が含まれていること" do
         expect(response.body).to include(post.content)
@@ -111,7 +111,7 @@ RSpec.describe "Cities", type: :request do
     before do
       create_list(:post, 11, :with_full_data, parent_city: city)
       create(:city, :observer, target_world_id: world.id)
-      get world_city_path(world, city)
+      get city_path(city)
     end
 
     it_behaves_like "posts_load_more_behavior", -> { load_more_city_path(city) }

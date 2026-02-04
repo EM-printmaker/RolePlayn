@@ -22,7 +22,7 @@ RSpec.describe "Posts", type: :request do
 
     before do
       create(:city, :observer, target_world_id: world.id)
-      get world_city_path(world, city)
+      get root_path
     end
 
     it "新しい投稿が作成され、レコード数が1増えること" do
