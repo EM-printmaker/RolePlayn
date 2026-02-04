@@ -100,6 +100,8 @@ Rails.application.routes.draw do
 
   # CDNを用いた画像表示用のURL作成
   direct :cdn_image do |model, options|
+    next nil if model.nil? || (model.respond_to?(:attached?) && !model.attached?)
+
     if model.respond_to?(:key)
       key = model.key
     elsif model.respond_to?(:variation)

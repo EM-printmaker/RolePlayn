@@ -60,7 +60,7 @@
                         data: { turbo_method: :post, turbo_frame: "_top", action: "click->modal#close" },
                         class: "preview-card d-block text-decoration-none expression-item" do %>
               <div class="image-wrapper mb-3 position-relative">
-                <%= image_tag cdn_image_url(@target_expression.image.variant(:display)), 
+                <%= cdn_image_tag @target_expression.image, variant: :display, 
                               class: "img-fluid rounded shadow-sm border", 
                               style: "max-height: 250px; transition: transform 0.2s;" %>
               </div>

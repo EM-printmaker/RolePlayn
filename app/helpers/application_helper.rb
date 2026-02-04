@@ -16,4 +16,14 @@ module ApplicationHelper
 
     "#{path}?page=#{pagy.next}"
   end
+
+  def cdn_image_tag(attachment, options = {})
+    return nil unless attachment&.attached?
+
+    variant_name = options.delete(:variant)
+
+    image_source = variant_name ? attachment.variant(variant_name) : attachment
+
+    image_tag cdn_image_url(image_source), options
+  end
 end
