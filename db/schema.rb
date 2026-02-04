@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_04_194805) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_04_210947) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -95,6 +95,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_04_194805) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reply_subject"
+    t.text "reply_body"
+    t.datetime "reply_sent_at"
+    t.index ["reply_sent_at"], name: "index_inquiries_on_reply_sent_at"
   end
 
   create_table "posts", force: :cascade do |t|

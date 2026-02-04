@@ -5,6 +5,12 @@ class Avo::Resources::Inquiry < Avo::BaseResource
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
 
+  def actions
+    action Avo::Actions::MarkAsProcessing
+    action Avo::Actions::PrepareReply
+    action Avo::Actions::ReplyToInquiry
+  end
+
   def fields
     field "基本情報", as: :heading
     field :id, as: :id
@@ -44,5 +50,23 @@ class Avo::Resources::Inquiry < Avo::BaseResource
               style: "word-break: break-all;"
             )
           }
+    field "返信", as: :heading
+    field :reply_subject, as: :text, name: "件名", hide_on: :index
+    field :reply_body, as: :textarea, name: "Message",
+          readonly: true,
+          rows: 10,
+          hide_on: :index,
+          format_using: -> {
+            content_tag(:div, value,
+              class: "w-full md:max-w-3xl break-words whitespace-pre-wrap min-h-[300px] p-4 rounded-md",
+              style: "word-break: break-all;"
+            )
+          }
+    field :reply_sent_at, as: :date_time,
+      name: "返信日時",
+      readonly: true,
+      only_on: [ :index, :show ],
+      format: "yyyy-MM-dd HH:mm",
+      sortable: true
   end
 end

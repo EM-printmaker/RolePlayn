@@ -1,0 +1,12 @@
+<p><%= @inquiry.name %> 様</p>
+
+<div style="margin-bottom: 20px;">
+  <%# simple_format を使うことで、Avoのtextareaで入力した改行が正しく反映されます %>
+  <%= simple_format(@body) %>
+</div>
+
+<hr>
+<p>
+  ※このメールは RolePlayn 管理画面より送信されています。<br>
+  心当たりがない場合は、お手数ですが破棄をお願いいたします。
+</p>
