@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :confirmable, :trackable,
+         :confirmable, :trackable, :lockable,
          authentication_keys: [ :login ]
 
   has_many :character_assignments, dependent: :destroy
@@ -40,7 +40,13 @@ class User < ApplicationRecord
   end
 
   def inactive_message
-    suspended_at.nil? ? super : :suspended
+    if suspended_at.present?
+      :suspended
+    elsif access_locked?
+      :locked
+    else
+      super
+    end
   end
 
   private

@@ -23,11 +23,15 @@ class Avo::Resources::User < Avo::BaseResource
     field :status, as: :text, only_on: :index, name: "状態" do
       if record.suspended_at.present?
         "🔴 凍結中"
+      elsif record.access_locked?
+        "🔒 ロック"
       else
         "🟢 アクティブ"
       end
     end
     field :suspended_reason, as: :textarea, name: "凍結理由", **admin_only_options
+    field :failed_attempts, as: :number, readonly: true, hide_on: :index, name: "ログイン失敗回数"
+    field :locked_at, as: :date_time, readonly: true, hide_on: :index, name: "自動ロック日時"
 
     field "トラッキング", as: :heading
     field :sign_in_count, as: :number, hide_on: :index, **admin_only_options

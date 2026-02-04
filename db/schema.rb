@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_04_184102) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_04_193042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -126,10 +126,17 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_04_184102) do
     t.integer "role", default: 0, null: false
     t.datetime "suspended_at"
     t.text "suspended_reason"
+    t.integer "failed_attempts", default: 0, null: false
+    t.integer "integer", default: 0, null: false
+    t.datetime "locked_at"
+    t.datetime "datetime"
+    t.string "unlock_token"
+    t.string "string"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["login_id"], name: "index_users_on_login_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   create_table "worlds", force: :cascade do |t|
