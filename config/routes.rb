@@ -48,6 +48,14 @@ Rails.application.routes.draw do
     resources :character_selections, only: [ :create ]
   end
 
+  # inquiries
+  resources :inquiries, only: [ :new, :create ] do
+    collection do
+      post :confirm
+      get :done
+    end
+  end
+
   # セキュリティのためこれより下に通常のルーティング設定を追加しないこと
 
   get "/:slug",

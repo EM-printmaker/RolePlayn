@@ -29,7 +29,7 @@ class Avo::Resources::Character < Avo::BaseResource
             query.joins(:city).order("cities.name #{direction}")
           },
           **admin_only_options
-    field :city_id, as: :number, hide_on: [ :index, :forms ]
+    field :city_id, as: :number, only_on: :show
     field :world, as: :record_link,
           sortable: -> {
             query.joins(city: :world).order("worlds.name #{direction}")

@@ -30,17 +30,18 @@ class Avo::Resources::User < Avo::BaseResource
       end
     end
     field :suspended_reason, as: :textarea, name: "凍結理由", **admin_only_options
-    field :failed_attempts, as: :number, readonly: true, hide_on: :index, name: "ログイン失敗回数"
-    field :locked_at, as: :date_time, readonly: true, hide_on: :index, name: "自動ロック日時"
+    field :failed_attempts, as: :number, readonly: true, only_on: :show, name: "ログイン失敗回数"
+    field :locked_at, as: :date_time, readonly: true, only_on: :show, name: "自動ロック日時"
 
-    field "トラッキング", as: :heading
-    field :sign_in_count, as: :number, hide_on: :index, **admin_only_options
-    field :current_sign_in_at, as: :date_time, hide_on: :index, **admin_only_options
-    field :last_sign_in_at, as: :date_time, hide_on: :index, **admin_only_options
-    field :current_sign_in_ip, as: :text, hide_on: :index, **admin_only_options
-    field :last_sign_in_ip, as: :text, hide_on: :index, **admin_only_options
-    field :password, as: :password, hide_on: [ :index, :show, :edit ]
-    field :password_confirmation, as: :password, hide_on: [ :index, :show, :edit ]
+    field "トラッキング", as: :heading, only_on: :show
+    field :sign_in_count, as: :number, only_on: :show, **admin_only_options
+    field :current_sign_in_at, as: :date_time, only_on: :show, **admin_only_options
+    field :last_sign_in_at, as: :date_time, only_on: :show, **admin_only_options
+    field :current_sign_in_ip, as: :text, only_on: :show, **admin_only_options
+    field :last_sign_in_ip, as: :text, only_on: :show, **admin_only_options
+    field "パスワード", as: :heading, only_on: :new
+    field :password, as: :password, only_on: :new
+    field :password_confirmation, as: :password, only_on: :new
     # field :confirmation_token, as: :text, **admin_only_options
     # field :confirmation_sent_at, as: :date_time, **admin_only_options
     # field :unconfirmed_email, as: :text, **admin_only_options

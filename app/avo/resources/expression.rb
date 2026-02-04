@@ -41,7 +41,7 @@ class Avo::Resources::Expression < Avo::BaseResource
             query.joins(:character).order("characters.name #{direction}")
           },
           **admin_only_options
-    field :character_id, as: :number, hide_on: [ :index, :forms ]
+    field :character_id, as: :number, only_on: :show
     field :emotion_type, as: :select, enum: ::Expression.emotion_types,
           sortable: true,
           **admin_only_options
