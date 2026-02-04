@@ -9,16 +9,27 @@ class Avo::Resources::City < Avo::BaseResource
     query.find_by slug: id
   }
 
+  self.stimulus_controllers = [ "conditional-fields" ]
+
   def fields
     field :id, as: :id
     field :name, as: :text
-    field :world_id, as: :number
-    field :target_scope_type, as: :select, enum: ::City.target_scope_types
-    field :target_world_id, as: :number
+    field :target_scope_type, as: :select,
+          enum: ::City.target_scope_types,
+          html: {
+            edit: {
+              input: { data: { action: "change->conditional-fields#toggle" } }
+            }
+          }
     field :slug, as: :text
     field :image, as: :file
     field :world, as: :belongs_to
-    field :target_world, as: :belongs_to
+    field :target_world, as: :belongs_to,
+          html: {
+            edit: {
+              wrapper: { data: { "conditional-fields-target": "targetField" } }
+            }
+          }
     field :characters, as: :has_many
     field :posts, as: :has_many
     field :character_assignments, as: :has_many
