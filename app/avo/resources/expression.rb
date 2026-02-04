@@ -33,6 +33,7 @@ class Avo::Resources::Expression < Avo::BaseResource
     end
   }
   def fields
+    field "基本情報", as: :heading
     field :id, as: :id
     field :image, as: :file, is_image: true, **admin_only_options
     field :character, as: :belongs_to,
@@ -45,6 +46,12 @@ class Avo::Resources::Expression < Avo::BaseResource
           sortable: true,
           **admin_only_options
     field :level, as: :number, sortable: true, **admin_only_options
+    field :created_at, as: :date_time,
+          name: "作成日時",
+          readonly: true,
+          sortable: true,
+          hide_on: :forms
+    field "所属", as: :heading
     field :city, as: :record_link,
           sortable: -> {
             query.joins(character: :city).order("cities.name #{direction}")
@@ -53,11 +60,7 @@ class Avo::Resources::Expression < Avo::BaseResource
           sortable: -> {
             query.joins(character: { city: :world }).order("worlds.name #{direction}")
           }
-    field :created_at, as: :date_time,
-          name: "作成日時",
-          readonly: true,
-          sortable: true,
-          hide_on: :forms
+
     field :posts, as: :has_many
   end
 end

@@ -8,16 +8,24 @@ class Avo::Resources::City < Avo::BaseResource
   self.stimulus_controllers = [ "conditional-fields" ]
 
   def fields
+    field "基本情報", as: :heading
     field :id, as: :id
     field :name, as: :text, sortable: true, **admin_only_options
     field :slug, as: :text, **admin_only_options
     field :image, as: :file, **admin_only_options
+    field :created_at, as: :date_time,
+          name: "作成日時",
+          readonly: true,
+          sortable: true,
+          hide_on: :forms
+    field "所属", as: :heading
     field :world, as: :belongs_to,
           sortable: -> {
             query.joins(:world).order("worlds.name #{direction}")
           },
           **admin_only_options
     field :world_id, as: :number, hide_on: [ :index, :forms ]
+    field "ステータス", as: :heading
     field :target_scope_type, as: :select,
           enum: ::City.target_scope_types,
           html: {
@@ -37,11 +45,7 @@ class Avo::Resources::City < Avo::BaseResource
             query.joins(:world).order("worlds.name #{direction}")
           }
     field :target_world_id, as: :number, hide_on: [ :index, :forms ]
-    field :created_at, as: :date_time,
-      name: "作成日時",
-      readonly: true,
-      sortable: true,
-      hide_on: :forms
+
     field :characters, as: :has_many
     field :posts, as: :has_many
   end
