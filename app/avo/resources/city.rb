@@ -37,6 +37,11 @@ class Avo::Resources::City < Avo::BaseResource
             query.joins(:world).order("worlds.name #{direction}")
           }
     field :target_world_id, as: :number, hide_on: :forms
+    field :created_at, as: :date_time,
+      name: "作成日時",
+      readonly: true,
+      sortable: true,
+      hide_on: :forms
     field :characters, as: :has_many
     field :posts, as: :has_many
     field :character_assignments, as: :has_many, hide_on: :show

@@ -15,5 +15,10 @@ class Avo::Resources::Post < Avo::BaseResource
     field :character_id, as: :number, hide_on: :forms
     field :expression, as: :belongs_to
     field :expression_id, as: :number, hide_on: :forms
+    field :created_at, as: :date_time,
+      name: "作成日時",
+      readonly: true,
+      sortable: true,
+      hide_on: :forms
   end
 end
