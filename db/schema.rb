@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_02_044324) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_04_184102) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -124,6 +124,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_02_044324) do
     t.datetime "updated_at", null: false
     t.string "login_id"
     t.integer "role", default: 0, null: false
+    t.datetime "suspended_at"
+    t.text "suspended_reason"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["login_id"], name: "index_users_on_login_id", unique: true

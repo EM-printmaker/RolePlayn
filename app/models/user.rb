@@ -34,6 +34,15 @@ class User < ApplicationRecord
     end
   end
 
+  # 凍結管理
+  def active_for_authentication?
+    super && suspended_at.nil?
+  end
+
+  def inactive_message
+    suspended_at.nil? ? super : :suspended
+  end
+
   private
 
   def downcase_login_id
