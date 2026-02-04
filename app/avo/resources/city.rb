@@ -34,6 +34,6 @@ class Avo::Resources::City < Avo::BaseResource
     field :target_world_id, as: :number, hide_on: :forms
     field :characters, as: :has_many
     field :posts, as: :has_many
-    field :character_assignments, as: :has_many
+    field :character_assignments, as: :has_many, hide_on: :show
   end
 end

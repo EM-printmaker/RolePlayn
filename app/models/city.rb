@@ -55,4 +55,9 @@ class City < ApplicationRecord
     # 将来的にglobalでの投稿とbase_scopeの投稿を合わせて表示するため
     base_scope.or(Post.from_city(id)).order(created_at: :desc)
   end
+
+  # ransack
+  def self.ransackable_attributes(auth_object = nil)
+    %w[id name created_at updated_at]
+  end
 end

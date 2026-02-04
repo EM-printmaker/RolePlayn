@@ -8,12 +8,12 @@ class Avo::Resources::Post < Avo::BaseResource
   def fields
     field :id, as: :id
     field :content, as: :textarea
-    field :character_id, as: :number, hide_on: :forms
-    field :expression_id, as: :number, hide_on: :forms
-    field :city_id, as: :number, hide_on: :forms
-    field :sender_session_token, as: :text
+    field :content, as: :text, hide_on: :forms
     field :city, as: :belongs_to
+    field :city_id, as: :number, hide_on: :forms
     field :character, as: :belongs_to
+    field :character_id, as: :number, hide_on: :forms
     field :expression, as: :belongs_to
+    field :expression_id, as: :number, hide_on: :forms
   end
 end

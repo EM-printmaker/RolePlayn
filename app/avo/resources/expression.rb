@@ -1,9 +1,24 @@
 class Avo::Resources::Expression < Avo::BaseResource
+  self.title = :display_name
   self.includes = [ character: { city: :world }, image_attachment: { blob: { variant_records: { image_attachment: :blob } } } ]
   self.attachments = [ :image ]
-  # self.search = {
-  #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
-  # }
+  self.search = {
+    query: -> {
+      emotion_value = ::Expression.emotion_types[q.downcase]
+      query.ransack(
+        character_name_cont: q,
+        emotion_type_eq: emotion_value,
+        id_eq: q,
+        level_eq: q,
+        m: "or"
+      ).result(distinct: false)
+    },
+    item:  -> do
+      {
+        title: "#{record.character.name} - #{record.emotion_type}(#{record.level})"
+      }
+    end
+  }
   self.default_view_type = :grid
   self.grid_view = {
     card: -> do
@@ -27,6 +42,6 @@ class Avo::Resources::Expression < Avo::BaseResource
     field :city, as: :record_link
     field :world, as: :record_link
     field :posts, as: :has_many
-    field :character_assignments, as: :has_many
+    field :character_assignments, as: :has_many, hide_on: :show
   end
 end

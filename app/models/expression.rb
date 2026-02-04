@@ -28,4 +28,22 @@ class Expression < ApplicationRecord
 
     target_character.expressions.pick_random || target_character.expressions.first
   end
+
+  # ransack
+  def self.ransackable_attributes(auth_object = nil)
+    %w[id emotion_type level character_id created_at updated_at]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[character]
+  end
+
+  # Avo
+  def display_name
+    if character.present?
+      "#{character&.name} - #{emotion_type} (Lv.#{level})"
+    else
+      "#{emotion_type} (Lv.#{level})"
+    end
+  end
 end

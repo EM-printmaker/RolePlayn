@@ -23,4 +23,13 @@ class Character < ApplicationRecord
   def match_expression(template_expression)
     template_expression&.find_equivalent_for(self) || expressions.pick_random
   end
+
+  # ransack
+  def self.ransackable_attributes(auth_object = nil)
+    %w[id name city_id created_at updated_at]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[city]
+  end
 end

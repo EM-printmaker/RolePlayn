@@ -4,9 +4,14 @@ class Avo::Resources::Character < Avo::BaseResource
     { expressions: { image_attachment: { blob: :variant_records } } }
   ]
   # self.attachments = []
-  # self.search = {
-  #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
-  # }
+  self.search = {
+    query: -> { query.ransack(id_eq: q, name_cont: q, city_name_cont: q, m: "or").result(distinct: false) },
+    item:  -> do
+      {
+        title: "#{record.name}(#{record.city.name})"
+      }
+    end
+  }
 
   def fields
     field :id, as: :id
@@ -17,6 +22,6 @@ class Avo::Resources::Character < Avo::BaseResource
     field :world, as: :record_link
     field :expressions, as: :has_many
     field :posts, as: :has_many
-    field :character_assignments, as: :has_many
+    field :character_assignments, as: :has_many, hide_on: :show
   end
 end
