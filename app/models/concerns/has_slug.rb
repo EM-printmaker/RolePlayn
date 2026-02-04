@@ -23,9 +23,9 @@ module HasSlug
       }
   end
 
-  def to_param
-    slug
-  end
+  # def to_param
+  #  slug
+  # end
 
   private
 
