@@ -17,7 +17,7 @@ class Avo::Resources::City < Avo::BaseResource
             query.joins(:world).order("worlds.name #{direction}")
           },
           **admin_only_options
-    field :world_id, as: :number, hide_on: :forms
+    field :world_id, as: :number, hide_on: [ :index, :forms ]
     field :target_scope_type, as: :select,
           enum: ::City.target_scope_types,
           html: {
@@ -36,7 +36,7 @@ class Avo::Resources::City < Avo::BaseResource
           sortable: -> {
             query.joins(:world).order("worlds.name #{direction}")
           }
-    field :target_world_id, as: :number, hide_on: :forms
+    field :target_world_id, as: :number, hide_on: [ :index, :forms ]
     field :created_at, as: :date_time,
       name: "作成日時",
       readonly: true,
