@@ -2,9 +2,9 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :confirmable, :trackable, :lockable,
-         authentication_keys: [ :login ]
+    :recoverable, :rememberable, :validatable,
+    :confirmable, :trackable, :lockable,
+    authentication_keys: [ :login ]
 
   has_many :character_assignments, dependent: :destroy
   has_many :inquiries,
@@ -16,10 +16,10 @@ class User < ApplicationRecord
   enum :role, { general: 0, moderator: 5, admin: 10 }
 
   validates :login_id,
-            uniqueness: { case_sensitive: false },
-            format: { with: /\A[a-z0-9_]+\z/i },
-            length: { in: 3..20 },
-            if: -> { login_id.present? }
+    uniqueness: { case_sensitive: false },
+    format: { with: /\A[a-z0-9_]+\z/i },
+    length: { in: 3..20 },
+    if: -> { login_id.present? }
 
   before_validation :downcase_login_id
 
