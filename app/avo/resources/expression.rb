@@ -40,7 +40,7 @@ class Avo::Resources::Expression < Avo::BaseResource
           **admin_only_options
     field :character, as: :belongs_to,
           sortable: -> {
-            query.joins(:character).order("characters.name #{direction}")
+            query.joins(:character).order("characters.name": direction)
           },
           **admin_only_options
     field :character_id, as: :number, only_on: :show
@@ -57,11 +57,11 @@ class Avo::Resources::Expression < Avo::BaseResource
     field "所属", as: :heading, only_on: :show
     field :city, as: :record_link,
           sortable: -> {
-            query.joins(character: :city).order("cities.name #{direction}")
+            query.joins(character: :city).order("characters.name": direction)
           }
     field :world, as: :record_link,
           sortable: -> {
-            query.joins(character: { city: :world }).order("worlds.name #{direction}")
+            query.joins(character: { city: :world }).order("characters.name": direction)
           }
 
     field :posts, as: :has_many

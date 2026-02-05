@@ -24,7 +24,7 @@ class Avo::Resources::City < Avo::BaseResource
     field "所属", as: :heading
     field :world, as: :belongs_to,
           sortable: -> {
-            query.joins(:world).order("worlds.name #{direction}")
+            query.joins(:world).order("worlds.name": direction)
           },
           **admin_only_options
     field :world_id, as: :number, only_on: :show
@@ -45,7 +45,8 @@ class Avo::Resources::City < Avo::BaseResource
             }
           },
           sortable: -> {
-            query.joins(:world).order("worlds.name #{direction}")
+            query.joins("LEFT OUTER JOIN worlds AS target_worlds_alt ON target_worlds_alt.id = cities.target_world_id").
+                  order(Arel.sql("target_worlds_alt.name #{direction} NULLS LAST"))
           }
     field :target_world_id, as: :number, only_on: :show
 

@@ -23,7 +23,7 @@ class Avo::Resources::World < Avo::BaseResource
     field :cities, as: :has_many
     field :observation_city_association, as: :has_one,
           sortable: -> {
-            query.left_outer_joins(:observation_city_association).order("cities.name #{direction}")
+            query.left_outer_joins(:observation_city_association).order("cities.name": direction)
           }
   end
 end

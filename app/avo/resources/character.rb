@@ -27,13 +27,13 @@ class Avo::Resources::Character < Avo::BaseResource
     field "所属", as: :heading
     field :city, as: :belongs_to,
           sortable: -> {
-            query.joins(:city).order("cities.name #{direction}")
+            query.joins(:city).order("cities.name": direction)
           },
           **admin_only_options
     field :city_id, as: :number, only_on: :show
     field :world, as: :record_link,
           sortable: -> {
-            query.joins(city: :world).order("worlds.name #{direction}")
+            query.joins(city: :world).order("cities.name": direction)
           }
 
     field :expressions, as: :has_many
