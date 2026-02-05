@@ -43,10 +43,6 @@ class Avo::Resources::City < Avo::BaseResource
             edit: {
               wrapper: { data: { "conditional-fields-target": "targetField" } }
             }
-          },
-          sortable: -> {
-            query.joins("LEFT OUTER JOIN worlds AS target_worlds_alt ON target_worlds_alt.id = cities.target_world_id").
-                  order(Arel.sql("target_worlds_alt.name #{direction} NULLS LAST"))
           }
     field :target_world_id, as: :number, only_on: :show
 
