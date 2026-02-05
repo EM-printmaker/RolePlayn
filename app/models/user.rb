@@ -29,6 +29,10 @@ class User < ApplicationRecord
     @login || self.login_id || self.email
   end
 
+  def can_access_admin?
+    admin? || moderator?
+  end
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if (login = conditions.delete(:login))
