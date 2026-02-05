@@ -147,25 +147,21 @@ RSpec.describe City, type: :model do
   describe "#pick_random_character_with_expression" do
     let(:city) { create(:city) }
     let!(:character) { create(:character, city: city) }
-    let!(:new_character) { create(:character, city: city) }
+    let(:target_character) { create(:character, city: city) }
+    let!(:target_expression) { create(:expression, :with_image, character: target_character) }
 
     it "excludeで指定したキャラクターは選ばれないこと" do
       10.times do
         result_char, _ = city.pick_random_character_with_expression(exclude: character)
-        expect(result_char).to eq new_character
+        expect(result_char).to eq target_character
       end
     end
 
-    context "キャラクターと表情が存在する場合" do
-      let!(:character) { create(:character, city: city) }
-      let!(:expression) { create(:expression, :with_image, character: character) }
-
-      it "キャラクターと表情の配列を返すこと" do
-        result = city.pick_random_character_with_expression
-        expect(result).to be_a(Array)
-        expect(result[0]).to eq character
-        expect(result[1]).to eq expression
-      end
+    it "キャラクターと表情の配列を返すこと" do
+      result = city.pick_random_character_with_expression(exclude: character)
+      expect(result).to be_an(Array)
+      expect(result[0]).to eq target_character
+      expect(result[1]).to eq target_expression
     end
 
     context "キャラクターが存在しない場合" do
