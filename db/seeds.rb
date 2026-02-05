@@ -63,7 +63,7 @@ characters_data.each do |data|
         next
       end
 
-      expression = character.expressions.find_or_create_by!(
+      expression = character.expressions.find_or_initialize_by(
         emotion_type: emo,
         level: lvl
       )
@@ -74,6 +74,7 @@ characters_data.each do |data|
           filename: "#{character.name}#{filename}",
           content_type: 'image/png'
         )
+        expression.save!
       end
     end
   end
@@ -84,6 +85,7 @@ characters_data.each do |data|
     character.posts.find_or_create_by!(content: content) do |p|
       p.city = character.city
       p.expression = character.expressions.pick_random
+      p.sender_session_token = SecureRandom.hex(16)
     end
   end
 end
