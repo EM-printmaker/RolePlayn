@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   private
 
     def set_all_worlds
-      @worlds = World.includes(:cities).all
+      @worlds = World.select(:id, :slug, :name).preload(:menu_cities)
     end
 
     def after_sign_in_path_for(resource)

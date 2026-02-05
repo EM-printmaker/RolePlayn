@@ -13,7 +13,7 @@
             <li class="dropdown-header text-uppercase small fw-bold text-muted border-bottom">
               <%= world.name %>
             </li>
-            <% world.cities.each do |city| %>
+            <% world.menu_cities.each do |city| %>
               <li>
                 <%= link_to city.name, city_path(city), class: "dropdown-item #{'active' if city == @city}" %>
               </li>
