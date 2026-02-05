@@ -14,14 +14,11 @@ class Post < ApplicationRecord
   scope :from_local_worlds, -> { joins(city: :world).merge(World.local) }
   scope :from_world, ->(w_id) { joins(:city).where(cities: { world_id: w_id }) }
   scope :from_city, ->(c_id) { where(city_id: c_id) }
+
   scope :with_details, -> {
-    includes(
-      :city,
-      expression: { image_attachment: { blob: :variant_records } },
-      character: [
-        { expressions: { image_attachment: { blob: :variant_records } } },
-        { city: { world: { observation_city_association: :world } } }
-      ]
+    includes(:city, character: { city: { world: { observation_city_association: :world } } })
+    .preload(
+      expression: { image_attachment: { blob: { variant_records: { image_attachment: :blob } } } }
     )
   }
 
