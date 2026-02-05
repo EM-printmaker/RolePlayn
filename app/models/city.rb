@@ -18,6 +18,7 @@ class City < ApplicationRecord
     specific_world: 2       # 特定のWorld配下の投稿
   }, default: :self_only
 
+  validates :name, presence: true, length: { maximum: 50 }
   validates :target_world_id, presence: true, if: :specific_world?
 
   scope :global, -> { joins(:world).merge(World.global) }
@@ -61,6 +62,10 @@ class City < ApplicationRecord
 
   # ransack
   def self.ransackable_attributes(_auth_object = nil)
-    %w[id name created_at updated_at]
+    %w[id name slug target_scope_type world_id created_at]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[world target_world]
   end
 end
