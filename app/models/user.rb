@@ -1,4 +1,10 @@
 class User < ApplicationRecord
+  RESERVED_LOGIN_IDS = %w[
+    admin root system support help security moderator
+    login logout signin signout register dashboard api
+    guest everyone group public private
+  ].freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -13,10 +19,15 @@ class User < ApplicationRecord
 
   validates :login_id,
     uniqueness: { case_sensitive: false },
-    format: { with: /\A[a-z0-9_]+\z/i },
     length: { in: 3..20 },
+    exclusion: { in: RESERVED_LOGIN_IDS, message: :reserved_word },
+    format: {
+      with: /\A[a-z0-9](?:[a-z0-9_]*[a-z0-9])?\z/i, # 先頭と末尾は英数字のみ、中はアンダースコアも許可
+      message: :invalid_format
+    },
     if: -> { login_id.present? }
 
+  validate :login_id_cannot_be_numeric
   before_validation :downcase_login_id
 
   attr_writer :login
@@ -61,6 +72,12 @@ class User < ApplicationRecord
       self.login_id = login_id.downcase
     else
       self.login_id = nil
+    end
+  end
+
+  def login_id_cannot_be_numeric
+    if login_id.present? && login_id.match?(/\A\d+\z/)
+      errors.add(:login_id, :numeric_only)
     end
   end
 end
