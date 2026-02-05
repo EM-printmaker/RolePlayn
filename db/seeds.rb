@@ -87,3 +87,19 @@ characters_data.each do |data|
     end
   end
 end
+
+# users
+users_data = [
+{ login_id: "test",  email: "test@example.com",  role: :admin },
+  { login_id: "test2", email: "test2@example.com", role: :moderator },
+  { login_id: "test3", email: "test3@example.com", role: :general }
+]
+users_data.each do |data|
+  User.find_or_create_by!(login_id: data[:login_id]) do |u|
+    u.email = data[:email]
+    u.password = "password"
+    u.password_confirmation = "password"
+    u.role = data[:role]
+    u.skip_confirmation! if u.respond_to?(:skip_confirmation!)
+  end
+end
