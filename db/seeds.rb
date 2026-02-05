@@ -97,11 +97,17 @@ users_data = [
   { login_id: "test3", email: "test3@example.com", role: :general }
 ]
 users_data.each do |data|
-  User.find_or_create_by!(login_id: data[:login_id]) do |u|
-    u.email = data[:email]
-    u.password = "password"
-    u.password_confirmation = "password"
-    u.role = data[:role]
-    u.skip_confirmation! if u.respond_to?(:skip_confirmation!)
+  user = User.find_or_initialize_by(login_id: data[:login_id])
+  user.email = data[:email]
+  user.role = data[:role]
+  user.skip_confirmation!
+  user.skip_reconfirmation! if user.respond_to?(:skip_reconfirmation!)
+  user.confirmed_at = Time.current
+
+  if user.new_record?
+    user.password = "password"
+    user.password_confirmation = "password"
   end
+
+  user.save!
 end
