@@ -11,12 +11,16 @@ class Character < ApplicationRecord
 
   delegate :world, to: :city, allow_nil: true
 
+  validates :name, presence: true, length: { maximum: 50 }
+
+
   def primary_observer
     world&.observation_city
   end
 
   def main_image
-    target = expressions.detect { |e| e.normal? && e.level == 1 } || expressions.first
+    target = expressions.find { |e| e.normal? && e.level == 1 }
+    target ||= expressions.min_by(&:id)
     target&.image
   end
 

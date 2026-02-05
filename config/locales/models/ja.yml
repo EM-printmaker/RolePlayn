@@ -9,6 +9,7 @@ ja:
     attributes:
       character:
         name: "名前"
+        city: "街"
         description: "自己紹介"
       expression:
         level: "レベル"
