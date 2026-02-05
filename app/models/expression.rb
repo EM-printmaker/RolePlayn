@@ -15,6 +15,16 @@ class Expression < ApplicationRecord
 
   enum :emotion_type, { joy: 0, angry: 1, sad: 2, fun: 3, normal: 4 }
 
+  validates :emotion_type, presence: true
+  validates :level, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :image, presence: true
+  # データベース側で idx_expressions_unique_set としてユニーク制約を張っているため
+  # rubocop:disable Rails/UniqueValidationWithoutIndex
+  validates :level, uniqueness: {
+    scope: [ :character_id, :emotion_type ]
+  }
+  # rubocop:enable Rails/UniqueValidationWithoutIndex
+
   scope :with_attached_images, -> {
     includes(image_attachment: { blob: { variant_records: { image_attachment: :blob } } })
   }
@@ -23,11 +33,11 @@ class Expression < ApplicationRecord
   def find_equivalent_for(target_character)
     return nil if target_character.nil?
 
-  found = target_character.expressions.detect { |e| e.emotion_type == emotion_type && e.level == level }
-  return found if found
+    found = target_character.expressions.detect { |e| e.emotion_type == emotion_type && e.level == level }
+    return found if found
 
-  found = target_character.expressions.detect { |e| e.emotion_type == emotion_type && e.level == 1 }
-  return found if found
+    found = target_character.expressions.detect { |e| e.emotion_type == emotion_type && e.level == 1 }
+    return found if found
 
     target_character.expressions.pick_random || target_character.expressions.first
   end

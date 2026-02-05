@@ -54,7 +54,7 @@ class Avo::Resources::Expression < Avo::BaseResource
           sortable: true,
           format: "yyyy-MM-dd",
           hide_on: :forms
-    field "所属", as: :heading
+    field "所属", as: :heading, only_on: :show
     field :city, as: :record_link,
           sortable: -> {
             query.joins(character: :city).order("cities.name #{direction}")

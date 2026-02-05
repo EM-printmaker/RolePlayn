@@ -10,6 +10,8 @@ ja:
       character:
         name: "名前"
         description: "自己紹介"
+      expression:
+        level: "レベル"
       post:
         content: "内容"
       city:
@@ -33,6 +35,10 @@ ja:
         image_too_wide: "の横幅は%{max_width}px以下にしてください"
         image_too_tall: "の縦幅は%{max_height}px以下にしてください"
       models:
+        expression:
+          attributes:
+            level:
+              taken: "（この感情の同じレベル）は既に登録されています"
         user:
           attributes:
             login_id:
