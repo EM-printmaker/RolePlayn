@@ -35,3 +35,9 @@ ja:
         sad: "哀"
         fun: "楽"
         normal: "通常"
+    inquiry:
+      category:
+        bug_report: 不具合
+        feature_request: 要望
+        account_issue: アカウント関連
+        general: その他

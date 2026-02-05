@@ -5,8 +5,7 @@ class InquiryMailer < ApplicationMailer
 
     mail(
       to: @inquiry.email,
-      subject: subject,
-      from: "support@yourdomain.com"
+      subject: subject
     )
   end
 end

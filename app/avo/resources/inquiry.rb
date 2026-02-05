@@ -14,6 +14,14 @@ class Avo::Resources::Inquiry < Avo::BaseResource
   def fields
     field "基本情報", as: :heading
     field :id, as: :id
+    field :category, as: :badge, name: "要件", sortable: true,
+          options: {
+            danger: :bug_report,
+            warning: :feature_request,
+            info: :account_issue,
+            neutral: :general
+          }
+    field :name, as: :text, sortable: true, only_on: :index, format_using: -> { value.truncate 20 }
     field :name, as: :text
     field :message, as: :text, only_on: :index, format_using: -> { value.truncate 30 }
     field :email, as: :text
@@ -28,7 +36,7 @@ class Avo::Resources::Inquiry < Avo::BaseResource
           sortable: true,
           display_with_value: true,
           hide_on: :index
-    field :status, as: :text, only_on: :index, name: "対応状況" do
+    field :status, as: :text, only_on: :index, sortable: true, name: "対応状況" do
           case record.status
           when "unread"
             "未読"
