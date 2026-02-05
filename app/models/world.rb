@@ -13,6 +13,9 @@ class World < ApplicationRecord
           dependent: :nullify,
           inverse_of: :target_world
 
+  validates :name, presence: true, length: { maximum: 50 }
+  validates :is_global, inclusion: { in: [ true, false ] }
+
   scope :global, -> { where(is_global: true)  }
   scope :local,  -> { where(is_global: false) }
 
