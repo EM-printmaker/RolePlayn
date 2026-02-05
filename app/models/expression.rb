@@ -18,12 +18,9 @@ class Expression < ApplicationRecord
   validates :emotion_type, presence: true
   validates :level, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :image, presence: true
-  # データベース側で idx_expressions_unique_set としてユニーク制約を張っているため
-  # rubocop:disable Rails/UniqueValidationWithoutIndex
   validates :level, uniqueness: {
     scope: [ :character_id, :emotion_type ]
   }
-  # rubocop:enable Rails/UniqueValidationWithoutIndex
 
   scope :with_attached_images, -> {
     includes(image_attachment: { blob: { variant_records: { image_attachment: :blob } } })
