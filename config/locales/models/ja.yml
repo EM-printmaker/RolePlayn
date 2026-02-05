@@ -17,6 +17,13 @@ ja:
       user:
         login: "ユーザーID・メールアドレス"
         login_id: "ユーザーID"
+      inquiry:
+        message: "お問い合わせ内容"
+      inquiry/category:
+        bug_report: "不具合報告"
+        feature_request: "機能要望"
+        account_issue: アカウント関連
+        general: その他
     errors:
       messages:
         invalid_image_type: "はJPEG, PNG, WEBP形式のみアップロード可能です"
@@ -44,6 +51,10 @@ ja:
               not_owned_by_character: "が指定されたキャラクターのものではありません。"
             base:
               too_soon: "あと %{count} 秒でまたお話しできます。"
+        inquiry:
+          attributes:
+            base:
+              too_soon: "連続での送信はできません。時間をおいてもう一度お試しください。"
   enums:
     expression:
       emotion_type:
@@ -54,7 +65,7 @@ ja:
         normal: "通常"
     inquiry:
       category:
-        bug_report: 不具合
-        feature_request: 要望
+        bug_report: 不具合報告
+        feature_request: 機能要望
         account_issue: アカウント関連
         general: その他

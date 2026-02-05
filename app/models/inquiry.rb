@@ -19,11 +19,18 @@ class Inquiry < ApplicationRecord
     general:          10 # その他
   }, default: :bug_report
 
-  validates :name, presence: true
-  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :name,    presence: true, length: { maximum: 100 }
+  validates :email,   presence: true, length: { maximum: 255 }, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :message, presence: true, length: { maximum: 5000 }
 
-  def category_text
-    I18n.t("enums.inquiry.category.#{category}") if category.present?
+  validate :inquiry_interval_limit, on: :create, unless: -> { Rails.env.development? }
+
+  private
+
+  def inquiry_interval_limit
+    last_inquiry = Inquiry.where(email: email).order(created_at: :desc).first
+    if last_inquiry && last_inquiry.created_at > 2.minutes.ago
+      errors.add(:base, :too_soon)
+    end
   end
 end
