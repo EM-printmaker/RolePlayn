@@ -35,7 +35,9 @@ class Avo::Resources::Expression < Avo::BaseResource
   def fields
     field "基本情報", as: :heading
     field :id, as: :id
-    field :image, as: :file, is_image: true, **admin_only_options
+    field :image, as: :file, is_image: true,
+          accept: ImageValidatable::ALLOWED_IMAGE_TYPES.join(","),
+          **admin_only_options
     field :character, as: :belongs_to,
           sortable: -> {
             query.joins(:character).order("characters.name #{direction}")

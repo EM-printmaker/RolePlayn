@@ -12,7 +12,9 @@ class Avo::Resources::City < Avo::BaseResource
     field :id, as: :id
     field :name, as: :text, sortable: true, **admin_only_options
     field :slug, as: :text, **admin_only_options
-    field :image, as: :file, **admin_only_options
+    field :image, as: :file, is_image: true,
+          accept: ImageValidatable::ALLOWED_IMAGE_TYPES.join(","),
+          **admin_only_options
     field :created_at, as: :date_time,
           name: "作成日",
           readonly: true,

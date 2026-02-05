@@ -18,15 +18,13 @@ ja:
         login: "ユーザーID・メールアドレス"
         login_id: "ユーザーID"
     errors:
-      models:
-        city:
-          attributes:
-            slug:
-              exclusion: "「%{value}」はシステムで使用されているため利用できません"
-        world:
-          attributes:
-            slug:
-              exclusion: "「%{value}」はシステムで使用されているため利用できません"
+      messages:
+        invalid_image_type: "はJPEG, PNG, WEBP形式のみアップロード可能です"
+        invalid_slug_format: "は小文字英数字とハイフンのみ使用可能です"
+        exclusion: "「%{value}」はシステムで使用されているため利用できません"
+        file_too_big: "は%{count}MB以下のファイルにしてください"
+        image_too_wide: "の横幅は%{max_width}px以下にしてください"
+        image_too_tall: "の縦幅は%{max_height}px以下にしてください"
   enums:
     expression:
       emotion_type:

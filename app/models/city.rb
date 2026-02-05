@@ -1,13 +1,16 @@
 class City < ApplicationRecord
   include RandomSelectable
   include HasSlug
+  include ImageValidatable
 
   belongs_to :world
   belongs_to :target_world, class_name: "World", optional: true, inverse_of: :observation_city_association
   has_many :characters, dependent: :restrict_with_error
   has_many :posts, dependent: :restrict_with_error
   has_many :character_assignments, dependent: :destroy
+
   has_one_attached :image
+  validates_image :image
 
   enum :target_scope_type, {
     self_only:      0,      # 自分自身の投稿のみ

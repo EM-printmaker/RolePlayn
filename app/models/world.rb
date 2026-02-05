@@ -1,8 +1,12 @@
 class World < ApplicationRecord
   include HasSlug
+  include ImageValidatable
 
   has_many :cities, dependent: :restrict_with_error
+
   has_one_attached :image
+  validates_image :image
+
   has_one :observation_city_association, -> { where(target_scope_type: :specific_world) },
           class_name: "City",
           foreign_key: :target_world_id,
