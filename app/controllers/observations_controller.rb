@@ -6,13 +6,13 @@ class ObservationsController < ApplicationController
   before_action :ensure_primary_observer, only: [ :show, :load_more ]
 
   def show
-    posts_scope = @city.feed_posts.where(character_id: @observed_subject.id).with_details
+    posts_scope = @city.feed_posts.where(character_id: @observed_subject.id).latest.with_details
     paginate_posts(posts_scope)
     render "cities/show"
   end
 
   def load_more
-    posts_scope = @city.feed_posts.where(character_id: @observed_subject.id).with_details
+    posts_scope = @city.feed_posts.where(character_id: @observed_subject.id).latest.with_details
     paginate_posts(posts_scope)
 
     respond_to do |format|

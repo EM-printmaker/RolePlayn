@@ -11,10 +11,17 @@ class Post < ApplicationRecord
   validate :expression_must_belong_to_character
   validate :post_interval_limit, on: :create
 
-  scope :from_local_worlds, -> { joins(city: :world).merge(World.local) }
-  scope :from_world, ->(w_id) { joins(:city).where(cities: { world_id: w_id }) }
-  scope :from_city, ->(c_id) { where(city_id: c_id) }
+  scope :from_local_worlds, ->       { joins(city: :world).merge(World.local) }
+  scope :from_world,        ->(w_id) { joins(city: :world).where(cities: { world_id: w_id }) }
+  scope :from_city,         ->(c_id) { joins(city: :world).where(city_id: c_id) }
 
+  scope :latest, -> { order(created_at: :desc) }
+  scope :sorted, ->(dir) {
+    direction = (dir.to_s.downcase == "asc") ? :asc : :desc
+    order(created_at: direction)
+  }
+
+  # 一覧表示に必要な関連（Character, City, World, 画像）を一括ロードするスコープ
   scope :with_details, -> {
     includes(:city, character: { city: { world: { observation_city_association: :world } } })
     .preload(

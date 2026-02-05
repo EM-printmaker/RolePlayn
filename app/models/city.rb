@@ -48,21 +48,18 @@ class City < ApplicationRecord
 
   def feed_posts
     base_scope =
-    case target_scope_type
-    when "all_local"
-      Post.from_local_worlds
-    when "specific_world"
-      Post.from_world(target_world_id)
-    else
-      Post.none
+    case target_scope_type.to_sym
+    when :all_local      then Post.from_local_worlds
+    when :specific_world then Post.from_world(target_world_id)
+    else Post.joins(city: :world).none
     end
     # 将来的にglobalでの投稿とbase_scopeの投稿を合わせて表示するため
-    base_scope.or(Post.from_city(id)).order(created_at: :desc)
+    base_scope.or(Post.from_city(id))
   end
 
   # ransack
   def self.ransackable_attributes(_auth_object = nil)
-    %w[id name slug target_scope_type world_id created_at]
+    %w[id name slug target_scope_type world_id target_world_id created_at]
   end
 
   def self.ransackable_associations(_auth_object = nil)
