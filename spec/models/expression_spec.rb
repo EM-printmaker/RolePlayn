@@ -29,6 +29,21 @@ RSpec.describe Expression, type: :model do
     end
   end
 
+  describe "#city / #world (delegation)" do
+    let(:world) { create(:world) }
+    let(:city) { create(:city, world: world) }
+    let(:character) { create(:character, city: city) }
+    let(:expression) { create(:expression, :with_image, character: character) }
+
+    it "characterを経由してcityを取得できること" do
+      expect(expression.city).to eq city
+    end
+
+    it "characterを経由してworldを取得できること" do
+      expect(expression.world).to eq world
+    end
+  end
+
   describe "enums" do
     it "emotion_typeが正しく定義されていること(joy, angry, sad, fun, normal)" do
       expect(described_class.emotion_types.keys).to match_array(%w[joy angry sad fun normal])
@@ -50,12 +65,54 @@ RSpec.describe Expression, type: :model do
       end
     end
 
+    context "紐づくCharacterAssignmentが存在する場合" do
+      let(:character) { create(:character) }
+      let(:expression) { create(:expression, :with_image, character: character) }
+
+      before do
+        create(:character_assignment,
+          character: character,
+          city: character.city,
+          expression: expression
+        )
+      end
+
+      it "Expression削除時にAssignmentも削除されること" do
+        expect { expression.destroy }.to change(CharacterAssignment, :count).by(-1)
+      end
+    end
+
     context "紐づくレコードが存在しない場合" do
       let!(:expression_without_associations) { create(:expression) }
 
       it "正常に削除できること" do
         expect { expression_without_associations.destroy! }.to change(described_class, :count).by(-1)
       end
+    end
+  end
+
+  describe "validations (uniqueness)" do
+    let(:character) { create(:character) }
+
+    before { create(:expression, :with_image, character: character, emotion_type: :joy, level: 1) }
+
+    context "同じキャラクター・同じ感情タイプ・同じレベルの場合" do
+      it "重複して登録できないこと" do
+        duplicate = build(:expression, :with_image, character: character, emotion_type: :joy, level: 1)
+        expect(duplicate).to be_invalid
+        expect(duplicate.errors[:level]).to include(match(/登録されています/))
+      end
+    end
+
+    it "同じキャラクター・同じ感情タイプでもレベルが異なれば登録できること" do
+      diff_level = build(:expression, :with_image, character: character, emotion_type: :joy, level: 2)
+      expect(diff_level).to be_valid
+    end
+
+    it "別のキャラクターであれば同じ感情・同じレベルでも登録できること" do
+      other_char = create(:character)
+      other_expression = build(:expression, :with_image, character: other_char, emotion_type: :joy, level: 1)
+      expect(other_expression).to be_valid
     end
   end
 
@@ -102,6 +159,23 @@ RSpec.describe Expression, type: :model do
 
       it "相手の持つ表情の中から何か（ランダムまたは最初の一つ）を返すこと" do
         expect(source_expression.find_equivalent_for(target_character)).to eq completely_different
+      end
+    end
+  end
+
+  describe "#display_name" do
+    let(:character) { create(:character, name: "テスト") }
+    let(:expression) { create(:expression, :with_image, character: character, emotion_type: :joy, level: 2) }
+
+    it "キャラクター名と感情タイプとレベルを含む文字列を返すこと" do
+      expect(expression.display_name).to eq "テスト - joy (Lv.2)"
+    end
+
+    context "キャラクターが存在しない場合" do
+      before { expression.character = nil }
+
+      it "感情タイプとレベルのみの文字列を返すこと" do
+        expect(expression.display_name).to eq "joy (Lv.2)"
       end
     end
   end

@@ -10,6 +10,61 @@ RSpec.describe CharacterAssignment, type: :model do
     it_behaves_like "belongs_to_association", :expression, Expression
   end
 
+  # describe "associations" の直後あたりに追加
+  describe "validations" do
+    let(:city) { create(:city) }
+    let(:character) { create(:character, city: city) }
+    let(:expression) { create(:expression, :with_image, character: character) }
+
+    context "データの整合性 (associations_consistency)" do
+      it "Characterが指定されたCityに所属していない場合、無効であること" do
+        other_city = create(:city)
+        assignment = build(:character_assignment, city: other_city, character: character, expression: expression)
+
+        expect(assignment).to be_invalid
+        expect(assignment.errors[:character]).to include(match(/はこの都市に所属していません/))
+      end
+
+      it "Expressionが指定されたCharacterのものではない場合、無効であること" do
+        other_character = create(:character, city: city)
+        other_expression = create(:expression, :with_image, character: other_character)
+
+        assignment = build(:character_assignment, city: city, character: character, expression: other_expression)
+
+        expect(assignment).to be_invalid
+        expect(assignment.errors[:expression]).to include(match(/表情ではありません/))
+      end
+    end
+
+    context "一意性制約" do
+      let(:user) { create(:user) }
+      let(:assigned_character) { create(:character, city: city) }
+      let(:assigned_expression) { create(:expression, :with_image, character: assigned_character) }
+
+      before do
+        create(:character_assignment,
+          user: user,
+          city: city,
+          character: assigned_character,
+          expression: assigned_expression,
+          assigned_date: Time.zone.today
+        )
+      end
+
+      it "同じユーザー・同じ都市・同じ日付の組み合わせは重複して登録できないこと" do
+          duplicate = build(:character_assignment,
+          user: user,
+          city: city,
+          character: assigned_character,
+          expression: assigned_expression,
+          assigned_date: Time.zone.today
+        )
+        expect(duplicate).to be_invalid
+        expect(duplicate.errors[:assigned_date]).to include(match(/はすでに存在します/))
+      end
+    end
+  end
+
   describe ".for_viewing" do
     let(:user) { create(:user) }
     let(:city) { create(:city) }
@@ -30,6 +85,33 @@ RSpec.describe CharacterAssignment, type: :model do
 
     it "引数が nil の場合に nil を返すこと" do
       expect(described_class.for_viewing(nil, city)).to be_nil
+    end
+  end
+
+  describe ".exists_for_today?" do
+    let(:user) { create(:user) }
+    let(:city) { create(:city) }
+    let(:character) { create(:character, city: city) }
+
+    context "今日の配役が存在する場合" do
+      before { create(:character_assignment, user: user, city: city, character: character, assigned_date: Time.zone.today) }
+
+      it "true を返すこと" do
+        expect(described_class.exists_for_today?(user, city)).to be true
+      end
+    end
+
+    context "今日の配役が存在しない場合" do
+      it "false を返すこと" do
+        expect(described_class.exists_for_today?(user, city)).to be false
+      end
+    end
+
+    context "引数が不完全な場合" do
+      it "false を返すこと" do
+        expect(described_class.exists_for_today?(nil, city)).to be false
+        expect(described_class.exists_for_today?(user, nil)).to be false
+      end
     end
   end
 
@@ -74,6 +156,56 @@ RSpec.describe CharacterAssignment, type: :model do
           expect(result).to eq existing
         }.not_to change(described_class, :count)
       end
+    end
+  end
+
+describe "#shuffle!" do
+    let(:city) { create(:city) }
+    let!(:current_character) { create(:character, :with_expressions, city: city) }
+    let!(:other_characters) { create_list(:character, 2, :with_expressions, city: city) }
+
+    let(:assignment) do
+      create(:character_assignment, city: city, character: current_character, expression: current_character.expressions.first)
+    end
+
+    it "キャラクターが別のキャラに更新されること" do
+      expect { assignment.shuffle! }.to change(assignment, :character_id)
+      expect(other_characters.map(&:id)).to include(assignment.character_id)
+      expect(assignment.expression.character_id).to eq assignment.character_id
+    end
+  end
+
+describe "#switch_character!" do
+    let(:city) { create(:city) }
+    let(:current_character) { create(:character, :with_expressions, city: city) }
+    let(:new_character) { create(:character, :with_expressions, city: city) }
+
+    let(:assignment) do
+      create(:character_assignment, city: city, character: current_character, expression: current_character.expressions.first)
+    end
+
+    it "指定されたキャラクターに更新され、表情も適切に引き継がれること" do
+      expect {
+        assignment.switch_character!(new_character)
+      }.to change(assignment, :character_id).from(current_character.id).to(new_character.id)
+
+      expect(assignment.expression.character).to eq new_character
+    end
+  end
+
+  describe "#change_expression!" do
+    let(:character) { create(:character) }
+    let!(:old_expression) { create(:expression, :with_image, character: character) }
+    let!(:new_expression) { create(:expression, :with_image, :joy, character: character) }
+
+    let(:assignment) do
+      create(:character_assignment, character: character, expression: old_expression)
+    end
+
+    it "表情が更新されること" do
+      expect {
+        assignment.change_expression!(new_expression)
+      }.to change(assignment, :expression_id).from(old_expression.id).to(new_expression.id)
     end
   end
 

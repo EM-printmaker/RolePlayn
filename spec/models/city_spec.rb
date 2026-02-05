@@ -35,6 +35,19 @@ RSpec.describe City, type: :model do
     end
   end
 
+  describe "image attachment" do
+    let(:city_with_image) { build(:city) }
+
+    before do
+      file_path = Rails.root.join('spec/fixtures/city_test_image.png')
+      city_with_image.image.attach(io: File.open(file_path), filename: 'test.png', content_type: 'image/png')
+    end
+
+    it "画像が正しくアタッチされること" do
+      expect(city_with_image.image).to be_attached
+    end
+  end
+
   describe "#target_scope_type" do
     context "specific_worldの場合" do
       it "target_world_idが必須であること" do
@@ -140,6 +153,26 @@ RSpec.describe City, type: :model do
       10.times do
         result_char, _ = city.pick_random_character_with_expression(exclude: character)
         expect(result_char).to eq new_character
+      end
+    end
+
+    context "キャラクターと表情が存在する場合" do
+      let!(:character) { create(:character, city: city) }
+      let!(:expression) { create(:expression, :with_image, character: character) }
+
+      it "キャラクターと表情の配列を返すこと" do
+        result = city.pick_random_character_with_expression
+        expect(result).to be_a(Array)
+        expect(result[0]).to eq character
+        expect(result[1]).to eq expression
+      end
+    end
+
+    context "キャラクターが存在しない場合" do
+      before { city.characters.destroy_all }
+
+      it "nil を返すこと" do
+        expect(city.pick_random_character_with_expression).to be_nil
       end
     end
   end
