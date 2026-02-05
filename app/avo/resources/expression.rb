@@ -47,9 +47,10 @@ class Avo::Resources::Expression < Avo::BaseResource
           **admin_only_options
     field :level, as: :number, sortable: true, **admin_only_options
     field :created_at, as: :date_time,
-          name: "作成日時",
+          name: "作成日",
           readonly: true,
           sortable: true,
+          format: "yyyy-MM-dd",
           hide_on: :forms
     field "所属", as: :heading
     field :city, as: :record_link,

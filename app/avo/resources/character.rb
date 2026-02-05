@@ -19,9 +19,10 @@ class Avo::Resources::Character < Avo::BaseResource
     field :name, as: :text, sortable: true, **admin_only_options
     field :description, as: :textarea, **admin_only_options
     field :created_at, as: :date_time,
-          name: "作成日時",
+          name: "作成日",
           readonly: true,
           sortable: true,
+          format: "yyyy-MM-dd",
           hide_on: :forms
     field "所属", as: :heading
     field :city, as: :belongs_to,

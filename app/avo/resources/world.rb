@@ -13,9 +13,10 @@ class Avo::Resources::World < Avo::BaseResource
     field :slug, as: :text, sortable: true, **admin_only_options
     field :image, as: :file, **admin_only_options
     field :created_at, as: :date_time,
-          name: "作成日時",
+          name: "作成日",
           readonly: true,
           sortable: true,
+          format: "yyyy-MM-dd",
           hide_on: :forms
     field :cities, as: :has_many
     field :observation_city_association, as: :has_one, sortable: -> {

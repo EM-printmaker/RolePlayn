@@ -20,7 +20,8 @@ class Avo::Resources::Inquiry < Avo::BaseResource
     field :created_at, as: :date_time,
           readonly: true,
           sortable: true,
-          name: "受信日時"
+          name: "受信日時",
+          format: "yyyy-MM-dd HH:mm"
     field "ステータス", as: :heading
     field :status, as: :select,
           enum: ::Inquiry.statuses,
