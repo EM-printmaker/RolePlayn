@@ -1,5 +1,5 @@
 class Avo::Resources::Inquiry < Avo::BaseResource
-  # self.includes = []
+  self.includes = [ :registered_user ]
   # self.attachments = []
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
@@ -24,13 +24,28 @@ class Avo::Resources::Inquiry < Avo::BaseResource
     field :name, as: :text, sortable: true, only_on: :index, format_using: -> { value.truncate 20 }
     field :name, as: :text
     field :message, as: :text, only_on: :index, format_using: -> { value.truncate 30 }
-    field :email, as: :text
+    field :email, as: :text do
+            if record.registered_user.present?
+              path = "#{root_path}/resources/users/#{record.registered_user.id}"
+              link_to record.email, path, class: "text-blue-600"
+            else
+              record.email
+            end
+          end
     field :created_at, as: :date_time,
           readonly: true,
           sortable: true,
           name: "受信日時",
           format: "yyyy-MM-dd HH:mm"
     field "ステータス", as: :heading
+    field :history_count, as: :text, name: "過去のやりとり", only_on: :show do
+            count = record.same_email_inquiries.count - 1
+            if count > 0
+              "#{count}件の過去履歴あり"
+            else
+              "初めての問い合わせ"
+            end
+          end
     field :status, as: :select,
           enum: ::Inquiry.statuses,
           sortable: true,
@@ -72,10 +87,15 @@ class Avo::Resources::Inquiry < Avo::BaseResource
             )
           }
     field :reply_sent_at, as: :date_time,
-      name: "返信日時",
-      readonly: true,
-      only_on: [ :index, :show ],
-      format: "yyyy-MM-dd HH:mm",
-      sortable: true
+          name: "返信日時",
+          readonly: true,
+          only_on: [ :index, :show ],
+          format: "yyyy-MM-dd HH:mm",
+          sortable: true
+    field :same_email_inquiries,
+          use_resource: :inquiry,
+          as: :has_many,
+          name: "このユーザーからの問い合わせ",
+          scope: -> { query.where.not(id: parent.id).order(created_at: :desc) }
   end
 end

@@ -1,4 +1,16 @@
 class Inquiry < ApplicationRecord
+  belongs_to :registered_user,
+    class_name: "User",
+    foreign_key: :email,
+    primary_key: :email,
+    optional: true
+  has_many :same_email_inquiries,
+    class_name: "Inquiry",
+    primary_key: :email,
+    foreign_key: :email,
+    dependent: nil,
+    inverse_of: false
+
   enum :status, {
     unread:     0, # 未読
     processing: 1, # 対応中

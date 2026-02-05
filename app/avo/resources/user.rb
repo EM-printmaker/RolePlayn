@@ -45,5 +45,10 @@ class Avo::Resources::User < Avo::BaseResource
     # field :confirmation_token, as: :text, **admin_only_options
     # field :confirmation_sent_at, as: :date_time, **admin_only_options
     # field :unconfirmed_email, as: :text, **admin_only_options
+    field :inquiries,
+          as: :has_many,
+          name: "お問い合わせ履歴",
+          hide_search: true,
+          scope: -> { query.order(created_at: :desc) }
   end
 end
