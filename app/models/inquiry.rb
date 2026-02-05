@@ -1,13 +1,9 @@
 class Inquiry < ApplicationRecord
-  belongs_to :registered_user,
-    class_name: "User",
-    foreign_key: :email,
-    primary_key: :email,
-    optional: true
-  has_many :same_email_inquiries,
+  belongs_to :user, optional: true
+  has_many :related_inquiries,
     class_name: "Inquiry",
-    primary_key: :email,
-    foreign_key: :email,
+    primary_key: :user_id,
+    foreign_key: :user_id,
     dependent: nil,
     inverse_of: false
 

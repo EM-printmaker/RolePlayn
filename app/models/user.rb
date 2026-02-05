@@ -7,11 +7,7 @@ class User < ApplicationRecord
     authentication_keys: [ :login ]
 
   has_many :character_assignments, dependent: :destroy
-  has_many :inquiries,
-    foreign_key: :email,
-    primary_key: :email,
-    dependent: nil,
-    inverse_of: false
+  has_many :inquiries, dependent: :nullify
 
   enum :role, { general: 0, moderator: 5, admin: 10 }
 

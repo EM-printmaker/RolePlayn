@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_04_214055) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_05_093615) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -99,7 +99,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_04_214055) do
     t.text "reply_body"
     t.datetime "reply_sent_at"
     t.integer "category"
+    t.bigint "user_id"
     t.index ["reply_sent_at"], name: "index_inquiries_on_reply_sent_at"
+    t.index ["user_id"], name: "index_inquiries_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -171,6 +173,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_04_214055) do
   add_foreign_key "characters", "cities"
   add_foreign_key "cities", "worlds"
   add_foreign_key "expressions", "characters"
+  add_foreign_key "inquiries", "users"
   add_foreign_key "posts", "characters"
   add_foreign_key "posts", "cities"
   add_foreign_key "posts", "expressions"
