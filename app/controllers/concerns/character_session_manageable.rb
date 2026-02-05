@@ -92,8 +92,8 @@ module CharacterSessionManageable
     return if city.blank?
 
     if user_signed_in?
-      character, expression = city.pick_random_character_with_expression(exclude: current_character(city))
-      CharacterAssignment.ensure_for_today!(current_user, city).update!(character: character, expression: expression) if character
+      assignment = CharacterAssignment.ensure_for_today!(current_user, city)
+      assignment&.shuffle!
     else
       character, expression = city.pick_random_character_with_expression(exclude: current_character(city))
       update_session_assignment(city, character, expression) if character
@@ -109,8 +109,7 @@ module CharacterSessionManageable
     return if expression.blank? || city.blank?
 
     if user_signed_in?
-      assignment = fetch_db_assignment(city)
-      assignment.update!(expression: expression) if assignment
+      fetch_db_assignment(city)&.change_expression!(expression)
     else
       session[:guest_assignments] ||= {}
       if session[:guest_assignments][city.id.to_s]
@@ -135,10 +134,8 @@ module CharacterSessionManageable
   def update_active_character(new_character, city = viewing_city)
     return if new_character.blank? || city.blank?
 
-    new_expression = new_character.match_expression(current_expression(city))
-
     assignment = CharacterAssignment.ensure_for_today!(current_user, city)
-    assignment.update!(character: new_character, expression: new_expression)
+    assignment.switch_character!(new_character)
 
     reset_character_caches
   end
