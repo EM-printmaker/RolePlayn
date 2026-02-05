@@ -1,29 +1,32 @@
 module ExpressionsHelper
-  def current_tab
-    params[:tab] || "emotions"
-  end
-
-  def modal_tab_button(label, tab_name)
-    is_active = (tab_name == "emotions")
-
-    tag.button(
-      label,
+  def modal_tab_button_config(tab_name)
+    {
       type: "button",
-      class: "nav-link #{'active' if is_active} border-0 bg-transparent",
+      class: "nav-link border-0 bg-transparent",
       data: {
         tabs_target: "link",
         tab_name: tab_name,
         action: "click->tabs#change"
       }
-    )
+    }
   end
 
-  def character_button_params(character)
+  def character_selection_config(character)
+    is_active = (character == current_character)
+
     {
-      character_id: character.id,
-      tab: current_tab,
-      view_type: params[:view_type],
-      view_level: params[:view_level]
+      params: {
+        character_id: character.id,
+        view_type: params[:view_type],
+        view_level: params[:view_level]
+      },
+      method: :post,
+      class: "btn p-0 border-0 flex-shrink-0 text-center shadow-none",
+      data: {
+        turbo_frame: "character_expression_wrapper",
+        action: "click->tabs#submitWithTab"
+      },
+      is_active: is_active
     }
   end
 
@@ -37,7 +40,7 @@ module ExpressionsHelper
     {
       params: {
         expression_id: expression.id,
-        tab: current_tab,
+        tab:  params[:tab],
         view_type: params[:view_type],
         view_level: params[:view_level]
       },

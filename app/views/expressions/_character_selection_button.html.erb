@@ -1,19 +1,14 @@
-<% is_active = (character == current_character) %>
+<% config = character_selection_config(character) %>
 
-<%= button_to character_selections_path, 
-      params: character_button_params(character),
-      method: :post,
-      data: { turbo_frame: "character_expression_wrapper" }, 
-      class: "btn p-0 border-0 flex-shrink-0 text-center shadow-none" do %>
+<%= button_to character_selections_path, **config.except(:is_active) do %>
   
   <div class="position-relative mx-auto mb-1" style="width: 66px; height: 66px;">
     <%= cdn_image_tag character.main_image, 
-              class: "rounded-circle border #{is_active ? 'border-primary border-3 shadow-sm' : 'border-light'}", 
-              style: "width: 60px; height: 60px; object-fit: cover; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" %>
-
+          class: "rounded-circle border #{config[:is_active] ? 'border-primary border-3 shadow-sm' : 'border-light'}", 
+          style: "width: 60px; height: 60px; object-fit: cover; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" %>
   </div>
   
-  <div class="small <%= is_active ? 'text-primary fw-bold' : 'text-muted' %>" style="max-width: 75px; font-size: 0.75rem; line-height: 1.2;">
+  <div class="small <%= config[:is_active] ? 'text-primary fw-bold' : 'text-muted' %>" style="max-width: 75px; font-size: 0.75rem; line-height: 1.2;">
     <%= character.name %>
   </div>
 <% end %>

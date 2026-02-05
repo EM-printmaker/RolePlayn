@@ -1,9 +1,9 @@
-<div class="modal-content" data-controller="tabs" data-tabs-default-tab="emotions">
+<div class="modal-content" data-controller="tabs" data-tabs-default-tab="<%= params[:tab].presence || 'emotions' %>">
 <div class="modal-header">
   <h5 class="m-0">表情を選択</h5>
   <ul class="nav nav-tabs card-header-tabs">
-    <li class="nav-item"><%= modal_tab_button("感情を追加", "emotions") %></li>
-    <li class="nav-item"><%= modal_tab_button("一覧から選ぶ", "all") %></li>
+    <li class="nav-item"><%= tag.button "感情を追加", **modal_tab_button_config("emotions") %></li>
+    <li class="nav-item"><%= tag.button "一覧から選ぶ", **modal_tab_button_config("all") %></li>
   </ul>
   <button type="button" class="btn-close" data-action="click->modal#close"></button>
 </div>

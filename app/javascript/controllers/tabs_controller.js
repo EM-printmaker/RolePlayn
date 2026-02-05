@@ -4,12 +4,14 @@ export default class extends Controller {
   static targets = ["pane", "link"];
 
   connect() {
-    this.showTab(this.data.get("defaultTab") || "emotions");
+    this.currentTab = this.data.get("defaultTab") || "emotions";
+    this.showTab(this.currentTab);
   }
 
   change(event) {
     event.preventDefault();
     const tabName = event.currentTarget.dataset.tabName;
+    this.currentTab = tabName;
     this.showTab(tabName);
   }
 
@@ -23,5 +25,26 @@ export default class extends Controller {
     this.linkTargets.forEach((link) => {
       link.classList.toggle("active", link.dataset.tabName === tabName);
     });
+  }
+
+  // フォーム送信時に現在のタブ情報を注入
+  submitWithTab(event) {
+    const form = event.currentTarget.closest("form");
+
+    if (!form) {
+      return;
+    }
+
+    const tabValue = this.currentTab || "emotions";
+
+    let input = form.querySelector('input[name="tab"]');
+    if (!input) {
+      input = document.createElement("input");
+      input.type = "hidden";
+      input.name = "tab";
+      form.appendChild(input);
+    }
+
+    input.value = tabValue;
   }
 }
