@@ -15,7 +15,7 @@ RSpec.describe CharacterAssignment, type: :model do
     let(:city) { create(:city) }
     let(:character) { create(:character, city: city) }
     let!(:today_assignment) do
-      create(:character_assignment, user: user, city: city, assigned_date: Time.zone.today)
+      create(:character_assignment, user: user, city: city, character: character, assigned_date: Time.zone.today)
     end
 
     it "指定されたユーザーと街の、今日の配役を返すこと" do
@@ -59,7 +59,14 @@ RSpec.describe CharacterAssignment, type: :model do
     end
 
     context "今日の配役が既に存在する場合" do
-      let!(:existing) { create(:character_assignment, user: user, city: city, assigned_date: Time.zone.today) }
+      let!(:existing) do
+        create(:character_assignment,
+          user: user,
+          city: city,
+          character: city.characters.first,
+          assigned_date: Time.zone.today
+        )
+      end
 
       it "新しいレコードは作られず、既存のレコードを返すこと" do
         expect {
@@ -74,7 +81,7 @@ RSpec.describe CharacterAssignment, type: :model do
     let(:user) { create(:user) }
     let(:city) { create(:city) }
     let(:character) { create(:character, city: city) }
-    let(:expression) { create(:expression, character: character) }
+    let(:expression) { create(:expression, :with_image, character: character) }
     let(:guest_assignments) do
       {
         city.id.to_s => {
@@ -97,7 +104,13 @@ RSpec.describe CharacterAssignment, type: :model do
     end
 
     it "既に同じ日のデータがある場合は重複して作成されないこと" do
-      create(:character_assignment, user: user, city: city, assigned_date: Time.zone.today)
+      create(:character_assignment,
+        user: user,
+        city: city,
+        character: character,
+        expression: expression,
+        assigned_date: Time.zone.today
+      )
 
       expect {
         described_class.transfer_from_guest!(user, guest_assignments)

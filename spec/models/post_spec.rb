@@ -43,11 +43,10 @@ RSpec.describe Post, type: :model do
       end
 
       context "トークンが空の場合" do
-        it "制限をスキップして投稿できること" do
-          travel 1.second do
-            no_token_post = build(:post, sender_session_token: nil)
-            expect(no_token_post).to be_valid
-          end
+        it "バリデーションエラーになること" do
+          post = build(:post, sender_session_token: nil)
+          expect(post).not_to be_valid
+          expect(post.errors[:sender_session_token]).to include("を入力してください")
         end
       end
     end
@@ -87,7 +86,7 @@ RSpec.describe Post, type: :model do
 
   describe ".with_details" do
     it "エラーにならず複雑なアソシエーションをプリロードできること" do
-      create(:post, :with_full_data)
+      create(:post)
       expect { described_class.with_details.to_a }.not_to raise_error
     end
   end

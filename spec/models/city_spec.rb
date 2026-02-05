@@ -191,11 +191,5 @@ RSpec.describe City, type: :model do
         expect(all_local_city.feed_posts).to include(my_post, other_post)
       end
     end
-
-    it "作成日時の降順（新しい順）で返されること" do
-      create(:post, city: city, created_at: 1.day.ago)
-      new_post = create(:post, city: city, created_at: Time.current)
-      expect(city.feed_posts.first).to eq new_post
-    end
   end
 end

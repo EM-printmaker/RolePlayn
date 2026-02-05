@@ -15,7 +15,7 @@ RSpec.describe User, type: :model do
       it '3文字未満なら無効であること' do
         user.login_id = 'ab'
         expect(user).to be_invalid
-        expect(user.errors[:login_id]).to include('は3文字以上で入力してください')
+        expect(user.errors[:login_id]).to include('は3文字以上で入力してください。')
       end
 
       it '20文字を超えるなら無効であること' do
@@ -38,7 +38,7 @@ RSpec.describe User, type: :model do
         duplicate_user = build(:user, login_id: 'UNIQUE_USER')
 
         expect(duplicate_user).to be_invalid
-        expect(duplicate_user.errors[:login_id]).to include('はすでに存在します')
+        expect(duplicate_user.errors[:login_id]).to include('はすでに使用されています。')
       end
     end
   end

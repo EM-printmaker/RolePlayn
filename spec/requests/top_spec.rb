@@ -61,7 +61,7 @@ RSpec.describe "Tops", type: :request do
 
   describe "GET top/load_more" do
     before do
-      create_list(:post, 11, :with_full_data, parent_city: city)
+      create_list(:post, 11, city: city)
       create(:city, :observer, target_world_id: world.id)
       get root_path
     end

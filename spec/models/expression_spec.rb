@@ -37,7 +37,13 @@ RSpec.describe Expression, type: :model do
 
   describe "deletion restrictions" do
     context "紐づく投稿が存在する場合" do
-      before { create(:post, expression: expression) }
+      before do
+        create(:post,
+          expression: expression,
+          character: expression.character,
+          city: expression.character.city
+        )
+      end
 
       it "削除しようとすると例外が発生して保護されること" do
         expect { expression.destroy! }.to raise_error(ActiveRecord::RecordNotDestroyed)

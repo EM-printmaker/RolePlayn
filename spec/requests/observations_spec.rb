@@ -8,9 +8,9 @@ RSpec.describe "Observations", type: :request do
     let!(:global_city) { create(:city, :observer, target_world_id: world.id) }
     let(:character) { create(:character, city: city) }
     let!(:post) do
-      create(:post, :with_full_data,
-        parent_city: city,
-        given_character: character,
+      create(:post,
+        city: city,
+        character: character,
       )
     end
 
@@ -85,7 +85,7 @@ RSpec.describe "Observations", type: :request do
     let(:global_city) { create(:city, :observer, target_world_id: world.id)  }
 
     before do
-      create_list(:post, 11, :with_full_data, parent_city: city, given_character: character)
+      create_list(:post, 11, city: city, character: character)
       get observation_path(character)
     end
 
