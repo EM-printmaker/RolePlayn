@@ -3,7 +3,12 @@ class PostsController < ApplicationController
   include PostPaginatable
 
   def create
-    @post = Post.new(post_params)
+    @post =
+      if user_signed_in?
+        current_user.posts.build(post_params)
+      else
+        Post.new(post_params)
+      end
     @city = viewing_city
     return redirect_to root_path, alert: t(".city_not_found") if @city.nil?
     @post.city_id = @city.id
