@@ -29,10 +29,12 @@
           <%= link_to '管理パネル', avo_path, class: 'text-sm text-gray-600 font-bold', data: { turbo: false } %>
         <% end %>
         <span>
-          <% if current_user.login_id.present? %>
-            <%= current_user.login_id %>
-          <% else %>
-            <%= current_user.email %>
+          <%= link_to profile_path do %>
+            <% if current_user.login_id.present? %>
+              <%= current_user.login_id %>
+            <% else %>
+              <%= current_user.email %>
+            <% end %>
           <% end %>
           でログイン中
         </span>
