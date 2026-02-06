@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get "inquiries/new"
-  get "inquiries/confirm"
-  get "inquiries/create"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -23,8 +20,11 @@ Rails.application.routes.draw do
   # top
   get "top/load_more", to: "top#load_more", as: :load_more_top
 
-  # users
+  # devise
   devise_for :users
+
+  # users
+  resources :users, only: [ :show ]
 
   # post
   resources :posts, only: [ :create, :destroy ]
