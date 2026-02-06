@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "inquiries/new"
+  get "inquiries/confirm"
+  get "inquiries/create"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -9,6 +12,9 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
+  authenticate :user, ->(user) { user.admin? || user.moderator? } do
+    mount_avo at: "/avo"
+  end
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   # root
@@ -44,11 +50,19 @@ Rails.application.routes.draw do
     resources :character_selections, only: [ :create ]
   end
 
+  # inquiries
+  resources :inquiries, only: [ :new, :create ] do
+    collection do
+      post :confirm
+      get :done
+    end
+  end
+
   # セキュリティのためこれより下に通常のルーティング設定を追加しないこと
 
   get "/:slug",
       to: "worlds#show",
-      as: :world,
+      as: :world_show,
       constraints: { slug: /[a-z0-9\-]+/ }
 
   get "/:world_slug/:slug",
@@ -70,6 +84,10 @@ Rails.application.routes.draw do
     to: "observations#load_more",
     as: :load_more_world_city_observation,
     constraints: { world_slug: /[a-z0-9\-]+/, city_slug: /[a-z0-9\-]+/ }
+
+  direct :world do |world|
+    world_show_path(slug: world.slug)
+  end
 
   direct :city do |city|
     world_city_path(world_slug: city.world.slug, slug: city.slug)
@@ -99,6 +117,8 @@ Rails.application.routes.draw do
 
   # CDNを用いた画像表示用のURL作成
   direct :cdn_image do |model, options|
+    next nil if model.nil? || (model.respond_to?(:attached?) && !model.attached?)
+
     if model.respond_to?(:key)
       key = model.key
     elsif model.respond_to?(:variation)

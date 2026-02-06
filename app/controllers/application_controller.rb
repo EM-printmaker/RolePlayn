@@ -1,9 +1,10 @@
 class ApplicationController < ActionController::Base
   allow_browser versions: :modern
-  include Pagy::Method
+  include Pagy::Backend
   include CharacterSessionManageable
 
   before_action :set_all_worlds
+  before_action :reject_suspended_user
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
@@ -18,7 +19,7 @@ class ApplicationController < ActionController::Base
   private
 
     def set_all_worlds
-      @worlds = World.includes(:cities).all
+      @worlds = World.select(:id, :slug, :name).preload(:menu_cities)
     end
 
     def after_sign_in_path_for(resource)
@@ -32,6 +33,16 @@ class ApplicationController < ActionController::Base
         edit_user_registration_path
       else
         super
+      end
+    end
+
+
+    # 凍結管理
+    def reject_suspended_user
+      if user_signed_in? && current_user.suspended_at.present?
+        sign_out current_user
+        flash[:alert] = t("custom_errors.messages.account_suspended")
+        redirect_to root_path
       end
     end
 end

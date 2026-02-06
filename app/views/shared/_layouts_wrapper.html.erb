@@ -8,6 +8,9 @@
         <%= yield %>
       </main>
       <aside class="d-none d-xl-block sub-container">
+        <%= render layout: 'shared/sidebar' do %>
+          <%= content_for?(:side_content) ? yield(:side_content) : nil %>
+        <% end %>
       </aside>
     </div>
   </div>

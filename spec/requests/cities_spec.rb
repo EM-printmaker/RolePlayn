@@ -70,9 +70,9 @@ RSpec.describe "Cities", type: :request do
     context "街の所属する世界がis_global:trueの場合" do
       let(:global_city) { create(:city, :observer, target_world_id: world.id) }
       let(:other_city) { create(:city, world: world) }
-      let!(:other_post) { create(:post, :with_full_data, parent_city: other_city) }
+      let!(:other_post) { create(:post, city: other_city) }
 
-      before { get world_city_path(global_city.world, global_city) }
+      before { get city_path(global_city) }
 
       it "ターゲットにしている世界所属の街すべての投稿が含まれていること" do
         expect(response.body).to include(post.content)
@@ -81,7 +81,7 @@ RSpec.describe "Cities", type: :request do
     end
 
     context "街の所属する世界がis_global:falseの場合" do
-      let!(:another_post) { create(:post, :with_full_data, parent_world: world) }
+      let!(:another_post) { create(:post, city: city) }
 
       it "他の街の投稿が含まれていないこと" do
         get world_city_path(world, city)
@@ -109,9 +109,9 @@ RSpec.describe "Cities", type: :request do
 
   describe "GET /:world_slug/:slug/load_more" do
     before do
-      create_list(:post, 11, :with_full_data, parent_city: city)
+      create_list(:post, 11, city: city)
       create(:city, :observer, target_world_id: world.id)
-      get world_city_path(world, city)
+      get city_path(city)
     end
 
     it_behaves_like "posts_load_more_behavior", -> { load_more_city_path(city) }

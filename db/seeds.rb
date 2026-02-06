@@ -63,7 +63,7 @@ characters_data.each do |data|
         next
       end
 
-      expression = character.expressions.find_or_create_by!(
+      expression = character.expressions.find_or_initialize_by(
         emotion_type: emo,
         level: lvl
       )
@@ -74,6 +74,7 @@ characters_data.each do |data|
           filename: "#{character.name}#{filename}",
           content_type: 'image/png'
         )
+        expression.save!
       end
     end
   end
@@ -84,6 +85,29 @@ characters_data.each do |data|
     character.posts.find_or_create_by!(content: content) do |p|
       p.city = character.city
       p.expression = character.expressions.pick_random
+      p.sender_session_token = SecureRandom.hex(16)
     end
   end
+end
+
+# users
+users_data = [
+{ login_id: "test",  email: "test@example.com",  role: :admin },
+  { login_id: "test2", email: "test2@example.com", role: :moderator },
+  { login_id: "test3", email: "test3@example.com", role: :general }
+]
+users_data.each do |data|
+  user = User.find_or_initialize_by(login_id: data[:login_id])
+  user.email = data[:email]
+  user.role = data[:role]
+  user.skip_confirmation!
+  user.skip_reconfirmation! if user.respond_to?(:skip_reconfirmation!)
+  user.confirmed_at = Time.current
+
+  if user.new_record?
+    user.password = "password"
+    user.password_confirmation = "password"
+  end
+
+  user.save!
 end

@@ -6,3 +6,6 @@ ja:
   flash:
     sessions:
       welcome_and_setup_id: "ログインありがとうございます！まずはユーザーIDを設定しましょう。"
+  custom_errors:
+    messages:
+      account_suspended: "あなたのアカウントは凍結されました。強制的にログアウトします。"

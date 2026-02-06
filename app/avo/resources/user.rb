@@ -1,0 +1,54 @@
+class Avo::Resources::User < Avo::BaseResource
+  # self.includes = []
+  # self.attachments = []
+  # self.search = {
+  #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
+  # }
+
+  def fields
+    field "基本情報", as: :heading
+    field :id, as: :id
+    field :login_id, as: :text, **admin_only_options
+    field :email, as: :text, sortable: true, **admin_only_options
+    field :role, as: :select, enum: ::User.roles, sortable: true, **admin_only_options
+    field :confirmed_at, as: :date_time, sortable: true, **admin_only_options
+
+    field "アカウント管理", as: :heading
+    field :suspended_at, as: :date_time,
+      name: "凍結日時",
+      placeholder: "未凍結（空欄で解除）",
+      hide_on: :index,
+      **admin_only_options
+
+    field :status, as: :text, only_on: :index, name: "状態" do
+      if record.suspended_at.present?
+        "🔴 凍結中"
+      elsif record.access_locked?
+        "🔒 ロック"
+      else
+        "🟢 アクティブ"
+      end
+    end
+    field :suspended_reason, as: :textarea, name: "凍結理由", **admin_only_options
+    field :failed_attempts, as: :number, readonly: true, only_on: :show, name: "ログイン失敗回数"
+    field :locked_at, as: :date_time, readonly: true, only_on: :show, name: "自動ロック日時"
+
+    field "トラッキング", as: :heading, only_on: :show
+    field :sign_in_count, as: :number, only_on: :show, **admin_only_options
+    field :current_sign_in_at, as: :date_time, only_on: :show, **admin_only_options
+    field :last_sign_in_at, as: :date_time, only_on: :show, **admin_only_options
+    field :current_sign_in_ip, as: :text, only_on: :show, **admin_only_options
+    field :last_sign_in_ip, as: :text, only_on: :show, **admin_only_options
+    field "パスワード", as: :heading, only_on: :new
+    field :password, as: :password, only_on: :new
+    field :password_confirmation, as: :password, only_on: :new
+    # field :confirmation_token, as: :text, **admin_only_options
+    # field :confirmation_sent_at, as: :date_time, **admin_only_options
+    # field :unconfirmed_email, as: :text, **admin_only_options
+    field :inquiries,
+          as: :has_many,
+          name: "お問い合わせ履歴",
+          hide_search: true,
+          scope: -> { query.order(created_at: :desc) }
+  end
+end

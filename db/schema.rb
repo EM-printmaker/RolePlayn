@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_02_044324) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_05_124502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,6 +86,23 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_02_044324) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["character_id"], name: "index_expressions_on_character_id"
+    t.index ["level", "character_id", "emotion_type"], name: "idx_expressions_unique_set", unique: true
+  end
+
+  create_table "inquiries", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.text "message", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "reply_subject"
+    t.text "reply_body"
+    t.datetime "reply_sent_at"
+    t.integer "category"
+    t.bigint "user_id"
+    t.index ["reply_sent_at"], name: "index_inquiries_on_reply_sent_at"
+    t.index ["user_id"], name: "index_inquiries_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -124,10 +141,19 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_02_044324) do
     t.datetime "updated_at", null: false
     t.string "login_id"
     t.integer "role", default: 0, null: false
+    t.datetime "suspended_at"
+    t.text "suspended_reason"
+    t.integer "failed_attempts", default: 0, null: false
+    t.integer "integer", default: 0, null: false
+    t.datetime "locked_at"
+    t.datetime "datetime"
+    t.string "unlock_token"
+    t.string "string"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["login_id"], name: "index_users_on_login_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
   create_table "worlds", force: :cascade do |t|
@@ -148,6 +174,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_02_044324) do
   add_foreign_key "characters", "cities"
   add_foreign_key "cities", "worlds"
   add_foreign_key "expressions", "characters"
+  add_foreign_key "inquiries", "users"
   add_foreign_key "posts", "characters"
   add_foreign_key "posts", "cities"
   add_foreign_key "posts", "expressions"

@@ -34,6 +34,24 @@ RSpec.describe Character, type: :model do
     end
   end
 
+  describe "#world (delegation)" do
+    let(:world) { create(:world) }
+    let(:city) { create(:city, world: world) }
+    let(:character) { create(:character, city: city) }
+
+    it "cityを経由してworldを取得できること" do
+      expect(character.world).to eq world
+    end
+
+    context "cityが存在しない場合" do
+      before { character.city = nil }
+
+      it "nilを返すこと" do
+        expect(character.world).to be_nil
+      end
+    end
+  end
+
   describe ".pick_random (RandomSelectable)" do
     before { create_list(:character, 2) }
 

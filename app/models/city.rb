@@ -1,13 +1,16 @@
 class City < ApplicationRecord
   include RandomSelectable
   include HasSlug
+  include ImageValidatable
 
   belongs_to :world
   belongs_to :target_world, class_name: "World", optional: true, inverse_of: :observation_city_association
   has_many :characters, dependent: :restrict_with_error
   has_many :posts, dependent: :restrict_with_error
   has_many :character_assignments, dependent: :destroy
+
   has_one_attached :image
+  validates_image :image
 
   enum :target_scope_type, {
     self_only:      0,      # 自分自身の投稿のみ
@@ -15,6 +18,7 @@ class City < ApplicationRecord
     specific_world: 2       # 特定のWorld配下の投稿
   }, default: :self_only
 
+  validates :name, presence: true, length: { maximum: 50 }
   validates :target_world_id, presence: true, if: :specific_world?
 
   scope :global, -> { joins(:world).merge(World.global) }
@@ -44,15 +48,21 @@ class City < ApplicationRecord
 
   def feed_posts
     base_scope =
-    case target_scope_type
-    when "all_local"
-      Post.from_local_worlds
-    when "specific_world"
-      Post.from_world(target_world_id)
-    else
-      Post.none
+    case target_scope_type.to_sym
+    when :all_local      then Post.from_local_worlds
+    when :specific_world then Post.from_world(target_world_id)
+    else Post.joins(city: :world).none
     end
     # 将来的にglobalでの投稿とbase_scopeの投稿を合わせて表示するため
-    base_scope.or(Post.from_city(id)).order(created_at: :desc)
+    base_scope.or(Post.from_city(id))
+  end
+
+  # ransack
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[id name slug target_scope_type world_id target_world_id created_at]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[world target_world]
   end
 end

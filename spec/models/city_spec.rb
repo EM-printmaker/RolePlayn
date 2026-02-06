@@ -35,6 +35,19 @@ RSpec.describe City, type: :model do
     end
   end
 
+  describe "image attachment" do
+    let(:city_with_image) { build(:city) }
+
+    before do
+      file_path = Rails.root.join('spec/fixtures/city_test_image.png')
+      city_with_image.image.attach(io: File.open(file_path), filename: 'test.png', content_type: 'image/png')
+    end
+
+    it "画像が正しくアタッチされること" do
+      expect(city_with_image.image).to be_attached
+    end
+  end
+
   describe "#target_scope_type" do
     context "specific_worldの場合" do
       it "target_world_idが必須であること" do
@@ -134,12 +147,28 @@ RSpec.describe City, type: :model do
   describe "#pick_random_character_with_expression" do
     let(:city) { create(:city) }
     let!(:character) { create(:character, city: city) }
-    let!(:new_character) { create(:character, city: city) }
+    let(:target_character) { create(:character, city: city) }
+    let!(:target_expression) { create(:expression, :with_image, character: target_character) }
 
     it "excludeで指定したキャラクターは選ばれないこと" do
       10.times do
         result_char, _ = city.pick_random_character_with_expression(exclude: character)
-        expect(result_char).to eq new_character
+        expect(result_char).to eq target_character
+      end
+    end
+
+    it "キャラクターと表情の配列を返すこと" do
+      result = city.pick_random_character_with_expression(exclude: character)
+      expect(result).to be_an(Array)
+      expect(result[0]).to eq target_character
+      expect(result[1]).to eq target_expression
+    end
+
+    context "キャラクターが存在しない場合" do
+      before { city.characters.destroy_all }
+
+      it "nil を返すこと" do
+        expect(city.pick_random_character_with_expression).to be_nil
       end
     end
   end
@@ -190,12 +219,6 @@ RSpec.describe City, type: :model do
         other_post = create(:post)
         expect(all_local_city.feed_posts).to include(my_post, other_post)
       end
-    end
-
-    it "作成日時の降順（新しい順）で返されること" do
-      create(:post, city: city, created_at: 1.day.ago)
-      new_post = create(:post, city: city, created_at: Time.current)
-      expect(city.feed_posts.first).to eq new_post
     end
   end
 end

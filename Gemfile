@@ -16,11 +16,14 @@ gem "bcrypt", "~> 3.1.7"
 gem "active_storage_validations"
 gem "image_processing", "~> 1.2"
 gem "aws-sdk-s3", require: false
-gem "pagy", "~> 43.2"
+gem "pagy", "~> 9.4"
 gem "rails-i18n"
 gem "devise"
 gem "devise-i18n"
 gem "resend"
+gem "avo", ">= 3.2"
+gem "avo-record_link_field"
+gem "ransack"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

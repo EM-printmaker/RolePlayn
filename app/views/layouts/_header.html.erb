@@ -13,7 +13,7 @@
             <li class="dropdown-header text-uppercase small fw-bold text-muted border-bottom">
               <%= world.name %>
             </li>
-            <% world.cities.each do |city| %>
+            <% world.menu_cities.each do |city| %>
               <li>
                 <%= link_to city.name, city_path(city), class: "dropdown-item #{'active' if city == @city}" %>
               </li>
@@ -25,13 +25,17 @@
 
     <div class="col-md-3 notification text-end">
       <% if user_signed_in? %>
+        <% if current_user.can_access_admin? %>
+          <%= link_to '管理パネル', avo_path, class: 'text-sm text-gray-600 font-bold', data: { turbo: false } %>
+        <% end %>
         <span>
           <% if current_user.login_id.present? %>
             <%= current_user.login_id %>
           <% else %>
             <%= current_user.email %>
           <% end %>
-          でログイン中</span>
+          でログイン中
+        </span>
         <%= link_to "設定", edit_user_registration_path %>
         <%= link_to "ログアウト", destroy_user_session_path, 
           data: { turbo_method: :delete, turbo_confirm: "ログアウトしますか？" }, 

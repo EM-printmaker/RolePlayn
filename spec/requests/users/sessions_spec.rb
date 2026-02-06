@@ -63,6 +63,37 @@ RSpec.describe "Users::Sessions", type: :request do
         expect(response.body).to include("ユーザーID・メールアドレスまたはパスワードが違います")
       end
     end
+
+    context "アカウントが凍結(suspended)されている場合" do
+      let(:suspended_user) { create(:user, suspended_at: Time.current) }
+
+      it "正しいパスワードを入力してもログインできず、凍結メッセージが表示されること" do
+        post user_session_path, params: { user: { login: suspended_user.email, password: suspended_user.password } }
+        expect(response).to have_http_status(:found)
+        expect(response).to redirect_to(new_user_session_path)
+
+        follow_redirect!
+
+        expect(response.body).to include("ログイン")
+        expect(response.body).to include("凍結")
+      end
+    end
+
+    context "アカウントがロック(locked)されている場合" do
+      let(:locked_user) { create(:user) }
+
+      before do
+        locked_user.lock_access!
+      end
+
+      it "正しいパスワードを入力してもログインできず、ロックメッセージが表示されること" do
+        post user_session_path, params: { user: { login: locked_user.email, password: locked_user.password } }
+
+        expect(controller).not_to be_user_signed_in
+
+        expect(response.body).to include("ロック")
+      end
+    end
   end
 
   describe "DELETE /users/sign_out" do
@@ -80,6 +111,25 @@ RSpec.describe "Users::Sessions", type: :request do
       expect(controller).not_to be_user_signed_in
       follow_redirect!
       expect(response.body).to include("ログアウトしました")
+    end
+  end
+
+  describe "#after_sign_in_path_for" do
+    let(:user) { create(:user) }
+
+    before do
+      character = create(:character, city: city)
+      create(:expression, :with_image, character: character)
+    end
+
+    it "ログイン後にデータがDBに移行され、セッションから削除されること" do
+      get city_path(city)
+      expect(session[:guest_assignments]).to be_present
+      post user_session_path,
+        params: { user: { login: user.email, password: user.password } }
+
+      expect(CharacterAssignment.exists?(user: user, city: city)).to be true
+      expect(session[:guest_assignments]).to be_nil
     end
   end
 end

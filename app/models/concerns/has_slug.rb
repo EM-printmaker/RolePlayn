@@ -9,7 +9,7 @@ module HasSlug
     signin signout signup sitemap static stats terms
     test upload user users webhooks world worlds
     top re_rolls shuffles character_selections rails up
-    preview expressions
+    preview expressions create
   ].freeze
 
   included do
@@ -17,15 +17,18 @@ module HasSlug
     validates :slug,
       presence: true,
       uniqueness: true,
-      format: { with: /\A[a-z0-9\-]+\z/ },
+      format: {
+        with: /\A[a-z0-9\-]+\z/,
+        message: :invalid_slug_format
+      },
       exclusion: {
         in: RESERVED_SLUGS
       }
   end
 
-  def to_param
-    slug
-  end
+  # def to_param
+  #  slug
+  # end
 
   private
 

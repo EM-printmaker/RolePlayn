@@ -1,0 +1,29 @@
+class Avo::Resources::World < Avo::BaseResource
+  # self.includes = []
+  # self.attachments = []
+  # self.search = {
+  #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
+  # }
+
+  def fields
+    field "基本情報", as: :heading
+    field :id, as: :id
+    field :name, as: :text, sortable: true, **admin_only_options
+    field :is_global, as: :boolean, sortable: true, **admin_only_options
+    field :slug, as: :text, sortable: true, **admin_only_options
+    field :image, as: :file, is_image: true,
+          accept: ImageValidatable::ALLOWED_IMAGE_TYPES.join(","),
+          **admin_only_options
+    field :created_at, as: :date_time,
+          name: "作成日",
+          readonly: true,
+          sortable: true,
+          format: "yyyy-MM-dd",
+          hide_on: :forms
+    field :cities, as: :has_many
+    field :observation_city_association, as: :has_one,
+          sortable: -> {
+            query.left_outer_joins(:observation_city_association).order("cities.name": direction)
+          }
+  end
+end

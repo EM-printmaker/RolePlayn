@@ -1,22 +1,17 @@
 FactoryBot.define do
   factory :post do
-    sequence(:content) { |n| "MyText #{n}" }
-    city
-    character { association :character, city: city }
-    expression { association :expression, character: character }
+    sequence(:content) { |n| "投稿テキスト #{n}" }
     sequence(:sender_session_token) { |n| "session_token_#{n}" }
-
-    transient do
-      parent_world { nil }
-      parent_city { nil }
-      given_character { nil }
-      given_expression { nil }
+    city { association :city }
+    character { city.characters.first || association(:character, city: city) }
+    expression do
+      character.expressions.first || association(:expression, :with_image, character: character)
     end
 
-    trait :with_full_data do
-      city { parent_city || (parent_world ? association(:city, world: parent_world) : association(:city)) }
-      character { given_character || association(:character, city: city) }
-      expression { given_expression || association(:expression, :with_image, character: character) }
+    after(:build) do |post|
+      if post.character.present?
+        post.city = post.character.city
+      end
     end
   end
 end

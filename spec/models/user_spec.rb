@@ -15,7 +15,7 @@ RSpec.describe User, type: :model do
       it '3文字未満なら無効であること' do
         user.login_id = 'ab'
         expect(user).to be_invalid
-        expect(user.errors[:login_id]).to include('は3文字以上で入力してください')
+        expect(user.errors[:login_id]).to include('は3文字以上で入力してください。')
       end
 
       it '20文字を超えるなら無効であること' do
@@ -38,7 +38,29 @@ RSpec.describe User, type: :model do
         duplicate_user = build(:user, login_id: 'UNIQUE_USER')
 
         expect(duplicate_user).to be_invalid
-        expect(duplicate_user.errors[:login_id]).to include('はすでに存在します')
+        expect(duplicate_user.errors[:login_id]).to include('はすでに使用されています。')
+      end
+
+      it '予約語（例: admin）は使用できないこと' do
+        user.login_id = 'admin'
+        expect(user).to be_invalid
+        expect(user.errors[:login_id]).to be_present
+      end
+
+      it '数字のみの login_id は無効であること' do
+        user.login_id = '123456'
+        expect(user).to be_invalid
+        expect(user.errors[:login_id]).to include(match(/数字のみ/))
+      end
+
+      it 'アンダースコアで始まる場合は無効であること' do
+        user.login_id = '_username'
+        expect(user).to be_invalid
+      end
+
+      it 'アンダースコアで終わる場合は無効であること' do
+        user.login_id = 'username_'
+        expect(user).to be_invalid
       end
     end
   end
@@ -50,11 +72,81 @@ RSpec.describe User, type: :model do
     end
   end
 
-    describe '.downcase_login_id' do
+  describe '.downcase_login_id' do
     it 'バリデーション前に login_id を小文字に変換すること' do
       user.login_id = 'MixedCase_ID'
       user.valid?
       expect(user.login_id).to eq 'mixedcase_id'
+    end
+  end
+
+  describe '#can_access_admin?' do
+    it 'admin権限を持つユーザーは true を返すこと' do
+      user.role = :admin
+      expect(user.can_access_admin?).to be true
+    end
+
+    it 'moderator権限を持つユーザーは true を返すこと' do
+      user.role = :moderator
+      expect(user.can_access_admin?).to be true
+    end
+
+    it 'general権限を持つユーザーは false を返すこと' do
+      user.role = :general
+      expect(user.can_access_admin?).to be false
+    end
+  end
+
+  describe '.find_first_by_auth_conditions' do
+    let!(:target_user) { create(:user, login_id: 'target_user', email: 'target@example.com') }
+
+    it 'login_id でユーザーを検索できること（大文字小文字無視）' do
+      conditions = { login: 'TARGET_USER' }
+      result = described_class.find_first_by_auth_conditions(conditions)
+      expect(result).to eq target_user
+    end
+
+    it 'email でユーザーを検索できること（大文字小文字無視）' do
+      conditions = { login: 'TARGET@EXAMPLE.COM' }
+      result = described_class.find_first_by_auth_conditions(conditions)
+      expect(result).to eq target_user
+    end
+
+    it '条件に一致しない場合は nil を返すこと' do
+      conditions = { login: 'unknown_user' }
+      result = described_class.find_first_by_auth_conditions(conditions)
+      expect(result).to be_nil
+    end
+  end
+
+  describe '#active_for_authentication?' do
+    it 'true を返すこと' do
+      user.suspended_at = nil
+      expect(user.active_for_authentication?).to be true
+    end
+
+    context 'suspended_at に日時が入っている場合' do
+      it 'false を返すこと' do
+        user.suspended_at = Time.current
+        expect(user.active_for_authentication?).to be false
+      end
+    end
+  end
+
+  describe '#inactive_message' do
+    context '凍結されている場合' do
+      it ':suspended を返すこと' do
+        user.suspended_at = Time.current
+        expect(user.inactive_message).to eq :suspended
+      end
+    end
+
+    context '凍結されておらず、ロックされている場合' do
+      it ':locked を返すこと' do
+        user.suspended_at = nil
+        allow(user).to receive(:access_locked?).and_return(true)
+        expect(user.inactive_message).to eq :locked
+      end
     end
   end
 end

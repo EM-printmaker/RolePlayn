@@ -1,7 +1,7 @@
 <article class="post row">
   <div class="col-3">
     <%= link_to observation_path(post.character), class: "character-link" do %>
-      <%= image_tag cdn_image_url(post.expression.image.variant(:display)), class: "post__avatar" %>
+        <%= cdn_image_tag post.expression.image, variant: :display, class: "post__avatar" %>
     <% end %>
   </div>
   <div class="col-8">

@@ -2,31 +2,68 @@ ja:
   activerecord:
     models:
       world: "世界"
-      city: "都市"
+      city: "街"
       character: "キャラクター"
       expression: "表情"
       post: "投稿"
     attributes:
       character:
         name: "名前"
+        city: "街"
         description: "自己紹介"
+      expression:
+        level: "レベル"
       post:
         content: "内容"
       city:
+        name: "名前"
+        world: "所属世界"
         slug: "識別子(Slug)"
       user:
         login: "ユーザーID・メールアドレス"
         login_id: "ユーザーID"
+      inquiry:
+        message: "お問い合わせ内容"
+      inquiry/category:
+        bug_report: "不具合報告"
+        feature_request: "機能要望"
+        account_issue: アカウント関連
+        general: その他
     errors:
+      messages:
+        invalid_image_type: "はJPEG, PNG, WEBP形式のみアップロード可能です"
+        invalid_slug_format: "は小文字英数字とハイフンのみ使用可能です"
+        exclusion: "「%{value}」はシステムで使用されているため利用できません"
+        file_too_big: "は%{count}MB以下のファイルにしてください"
+        image_too_wide: "の横幅は%{max_width}px以下にしてください"
+        image_too_tall: "の縦幅は%{max_height}px以下にしてください"
       models:
-        city:
+        expression:
           attributes:
-            slug:
-              exclusion: "「%{value}」はシステムで使用されているため利用できません"
-        world:
+            level:
+              taken: "（この感情の同じレベル）は既に登録されています"
+        user:
           attributes:
-            slug:
-              exclusion: "「%{value}」はシステムで使用されているため利用できません"
+            login_id:
+              blank: "を入力してください。"
+              taken: "はすでに使用されています。"
+              too_short: "は3文字以上で入力してください。"
+              too_long: "は20文字以内で入力してください。"
+              invalid_format: "は半角英数字とアンダースコアのみ使用可能です（先頭・末尾は英数字のみ）。"
+              reserved_word: "は使用できないIDです。"
+              numeric_only: "は数字のみでは登録できません。"
+        post:
+          attributes:
+            character:
+              invalid_city_association: "がこの街に滞在していません。"
+            expression:
+              not_owned_by_character: "が指定されたキャラクターのものではありません。"
+            base:
+              too_soon: "あと %{count} 秒でまたお話しできます。"
+        inquiry:
+          attributes:
+            base:
+              too_soon: "連続での送信はできません。時間をおいてもう一度お試しください。"
   enums:
     expression:
       emotion_type:
@@ -35,3 +72,9 @@ ja:
         sad: "哀"
         fun: "楽"
         normal: "通常"
+    inquiry:
+      category:
+        bug_report: 不具合報告
+        feature_request: 機能要望
+        account_issue: アカウント関連
+        general: その他

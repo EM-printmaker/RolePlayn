@@ -38,13 +38,14 @@ ja:
     failure:
       already_authenticated: すでにログインしています。
       inactive: アカウントが有効化されていません。メールに記載された手順にしたがって、アカウントを有効化してください。
-      invalid: "ユーザーID・メールアドレスまたはパスワードが違います。"
-      last_attempt: もう一回誤るとアカウントがロックされます。
-      locked: アカウントはロックされています。
+      invalid: ユーザーID・メールアドレスまたはパスワードが違います。
+      last_attempt: もう一回入力を誤るとアカウントがロックされます。
+      locked: アカウントはロックされています。1時間待つか、届いたメールから解除してください。
       not_found_in_database: "ユーザーID・メールアドレスまたはパスワードが違います。"
       timeout: セッションがタイムアウトしました。もう一度ログインしてください。
       unauthenticated: ログインもしくはアカウント登録してください。
       unconfirmed: メールアドレスの本人確認が必要です。
+      suspended: あなたのアカウントは現在凍結されています。心当たりがない場合は運営にお問い合わせください。
     mailer:
       confirmation_instructions:
         action: メールアドレスの確認

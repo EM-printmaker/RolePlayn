@@ -5,6 +5,6 @@
       class: "expression-item text-decoration-none text-dark",
       data: config[:data] do %>
   <div class="rounded <%= config[:active_class] %>">
-    <%= image_tag(cdn_image_url(expression.image.variant(:display)), class: "img-thumbnail") %>
+    <%= cdn_image_tag expression.image, variant: :display, class: "img-thumbnail" %>
   </div>
 <% end %>

@@ -6,7 +6,8 @@ FactoryBot.define do
 
     trait :with_expressions do
       after(:create) do |character|
-        create_list(:expression, 2, :with_image, character: character)
+        create(:expression, :with_image, character: character)
+        create(:expression, :joy, :with_image, character: character)
       end
     end
   end
