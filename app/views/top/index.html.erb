@@ -1,3 +1,6 @@
 <%= render layout: 'shared/layouts_wrapper' do %>
   <%= render 'shared/feed_and_post_section', posts: @posts, post: @post, city: @city %>
+  <% content_for :side_content do %>
+    <%= render 'top/side_content' %>
+  <% end %>
 <% end %>
