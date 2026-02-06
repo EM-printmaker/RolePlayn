@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   # users
-  resources :users, only: [ :show ]
+  resource :profile, only: [ :show ], controller: "users"
 
   # post
   resources :posts, only: [ :create, :destroy ]
