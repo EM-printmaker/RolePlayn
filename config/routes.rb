@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  mount_avo
+  authenticate :user, ->(user) { user.admin? || user.moderator? } do
+    mount_avo at: "/avo"
+  end
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   # root
