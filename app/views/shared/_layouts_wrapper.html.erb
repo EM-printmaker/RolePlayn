@@ -4,7 +4,8 @@
   </div>
   <div class="main-wrapper">
     <div class="main-container">
-      <main class="main">
+      <main class="main" data-controller="<%= flash[:scroll_to_top] ? 'scroll-reset' : '' %>"
+            data-scroll-reset-timestamp-value="<%= Time.current.to_i %>">
         <%= yield %>
       </main>
       <aside class="d-none d-xl-block sub-container">

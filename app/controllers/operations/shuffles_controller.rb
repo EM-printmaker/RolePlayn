@@ -8,6 +8,7 @@ module Operations
       transition_to_city(exclude_city: old_city)
       new_city = @city
 
+      flash[:scroll_to_top] = true
       redirect_to determine_shuffle_redirect_path(new_city), status: :see_other
     end
   end

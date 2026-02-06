@@ -4,6 +4,9 @@
 
 import { application } from "controllers/application";
 
+import ConditionalFieldsController from "controllers/conditional_fields_controller";
+application.register("conditional-fields", ConditionalFieldsController);
+
 import ModalController from "controllers/modal_controller";
 application.register("modal", ModalController);
 
@@ -12,6 +15,9 @@ application.register("post-alert", PostAlertController);
 
 import PostFormController from "controllers/post_form_controller";
 application.register("post-form", PostFormController);
+
+import ScrollResetController from "controllers/scroll_reset_controller";
+application.register("scroll-reset", ScrollResetController);
 
 import TabsController from "controllers/tabs_controller";
 application.register("tabs", TabsController);
