@@ -1,5 +1,6 @@
 <% if post.present? %>
   <%= form_with(model: post, id: "post-form",
+                url: posts_path(city_id: params[:city_id]),
                 data: {
                   turbo_submitting: "false",
                   controller: "post-form",

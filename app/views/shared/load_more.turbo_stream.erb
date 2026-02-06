@@ -12,7 +12,7 @@
   <div id="pagination-footer">
     <% if @pagy.next %>
       <%= turbo_frame_tag "pagination_frame", 
-          src: "#{request.path}?page=#{@pagy.next}", 
+          src: infinite_scroll_load_more_url(@pagy, @city, @observed_subject), 
           loading: :lazy do %>
         <div class="text-center p-4 text-muted">読み込み中...</div>
       <% end %>

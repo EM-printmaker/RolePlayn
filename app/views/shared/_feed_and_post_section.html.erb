@@ -1,10 +1,14 @@
 <%= turbo_stream_from "posts_channel_city_#{city.id}" %>
 <% if city.local? %>
-  <div class="main-form container-fluid">
+  <div id="post-section-container" class="main-form container-fluid">
     <%= render 'shared/post_section', post: post, city: city %>
   </div>
 <% end %>
+<div class="feed-extension-slot">
+  <%= yield %>
+</div>
 <div id="new-posts-alert" data-latest-post-id="<%= posts&.first&.id || 0 %>"></div>
 <div class="feed-container">
   <%= render 'shared/feed', posts: posts %>
 </div>
+

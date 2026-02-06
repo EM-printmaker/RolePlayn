@@ -92,7 +92,7 @@ module RedirectManageable
       elsif path&.chomp("/") == profile_path.chomp("/")
         safe_redirect_url_with_params(new_city_id: new_city.id)
       else
-      safe_redirect_url_with_params(new_city_id: false)
+        safe_redirect_url_with_params(new_city_id: false)
       end
     end
 end
