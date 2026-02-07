@@ -1,0 +1,2 @@
+module Expressions::FavoritesHelper
+end
