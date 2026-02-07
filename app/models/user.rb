@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :character_assignments, dependent: :destroy
   has_many :posts, dependent: :destroy
   has_many :inquiries, dependent: :nullify
+  has_many :favorites, dependent: :destroy
 
   enum :role, { general: 0, moderator: 5, admin: 10 }
 
@@ -54,6 +55,10 @@ class User < ApplicationRecord
       safe_conditions = conditions.to_h.select { |k, _v| column_names.include?(k.to_s) }
       where(safe_conditions).first
     end
+  end
+
+  def favorited?(object)
+    favorites.exists?(favoritable: object)
   end
 
   # 凍結管理
