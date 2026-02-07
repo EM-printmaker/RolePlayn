@@ -21,7 +21,10 @@ Rails.application.routes.draw do
   get "top/load_more", to: "top#load_more", as: :load_more_top
 
   # devise
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: "users/registrations",
+    sessions: "users/sessions"
+  }
 
   # users
   resource :profile, only: [ :show ], controller: "users" do
