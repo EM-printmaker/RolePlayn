@@ -116,7 +116,60 @@ RSpec.describe "Posts", type: :request do
   end
 
   describe "DELETE /posts/:id" do
-    it "レスポンスが Turbo Stream 形式であること"
-    it "投稿が削除され、Post レコードが1減ること"
+    let(:user) { create(:user) }
+    let!(:post) { create(:post, user: user) }
+    let(:other_user) { create(:user) }
+    let!(:other_user_post) { create(:post, user: other_user) }
+
+    before { sign_in user }
+
+    it "投稿が削除され、Post レコードが1減ること" do
+      expect {
+        delete post_path(post)
+      }.to change(Post, :count).by(-1)
+    end
+
+    it "削除されたあと、303 See Other でリダイレクトすること" do
+      delete post_path(post)
+      expect(response).to have_http_status(:see_other)
+      expect(response).to redirect_to(root_path)
+    end
+
+    context "他人の投稿を削除しようとした場合" do
+      it "ActiveRecord::RecordNotFound が発生すること（404）" do
+        delete post_path(other_user_post)
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "未ログインの場合" do
+      before { sign_out user }
+
+      it "ログイン画面にリダイレクトされること" do
+        delete post_path(post)
+        expect(response).to redirect_to(new_user_session_path)
+      end
+
+      it "投稿が削除されないこと" do
+        expect {
+          delete post_path(post)
+        }.not_to change(Post, :count)
+      end
+    end
+  end
+
+  describe "Redirect after deletion" do
+    let(:user) { create(:user) }
+    let!(:post_record) { create(:post, user: user) }
+
+    before { sign_in user }
+
+    context "when maintaining filter parameters" do
+      it_behaves_like "redirect_manageable_behavior", method: :delete do
+        let(:action_path) { post_path(post_record) }
+        let(:referer_url) { profile_url(city_id: 5) }
+        let(:expected_path) { profile_path(city_id: 5) }
+      end
+    end
   end
 end
