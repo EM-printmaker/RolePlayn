@@ -1,7 +1,18 @@
-<p>Hello <%= @email %>!</p>
-
-<% if @resource.try(:unconfirmed_email?) %>
-  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
-<% else %>
-  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
-<% end %>
+<div style="font-family: sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e9e9e9; border-radius: 8px;">
+  <h2 style="color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
+    <%= t(".subject") %>
+  </h2>
+  <p>
+    <%= t(".greeting", recipient: @email) %>
+  </p>
+  <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+    <% if @resource.try(:unconfirmed_email?) %>
+      <%= t(".message_unconfirmed", email: @resource.unconfirmed_email) %>
+    <% else %>
+      <%= t(".message", email: @resource.email) %>
+    <% end %>
+  </div>
+  <p style="font-size: 0.85em; color: #777;">
+    ※この変更に心当たりがない場合は、至急パスワードを変更し、サポートまでお問い合わせください。
+  </p>
+</div>

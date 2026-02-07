@@ -1,0 +1,11 @@
+<%= t(".greeting", recipient: @email) %>
+
+<% if @resource.try(:unconfirmed_email?) %>
+<%= t(".message_unconfirmed", email: @resource.unconfirmed_email) %>
+<% else %>
+<%= t(".message", email: @resource.email) %>
+<% end %>
+
+──────────────────────────────────────
+※この変更に心当たりがない場合は、至急パスワードを変更し、サポートまでお問い合わせください。
+──────────────────────────────────────
