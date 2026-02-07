@@ -1,9 +1,19 @@
 <div id="<%= dom_id(favoritable, :favorite) %>">
-  <%= button_to polymorphic_path([favoritable, :favorite]), 
-      method: current_user.favorited?(favoritable) ? :delete : :post, 
-      class: "btn btn-link p-0 text-decoration-none shadow-none" do %>
-    
-    <%= favorite_icon(favoritable, is_on: current_user.favorited?(favoritable)) %>
-
+  <% if user_signed_in? %>
+    <%= button_to polymorphic_path([favoritable, :favorite]), 
+        method: current_user.favorited?(favoritable) ? :delete : :post, 
+        class: "btn btn-link p-0 text-decoration-none shadow-none" do %>
+      <%= favorite_icon(favoritable, is_on: current_user.favorited?(favoritable)) %>
+    <% end %>
+  <% else %>
+    <% if favoritable.is_a?(Post) %>
+      <%= link_to new_user_session_path, 
+          class: "btn btn-link p-0 text-decoration-none shadow-none",
+          data: { turbo: false } do %>
+        <%= favorite_icon(favoritable, is_on: false) %>
+      <% end %>
+    <% else %>
+      <%# 表情のお気に入りは非表示 %>
+    <% end %>
   <% end %>
 </div>
