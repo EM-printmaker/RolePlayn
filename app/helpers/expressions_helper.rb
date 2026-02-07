@@ -72,22 +72,4 @@ module ExpressionsHelper
       data: { turbo_stream: true }
     }
   end
-
-  def emotion_icon(type, options = {})
-    data = EMOTION_DATA[type.to_sym]
-    return nil unless data
-
-    css_class = "bi #{options[:class]} #{data[:color]}"
-    size = options[:size] || "24"
-
-    content_tag(:svg,
-      tag.path(d: data[:path]),
-      xmlns: "http://www.w3.org/2000/svg",
-      width: size,
-      height: size,
-      fill: "currentColor",
-      class: css_class,
-      viewBox: "0 0 16 16"
-    )
-  end
 end

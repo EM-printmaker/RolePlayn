@@ -2,6 +2,16 @@ module IconHelper
   include EmotionIconData
   include SystemIconData
 
+  def emotion_icon(type, options = {})
+    data = EMOTION_DATA[type.to_sym]
+    return nil unless data
+
+    css_class = "bi #{options[:class]} #{data[:color]}"
+    size = options[:size] || "24"
+
+    render_base_svg(data[:path], css_class, size)
+  end
+
   def favorite_icon(favoritable, is_on: false, **options)
     if favoritable.is_a?(Post)
       path = is_on ? FAVORITE_DATA[:post_on][:path] : FAVORITE_DATA[:post_off][:path]
