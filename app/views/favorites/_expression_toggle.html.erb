@@ -1,0 +1,10 @@
+<div id="fav_exp_<%= expression.id %>">
+  <% is_favorited = current_user.favorited?(expression) %>
+  <%= button_to polymorphic_path([expression, :favorite]),
+        method: is_favorited ? :delete : :post,
+        class: "btn btn-link p-0 text-decoration-none shadow-none border-0",
+        onclick: "event.stopPropagation();",
+        data: { turbo_method: is_favorited ? :delete : :post } do %>
+    <%= favorite_icon(expression, is_on: is_favorited, size: "20") %>
+  <% end %>
+</div>

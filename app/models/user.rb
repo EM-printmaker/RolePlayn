@@ -17,6 +17,11 @@ class User < ApplicationRecord
   has_many :inquiries, dependent: :nullify
   has_many :favorites, dependent: :destroy
 
+  has_many :favorite_expressions,
+    through: :favorites,
+    source: :favoritable,
+    source_type: "Expression"
+
   enum :role, { general: 0, moderator: 5, admin: 10 }
 
   validates :login_id,

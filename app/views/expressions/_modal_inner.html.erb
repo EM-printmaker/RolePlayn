@@ -2,6 +2,7 @@
 <div class="modal-header">
   <h5 class="m-0">表情を選択</h5>
   <ul class="nav nav-tabs card-header-tabs">
+    <li class="nav-item"><%= tag.button "お気に入り", **modal_tab_button_config("favorites") %></li>
     <li class="nav-item"><%= tag.button "感情を追加", **modal_tab_button_config("emotions") %></li>
     <li class="nav-item"><%= tag.button "一覧から選ぶ", **modal_tab_button_config("all") %></li>
   </ul>
@@ -17,6 +18,23 @@
         </div>
       </div>
     <% end %>
+
+    <div class="d-none" data-tabs-target="pane" data-tab-name="favorites">
+      <% if current_character.present? %>
+        <% fav_expressions = current_user.favorite_expressions.where(character_id: current_character.id) %>
+        
+        <% if fav_expressions.any? %>
+          <div class="expression-grid">
+            <%= render partial: "expressions/expression_button", collection: fav_expressions, as: :expression %>
+          </div>
+        <% else %>
+          <div class="text-center py-5 text-muted">
+            <i class="bi bi-star" style="font-size: 2rem;"></i>
+            <p class="mt-2">お気に入りの表情はありません</p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
 
     <div class="d-none" data-tabs-target="pane" data-tab-name="all">
       <% if current_character.present? %>
