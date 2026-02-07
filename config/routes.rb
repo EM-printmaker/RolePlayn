@@ -77,6 +77,8 @@ Rails.application.routes.draw do
     resource :favorite, only: [ :create, :destroy ], module: :expressions
   end
 
+  get "login_announcement", to: "pages#login_announcement"
+
   # セキュリティのためこれより下に通常のルーティング設定を追加しないこと
 
   get "/:slug",

@@ -7,9 +7,9 @@
     <% end %>
   <% else %>
     <% if favoritable.is_a?(Post) %>
-      <%= link_to new_user_session_path, 
+      <%= link_to login_announcement_path, 
           class: "btn btn-link p-0 text-decoration-none shadow-none",
-          data: { turbo: false } do %>
+          data: { turbo_stream: true } do %>
         <%= favorite_icon(favoritable, is_on: false) %>
       <% end %>
     <% else %>
