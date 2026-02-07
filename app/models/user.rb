@@ -41,6 +41,11 @@ class User < ApplicationRecord
     admin? || moderator?
   end
 
+  # 初めてログインIDが設定されたかどうか
+  def just_set_login_id?
+    login_id_previously_was.blank? && login_id.present?
+  end
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if (login = conditions.delete(:login))
