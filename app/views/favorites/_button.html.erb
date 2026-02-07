@@ -5,15 +5,15 @@
         class: "btn btn-link p-0 text-decoration-none shadow-none" do %>
       <%= favorite_icon(favoritable, is_on: current_user.favorited?(favoritable)) %>
     <% end %>
-  <% else %>
-    <% if favoritable.is_a?(Post) %>
-      <%= link_to login_announcement_path, 
+  <%# else %>
+    <%# if favoritable.is_a?(Post) %>
+      <%#= link_to login_announcement_path(favorite_after_login_id: post.id), 
           class: "btn btn-link p-0 text-decoration-none shadow-none",
           data: { turbo_stream: true } do %>
-        <%= favorite_icon(favoritable, is_on: false) %>
-      <% end %>
-    <% else %>
+        <%#= favorite_icon(favoritable, is_on: false) %>
+      <%# end %>
+    <%# else %>
       <%# 表情のお気に入りは非表示 %>
-    <% end %>
+    <%# end %>
   <% end %>
 </div>
