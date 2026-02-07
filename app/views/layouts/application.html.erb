@@ -8,8 +8,10 @@
 
   <body>
     <div class="wrapper">
-      <% flash.each do |message_type, message| %>
-        <%= content_tag(:div, message, class: "alert alert-#{message_type}") %>
+      <% discard_keys = ['scroll_to_top'] %>
+      <% flash.each do |key, message| %>
+        <% next if discard_keys.include?(key.to_s) %>
+        <%= content_tag(:div, message, class: "alert alert-#{key}") %>
       <% end %>
       <%= render 'layouts/header' %>
       <%= yield %>    

@@ -1,11 +1,15 @@
 module Operations
   class ShufflesController < ApplicationController
     include CharacterSessionManageable
+    include RedirectManageable
 
     def create
       old_city = viewing_city
       transition_to_city(exclude_city: old_city)
-      redirect_to root_path, status: :see_other
+      new_city = @city
+
+      flash[:scroll_to_top] = true
+      redirect_to determine_shuffle_redirect_path(new_city), status: :see_other
     end
   end
 end

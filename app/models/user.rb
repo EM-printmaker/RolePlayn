@@ -13,6 +13,7 @@ class User < ApplicationRecord
     authentication_keys: [ :login ]
 
   has_many :character_assignments, dependent: :destroy
+  has_many :posts, dependent: :destroy
   has_many :inquiries, dependent: :nullify
 
   enum :role, { general: 0, moderator: 5, admin: 10 }
@@ -38,6 +39,11 @@ class User < ApplicationRecord
 
   def can_access_admin?
     admin? || moderator?
+  end
+
+  # 初めてログインIDが設定されたかどうか
+  def just_set_login_id?
+    login_id_previously_was.blank? && login_id.present?
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)

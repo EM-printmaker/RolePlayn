@@ -1,17 +1,26 @@
 class PostsController < ApplicationController
   include CharacterSessionManageable
+  include RedirectManageable
   include PostPaginatable
 
+  before_action :authenticate_user!, only: :destroy
+
   def create
-    @post = Post.new(post_params)
-    @city = viewing_city
+    @post =
+      if user_signed_in?
+        current_user.posts.build(post_params)
+      else
+        Post.new(post_params)
+      end
+    @city = City.find_by(id: params[:city_id]) || viewing_city
     return redirect_to root_path, alert: t(".city_not_found") if @city.nil?
     @post.city_id = @city.id
     @post.character_id = current_character&.id
     @post.expression_id = current_expression&.id
     @post.sender_session_token = helpers.session_token(session.id)
+
     if @post.save
-      redirect_back fallback_location: root_path, status: :see_other
+      redirect_to determine_redirect_path, status: :see_other
     else
       respond_to do |format|
         format.turbo_stream { render :create, status: :unprocessable_content }
@@ -21,11 +30,15 @@ class PostsController < ApplicationController
   end
 
   def destroy
+    @post = current_user.posts.find(params[:id])
+    @post.destroy!
+
+    redirect_to determine_redirect_path, status: :see_other
   end
 
   private
 
-  def post_params
-    params.require(:post).permit(:content)
-  end
+    def post_params
+      params.require(:post).permit(:content)
+    end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_05_124502) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_06_081003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -113,6 +113,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_05_124502) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "sender_session_token"
+    t.bigint "user_id"
     t.index ["character_id", "created_at"], name: "index_posts_on_character_id_and_created_at"
     t.index ["character_id"], name: "index_posts_on_character_id"
     t.index ["city_id", "created_at"], name: "index_posts_on_city_id_and_created_at"
@@ -120,6 +121,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_05_124502) do
     t.index ["created_at"], name: "index_posts_on_created_at"
     t.index ["expression_id"], name: "index_posts_on_expression_id"
     t.index ["sender_session_token"], name: "index_posts_on_sender_session_token"
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -178,4 +180,5 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_05_124502) do
   add_foreign_key "posts", "characters"
   add_foreign_key "posts", "cities"
   add_foreign_key "posts", "expressions"
+  add_foreign_key "posts", "users"
 end

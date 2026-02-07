@@ -4,6 +4,7 @@ class Post < ApplicationRecord
   belongs_to :city
   belongs_to :character
   belongs_to :expression, -> { with_attached_images }, inverse_of: :posts
+  belongs_to :user, optional: true
 
   validates :content, presence: true, length: { maximum: 300 }
   validates :sender_session_token, presence: true

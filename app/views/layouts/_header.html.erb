@@ -1,4 +1,4 @@
-<header class="header navbar">
+<header id="main-header" class="header navbar">
   <div class="container-fluid header-container">
     <%= link_to "RolePlayn", root_path, class: "header-logo col-md-3" %>
 
@@ -29,10 +29,12 @@
           <%= link_to '管理パネル', avo_path, class: 'text-sm text-gray-600 font-bold', data: { turbo: false } %>
         <% end %>
         <span>
-          <% if current_user.login_id.present? %>
-            <%= current_user.login_id %>
-          <% else %>
-            <%= current_user.email %>
+          <%= link_to profile_path do %>
+            <% if current_user.login_id.present? %>
+              <%= current_user.login_id %>
+            <% else %>
+              <%= current_user.email %>
+            <% end %>
           <% end %>
           でログイン中
         </span>

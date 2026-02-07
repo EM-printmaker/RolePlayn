@@ -71,21 +71,34 @@ class CharacterAssignment < ApplicationRecord
   def self.transfer_from_guest!(user, guest_assignments_hash)
     return if guest_assignments_hash.blank?
 
-    transaction do
-      guest_assignments_hash.each do |city_id, data|
-        next if data["character_id"].blank? || data["expression_id"].blank?
+    data_hash = guest_assignments_hash.with_indifferent_access
+    data_hash.each do |city_id_raw, data|
+      begin
+        city_id = city_id_raw.to_i
+        character_id = data[:character_id].to_i
+        expression_id = data[:expression_id].to_i
+
+        assigned_date = data[:assigned_date].to_date rescue nil
+
+        next if city_id.zero? || character_id.zero? || expression_id.zero? || assigned_date.nil?
 
         assignment = find_or_initialize_by(
           user: user,
           city_id: city_id,
-          assigned_date: data["assigned_date"].to_date
+          assigned_date: assigned_date
         )
 
         if assignment.new_record?
-          assignment.character_id = data["character_id"]
-          assignment.expression_id = data["expression_id"]
-          assignment.save!
+          assignment.character_id = character_id
+          assignment.expression_id = expression_id
+
+          unless assignment.save
+            Rails.logger.warn "Guest data transfer failed for City:#{city_id}: #{assignment.errors.full_messages.join(', ')}"
+          end
         end
+
+      rescue => e
+        Rails.logger.error "Guest data transfer error: #{e.message}"
       end
     end
   end

@@ -5,6 +5,10 @@ module ApplicationHelper
   end
 
   def infinite_scroll_load_more_url(pagy, city = nil, subject = nil)
+    if controller_name == "users"
+      return load_more_profile_path(request.query_parameters.merge(page: pagy.next))
+    end
+
     path =
       if subject.present? && city.present?
         load_more_observation_path(city, subject)

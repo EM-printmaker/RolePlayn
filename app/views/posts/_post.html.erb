@@ -1,11 +1,19 @@
-<article class="post row">
+<article id="<%= dom_id(post) %>" class="post row">
   <div class="col-3">
     <%= link_to observation_path(post.character), class: "character-link" do %>
         <%= cdn_image_tag post.expression.image, variant: :display, class: "post__avatar" %>
     <% end %>
   </div>
   <div class="col-8">
-    <p><%= post.character.name %></p>
+    <div class="d-flex justify-content-between">
+      <p><%= post.character.name %> <%= post.character.city.name %></p>
+      <% if user_signed_in? && post.user == current_user %>
+        <%= button_to "削除", post_path(post, city_id: params[:city_id]),
+              method: :delete,
+              form: { data: { turbo_confirm: "本当に削除しますか？" } },
+              class: "btn btn-danger" %>
+      <% end %>
+    </div>
     <p><%= post.content %></p>
   </div>
 </article>

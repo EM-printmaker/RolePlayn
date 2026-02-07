@@ -1,0 +1,14 @@
+<%= render layout: 'shared/layouts_wrapper' do %>
+<div id="profile_feed_and_post_section">
+  <%= render layout: 'shared/feed_and_post_section', locals: { posts: @posts, post: @post, city: @city } do %>
+    <div class="filter-bar d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded">
+      <div id="city-filter-bar">
+        <%= render 'users/filter_bar' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+  <% content_for :side_content do %>
+    <%= render 'top/side_content' %>
+  <% end %>
+<% end %>
