@@ -14,6 +14,9 @@
               class: "btn btn-danger" %>
       <% end %>
     </div>
-    <p><%= post.content %></p>
+    <div class="d-flex justify-content-between">
+      <p><%= post.content %></p>
+      <%= render "favorites/button", favoritable: post %>
+    </div>
   </div>
 </article>

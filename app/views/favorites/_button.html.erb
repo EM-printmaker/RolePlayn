@@ -1,0 +1,9 @@
+<div id="<%= dom_id(favoritable, :favorite) %>">
+  <%= button_to polymorphic_path([favoritable, :favorite]), 
+      method: current_user.favorited?(favoritable) ? :delete : :post, 
+      class: "btn btn-link p-0 text-decoration-none shadow-none" do %>
+    
+    <%= favorite_icon(favoritable, is_on: current_user.favorited?(favoritable)) %>
+
+  <% end %>
+</div>

@@ -1,4 +1,5 @@
 class FavoritesController < ApplicationController
+  include ActionView::RecordIdentifier
   before_action :authenticate_user!
   before_action :set_favoritable
 
