@@ -1,0 +1,9 @@
+<%= turbo_frame_tag "favorites-pane" do %>
+  <div class="expression-grid">
+    <% if expressions.any? %>
+      <%= render partial: "expressions/expression_button", collection: expressions, as: :expression, locals: { prefix: "fav" } %>
+    <% else %>
+      <p class="text-center py-5">お気に入りはまだありません</p>
+    <% end %>
+  </div>
+<% end %>

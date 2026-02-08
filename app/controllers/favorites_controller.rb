@@ -25,29 +25,25 @@ class FavoritesController < ApplicationController
     end
 
     def render_turbo_replace
+      is_on = (action_name == "create")
       respond_to do |format|
         format.turbo_stream do
           if @favoritable.is_a?(Expression)
-            render turbo_stream: [
-              # 1. リスト(grid)
+            targets = [ "preview", "fav", "all" ]
+
+            streams = targets.map do |prefix|
               turbo_stream.replace(
-                "fav_exp_grid_#{@favoritable.id}",
+                "fav_exp_#{prefix}_#{@favoritable.id}",
                 partial: "favorites/expression_toggle",
-                locals: { expression: @favoritable, prefix: "grid" }
-              ),
-              # 2. プレビュー(preview)
-              turbo_stream.replace(
-                "fav_exp_preview_#{@favoritable.id}",
-                partial: "favorites/expression_toggle",
-                locals: { expression: @favoritable, prefix: "preview" }
+                locals: { expression: @favoritable, is_favorited: is_on, prefix: prefix }
               )
-            ]
+            end
+            render turbo_stream: streams
           else
-            # その他(post)
             render turbo_stream: turbo_stream.replace(
               dom_id(@favoritable, :favorite),
               partial: "favorites/button",
-              locals: { favoritable: @favoritable }
+              locals: { favoritable: @favoritable, is_favorited: is_on }
             )
           end
         end

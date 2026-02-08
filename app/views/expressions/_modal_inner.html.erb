@@ -20,26 +20,17 @@
     <% end %>
 
     <div class="d-none" data-tabs-target="pane" data-tab-name="favorites">
-      <% if current_character.present? %>
-        <% fav_expressions = current_user.favorite_expressions.where(character_id: current_character.id) %>
-        
-        <% if fav_expressions.any? %>
-          <div class="expression-grid">
-            <%= render partial: "expressions/expression_button", collection: fav_expressions, as: :expression %>
-          </div>
-        <% else %>
-          <div class="text-center py-5 text-muted">
-            <i class="bi bi-star" style="font-size: 2rem;"></i>
-            <p class="mt-2">お気に入りの表情はありません</p>
-          </div>
-        <% end %>
+      <%= turbo_frame_tag "favorites-pane", src: favorites_expressions_path do %>
+        <div class="text-center py-5">
+          <div class="spinner-border text-warning"></div>
+        </div>
       <% end %>
     </div>
 
     <div class="d-none" data-tabs-target="pane" data-tab-name="all">
       <% if current_character.present? %>
         <div class="expression-grid">
-          <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression %>
+          <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression, locals: { prefix: "all" } %>
         </div>
       <% else %>
         <div class="text-center py-5">

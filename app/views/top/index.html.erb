@@ -1,3 +1,12 @@
+<% if current_character.present? %>
+  <div class="expression-grid">
+    <%= render partial: "expressions/expression_button", collection: current_favorite_expressions, as: :expression %>
+  </div>
+<% else %>
+  <div class="text-center py-5">
+    <p class="text-muted">表示できるキャラクターがいません</p>
+  </div>
+<% end %>
 <%= render layout: 'shared/layouts_wrapper' do %>
   <%= render 'shared/feed_and_post_section', posts: @posts, post: @post, city: @city %>
   <% content_for :side_content do %>

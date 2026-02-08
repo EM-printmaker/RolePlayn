@@ -1,0 +1,22 @@
+<div class="modal-inner p-3">
+      <div class="character-selector-wrapper mb-4 border-bottom pb-3">
+        <div class="d-flex flex-nowrap overflow-x-auto gap-3 pb-2" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+          <%= render partial: "expressions/character_selection_button", collection: characters, as: :character %>
+        </div>
+      </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="m-0">お気に入りの表情</h5>
+    <button type="button" class="btn-close" data-action="click->modal#close"></button>
+  </div>
+
+  <div class="expression-grid">
+    <% if @favorite_expressions.any? %>
+      <%= render partial: "expressions/expression_button", collection: @favorite_expressions, as: :expression %>
+    <% else %>
+      <div class="text-center py-5 text-muted">
+        <p>お気に入りはまだありません</p>
+      </div>
+    <% end %>
+  </div>
+</div>

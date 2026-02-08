@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   resources :expressions, only: [] do
     collection do
       post :preview
+      get :favorites  # => /expressions/favorites
     end
   end
 
