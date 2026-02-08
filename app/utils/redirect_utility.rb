@@ -52,7 +52,7 @@ module RedirectUtility
         query["city_id"] = forced_id&.to_s || query["city_id"] || params[:city_id]
       end
 
-      clean_query = query.select { |_, v| v.present? }
+      clean_query = query.compact_blank
       uri.query = clean_query.any? ? URI.encode_www_form(clean_query) : nil
     end
 
