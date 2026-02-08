@@ -1,9 +1,11 @@
 class UsersController < ApplicationController
   include CharacterSessionManageable
+  include FavoriteLookup
   include PostPaginatable
 
   before_action :prepare_viewing_context
   before_action :authenticate_user!
+  before_action :prepare_favorite_ids, only: [ :show, :load_more ]
 
   def show
     @posts = current_user.posts.latest.with_details

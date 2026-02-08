@@ -1,7 +1,8 @@
 <%# locals: (expression:, prefix: "grid", is_favorited: nil) %>
-<% if user_signed_in? && local_assigns[:is_favorited].nil? %>
-  <% is_favorited = current_user.favorited_expression?(expression) %>
+<% if user_signed_in? && is_favorited.nil? %>
+  <% is_favorited = expression_favorited?(expression) %>
 <% end %>
+
 <div id="fav_exp_<%= prefix %>_<%= expression.id %>" class="d-inline-block">
   <% if user_signed_in? %>
     <%= button_to expression_favorite_path(expression),

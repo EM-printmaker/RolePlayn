@@ -1,5 +1,8 @@
 class ExpressionsController < ApplicationController
   include CharacterSessionManageable
+  include FavoriteLookup
+
+  before_action :prepare_favorite_ids, only: [ :preview, :favorites ]
 
   def preview
     @city = viewing_city
