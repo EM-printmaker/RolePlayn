@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
   include Pagy::Backend
   include CharacterSessionManageable
+  include FavoriteLookup
 
   before_action :set_all_worlds
   before_action :reject_suspended_user
