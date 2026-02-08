@@ -1,12 +1,12 @@
 <div class="dropdown">
   <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" id="cityFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-    <%= params[:city_id].present? ? "都市: #{@city.name}" : "全ての都市" %>
+    <%= params[:city_id].present? ? "都市: #{city.name}" : "全ての都市" %>
   </button>
 
   <ul class="dropdown-menu shadow" aria-labelledby="cityFilterDropdown">
     <li>
       <%= link_to "全ての都市", 
-            profile_path,
+            profile_tab_filter_path(@tab),
             class: "dropdown-item #{params[:city_id].blank? ? 'active' : ''}" %>
     </li>
     
@@ -19,7 +19,7 @@
       <% world.menu_cities.each do |city| %>
         <li>
           <%= link_to city.name, 
-                  profile_path(city_id: city.id), 
+                  profile_tab_filter_path(@tab, city.id), 
                   class: "dropdown-item #{params[:city_id].to_s == city.id.to_s ? 'active' : ''}" %>
         </li>
       <% end %>
