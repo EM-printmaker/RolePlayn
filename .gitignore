@@ -41,3 +41,6 @@ node_modules/
 !/app/assets/builds/.keep
 
 coverage/
+
+# macOS system files
+.DS_Store
