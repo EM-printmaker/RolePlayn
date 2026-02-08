@@ -4,9 +4,13 @@ module ApplicationHelper
     OpenSSL::HMAC.hexdigest("SHA256", Rails.application.secret_key_base, session_id.to_s)
   end
 
-  def infinite_scroll_load_more_url(pagy, city = nil, subject = nil)
+  def infinite_scroll_load_more_url(pagy, city = nil, subject = nil, tab: nil)
     if controller_name == "users"
-      return load_more_profile_path(request.query_parameters.merge(page: pagy.next))
+      params_hash = request.query_parameters.merge(
+        page: pagy.next,
+        tab: tab
+      )
+      return load_more_profile_path(params_hash)
     end
 
     path =

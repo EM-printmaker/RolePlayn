@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   # users
   resource :profile, only: [ :show ], controller: "users" do
     get :load_more
+    get "favorited-posts", to: "users#favorited_posts", as: :favorited_posts
   end
 
   # post
