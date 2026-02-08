@@ -15,7 +15,11 @@ class User < ApplicationRecord
   has_many :character_assignments, dependent: :destroy
   has_many :posts, dependent: :destroy
   has_many :inquiries, dependent: :nullify
-  has_many :favorites, dependent: :destroy
+  has_many :expression_favorites, dependent: :destroy
+  has_many :post_favorites, dependent: :destroy
+
+  has_many :favorited_expressions, through: :expression_favorites, source: :expression
+  has_many :favorited_posts, through: :post_favorites, source: :post
 
   has_many :favorite_expressions,
     through: :favorites,
