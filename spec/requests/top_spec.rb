@@ -26,6 +26,7 @@ RSpec.describe "Tops", type: :request do
     end
 
     it_behaves_like "character_session_manageable", :root_path
+    it_behaves_like "favorite_lookup_behavior", -> { root_path }
 
     it "正常なレスポンスが返ること" do
       expect(response).to have_http_status(:success)

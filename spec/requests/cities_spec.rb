@@ -43,6 +43,7 @@ RSpec.describe "Cities", type: :request do
     end
 
     it_behaves_like "character_session_manageable", -> { city_path(city) }
+    it_behaves_like "favorite_lookup_behavior", -> { city_path(city) }
 
     it "正常なレスポンスが返ること" do
       expect(response).to have_http_status(:success)
