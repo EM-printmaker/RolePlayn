@@ -1,0 +1,2 @@
+class ExpressionFavorite < ApplicationRecord
+end
