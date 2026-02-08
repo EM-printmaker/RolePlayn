@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ExpressionFavorite, type: :model do
   subject(:expression_favorite) { create(:expression_favorite) }
 
-    describe "associations" do
+  describe "associations" do
     it_behaves_like "belongs_to_association", :user, User
     it_behaves_like "belongs_to_association", :expression, Expression
   end
