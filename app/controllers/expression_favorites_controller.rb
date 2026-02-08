@@ -1,0 +1,2 @@
+class ExpressionFavoritesController < ApplicationController
+end
