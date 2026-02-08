@@ -81,6 +81,10 @@ Rails.application.routes.draw do
     end
   end
 
+  # notifications
+  post "notifications/read", to: "notifications#read", as: :read_notifications
+
+  # login_modal
   get "login_announcement", to: "pages#login_announcement"
 
   # セキュリティのためこれより下に通常のルーティング設定を追加しないこと

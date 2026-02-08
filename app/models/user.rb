@@ -76,6 +76,10 @@ class User < ApplicationRecord
     post_favorites.exists?(post_id: post.id)
   end
 
+  def mark_notifications_as_read
+    update(unread_notification: false) if unread_notification?
+  end
+
   # 凍結管理
   def active_for_authentication?
     super && suspended_at.nil?
