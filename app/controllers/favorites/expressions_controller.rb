@@ -23,7 +23,7 @@ module Favorites
     def render_turbo_update(is_favorited)
       respond_to do |format|
         format.turbo_stream do
-          targets = [ "grid", "list", "preview", "fav" ]
+          targets = [ "grid", "preview", "fav" ]
 
           streams = targets.map do |prefix|
             turbo_stream.replace(
