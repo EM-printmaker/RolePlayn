@@ -30,7 +30,7 @@
     <div class="d-none" data-tabs-target="pane" data-tab-name="all">
       <% if current_character.present? %>
         <div class="expression-grid">
-          <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression, locals: { prefix: "all" } %>
+          <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression, locals: { prefix: "grid" } %>
         </div>
       <% else %>
         <div class="text-center py-5">

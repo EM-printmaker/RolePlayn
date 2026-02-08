@@ -87,14 +87,12 @@ module CharacterSessionManageable
     @_characters ||= viewing_city.characters.includes(:expressions)
   end
 
-
   def current_favorite_expressions(city = viewing_city)
     character = current_character(city)
     return Expression.none if character.blank? || !user_signed_in?
 
-    @current_favorite_expressions ||= {}
-    @current_favorite_expressions["#{city.id}_#{character.id}"] ||=
-      current_user.favorite_expressions
+    @current_favorite_expressions ||=
+      current_user.favorited_expressions
                   .where(character_id: character.id)
                   .with_attached_image
   end

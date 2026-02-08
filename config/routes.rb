@@ -70,12 +70,14 @@ Rails.application.routes.draw do
   end
 
   # favorite
-  resources :posts do
-    resource :favorite, only: [ :create, :destroy ], module: :posts
-  end
+  scope module: :favorites do
+    resources :expressions, only: [] do
+      resource :favorite, only: [ :create, :destroy ], controller: :expressions
+    end
 
-  resources :expressions do
-    resource :favorite, only: [ :create, :destroy ], module: :expressions
+    resources :posts, only: [] do
+      resource :favorite, only: [ :create, :destroy ], controller: :posts
+    end
   end
 
   get "login_announcement", to: "pages#login_announcement"

@@ -1,2 +1,0 @@
-class PostFavoritesController < ApplicationController
-end

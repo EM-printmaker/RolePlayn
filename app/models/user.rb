@@ -66,8 +66,14 @@ class User < ApplicationRecord
     end
   end
 
-  def favorited?(object)
-    favorites.exists?(favoritable: object)
+  def favorited_expression?(expression)
+    return false if expression.nil?
+    expression_favorites.exists?(expression_id: expression.id)
+  end
+
+  def favorited_post?(post)
+    return false if post.nil?
+    post_favorites.exists?(post_id: post.id)
   end
 
   # 凍結管理
