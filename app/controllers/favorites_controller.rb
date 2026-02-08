@@ -28,12 +28,22 @@ class FavoritesController < ApplicationController
       respond_to do |format|
         format.turbo_stream do
           if @favoritable.is_a?(Expression)
-            render turbo_stream: turbo_stream.replace(
-              "fav_exp_#{@favoritable.id}",
-              partial: "favorites/expression_toggle",
-              locals: { expression: @favoritable }
-            )
+            render turbo_stream: [
+              # 1. リスト(grid)
+              turbo_stream.replace(
+                "fav_exp_grid_#{@favoritable.id}",
+                partial: "favorites/expression_toggle",
+                locals: { expression: @favoritable, prefix: "grid" }
+              ),
+              # 2. プレビュー(preview)
+              turbo_stream.replace(
+                "fav_exp_preview_#{@favoritable.id}",
+                partial: "favorites/expression_toggle",
+                locals: { expression: @favoritable, prefix: "preview" }
+              )
+            ]
           else
+            # その他(post)
             render turbo_stream: turbo_stream.replace(
               dom_id(@favoritable, :favorite),
               partial: "favorites/button",

@@ -74,15 +74,7 @@
 
         <div class="preview-display text-center">
           <% if @target_expression %>
-            <%= button_to expressions_path(expression_id: @target_expression.id),
-                        data: { turbo_method: :post, turbo_frame: "_top", action: "click->modal#close" },
-                        class: "preview-card d-block text-decoration-none expression-item" do %>
-              <div class="image-wrapper mb-3 position-relative">
-                <%= cdn_image_tag @target_expression.image, variant: :display, 
-                              class: "img-fluid rounded shadow-sm border", 
-                              style: "max-height: 250px; transition: transform 0.2s;" %>
-              </div>
-            <% end %>
+            <%= render partial: "expressions/expression_button", locals: { expression: @target_expression, prefix: "preview" } %>
           <% else %>
             <div class="empty-state py-5 border rounded bg-light border-dashed">
               <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>

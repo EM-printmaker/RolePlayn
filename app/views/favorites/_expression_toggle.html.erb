@@ -1,4 +1,5 @@
-<div id="fav_exp_<%= expression.id %>">
+<% prefix ||= "grid" %>
+<div id="fav_exp_<%= prefix %>_<%= expression.id %>">
   <% is_favorited = current_user.favorited?(expression) %>
   <%= button_to polymorphic_path([expression, :favorite]),
         method: is_favorited ? :delete : :post,
