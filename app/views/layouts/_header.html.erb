@@ -11,26 +11,14 @@
     </div>
 
     <div class="col-md-6 world-select text-center">
-      <div class="dropdown">
-        <button class="btn city-select-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-          <%= @city&.name || "街を選択" %> <%= nav_icon(:chevron_down, size: 15) %>
-        </button>
-        
-        <ul class="dropdown-menu shadow" aria-labelledby="dropdownMenuButton" role="list">
-          <% @worlds.each do |world| %>
-            <li class="dropdown-header text-uppercase small fw-bold text-muted border-bottom">
-              <%= world.name %>
-            </li>
-            <% world.menu_cities.each do |city| %>
-              <li>
-                <%= link_to city.name, city_path(city), class: "dropdown-item #{'active' if city == @city}" %>
-              </li>
-            <% end %>
-          <% end %>
-        </ul>
-      </div>
+      <button class="btn city-select-button" type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanva-top-menu"
+        aria-controls="offcanva-top-menu">
+        <%= @city&.name || "街を選択" %> <%= nav_icon(:chevron_down, size: 15) %>
+      </button>
     </div>
-    <div>
+    <div class="navbar-toggler-container">
       <button class="d-xl-none navbar-toggler-button" type="button"
         data-bs-toggle="offcanvas"
         data-bs-target="#offcanvas-responsive-right"
@@ -40,3 +28,15 @@
     </div>
   </div>
 </header>
+
+  <div class="offcanvas offcanvas-top main-city-nav-container" tabindex="-1" id="offcanva-top-menu">
+    <ul class="main-city-nav" aria-labelledby="offcanvaTopMenu" role="list">
+      <% @worlds.each do |world| %>
+        <% world.menu_cities.each do |city| %>
+          <li>
+            <%= link_to city.name, city_path(city), class: "#{'active' if city == @city}" %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
