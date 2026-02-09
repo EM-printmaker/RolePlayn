@@ -1,0 +1,16 @@
+<%# locals: (expression:, prefix: "grid", is_favorited: nil) %>
+<% if user_signed_in? && is_favorited.nil? %>
+  <% is_favorited = expression_favorited?(expression) %>
+<% end %>
+
+<div id="fav_exp_<%= prefix %>_<%= expression.id %>" class="d-inline-block">
+  <% if user_signed_in? %>
+    <%= button_to expression_favorite_path(expression),
+          method: is_favorited ? :delete : :post,
+          class: "btn btn-link p-0 text-decoration-none shadow-none",
+          onclick: "event.stopPropagation();",
+          form: { data: { turbo: true } } do %>
+      <%= favorite_icon(expression, is_on: is_favorited, size: "20") %>
+    <% end %>
+  <% end %>
+</div>

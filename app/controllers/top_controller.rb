@@ -1,8 +1,10 @@
 class TopController < ApplicationController
   include CharacterSessionManageable
+  include FavoriteLookup
   include PostPaginatable
 
   before_action :prepare_viewing_context
+  before_action :prepare_favorite_ids, only: [ :index, :load_more ]
 
   def index
     paginate_posts(@city.feed_posts.latest.with_details)

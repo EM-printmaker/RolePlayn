@@ -1,3 +1,14 @@
 <div>
-  <p>テストです</p>
+  <% if user_signed_in? && current_user.unread_notification? %>
+  <div id="notification_banner">
+    <%= button_to read_notifications_path, 
+                  method: :post, 
+                  class: "w-full bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-3 text-center border-b border-blue-100 transition duration-200" do %>
+      <div class="flex justify-center items-center gap-2">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>あなたの言葉が、誰かの物語に編み込まれました。</span>
+      </div>
+    <% end %>
+  </div>
+<% end %>
 </div>

@@ -1,0 +1,13 @@
+<%# locals: (post:, is_favorited: nil) %>
+<% is_favorited = post_favorited?(post) if is_favorited.nil? %>
+
+<div id="<%= dom_id(post, :favorite) %>" class="d-inline-block">
+  <% if user_signed_in? %>
+    <%= button_to post_favorite_path(post), 
+          method: is_favorited ? :delete : :post, 
+          form: { data: { turbo: true } },
+          class: "btn p-0 border-0 bg-transparent shadow-none" do %>
+      <%= favorite_icon(post, is_on: is_favorited) %>
+    <% end %>
+  <% end %>
+</div>

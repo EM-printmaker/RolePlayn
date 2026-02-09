@@ -1,10 +1,18 @@
-<% config = expression_button_config(expression) %>
-
-<%= button_to expressions_path(config[:params]),
-      id: "expression_link_#{expression.id}",
-      class: "expression-item text-decoration-none text-dark",
-      data: config[:data] do %>
-  <div class="rounded <%= config[:active_class] %>">
-    <%= cdn_image_tag expression.image, variant: :display, class: "img-thumbnail" %>
-  </div>
-<% end %>
+<%# locals: (expression:, prefix: "grid") %>
+<% return if expression.nil? %>
+<div class="expression-item-wrapper position-relative d-inline-block m-1">
+  <% config = expression_button_config(expression) %>
+  <%= button_to expressions_path(config[:params]),
+        id: "expression_link_#{expression.id}",
+        class: "expression-item p-0 border-0 bg-transparent text-decoration-none",
+        data: config[:data] do %>
+    <div class="rounded <%= config[:active_class] %>">
+      <%= cdn_image_tag expression.image, variant: :display, class: "img-thumbnail" %>
+    </div>
+  <% end %>
+  <% if user_signed_in? %>
+    <div class="favorite-overlay">
+      <%= render "favorites/expression_toggle", expression: expression, prefix: prefix %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,26 @@
+<%= turbo_stream.update "remote_modal_wrapper" do %>
+  <div data-controller="dialog">
+    <dialog data-dialog-target="dialog" data-action="click->dialog#clickOutside" class="login-modal">
+      <div class="modal-inner p-4">
+        <div class="text-end">
+          <button type="button" data-action="dialog#close" class="btn-close"></button>
+        </div>
+        
+        <div class="text-center mb-4">
+          <div class="mb-2">
+            <%= favorite_icon(Post.new, is_on: true, size: 40) %>
+          </div>
+          <h4 class="fw-bold">ログインして保存</h4>
+          <p class="text-muted small">お気に入り機能を利用するにはログインが必要です</p>
+        </div>
+
+        <%= render "devise/sessions/new_form" %>
+
+        <div class="text-center mt-4 pt-3 border-top">
+          <p class="small text-muted mb-2">アカウントをお持ちでない方は</p>
+          <%= link_to "新規登録（無料）", new_user_registration_path, class: "text-decoration-none" %>
+        </div>
+      </div>
+    </dialog>
+  </div>
+<% end %>

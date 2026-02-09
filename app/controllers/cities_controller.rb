@@ -1,9 +1,11 @@
 class CitiesController < ApplicationController
   include CharacterSessionManageable
+  include FavoriteLookup
   include PostPaginatable
 
   before_action :prepare_viewing_context, only: [ :show ]
   before_action :set_city_only, only: [ :load_more ]
+  before_action :prepare_favorite_ids, only: [ :show, :load_more ]
 
   def index
     redirect_to city_path(City.global_observer), status: :found

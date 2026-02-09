@@ -119,6 +119,62 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "#favorited_post?" do
+    let(:post) { create(:post) }
+
+    context "指定した投稿をお気に入りしている場合" do
+      before do
+        create(:post_favorite, user: user, post: post)
+      end
+
+      it "trueを返すこと" do
+        expect(user.favorited_post?(post)).to be true
+      end
+    end
+
+    context "指定した投稿をお気に入りしていない場合" do
+      it "falseを返すこと" do
+        expect(user.favorited_post?(post)).to be false
+      end
+    end
+
+    context "引数がnilの場合" do
+      it "falseを返すこと" do
+        expect(user.favorited_post?(nil)).to be false
+      end
+    end
+  end
+
+  describe "#favorited_expression?" do
+    let(:expression) { create(:expression) }
+
+    context "指定した表情をお気に入りしている場合" do
+      before do
+        create(:expression_favorite, user: user, expression: expression)
+      end
+
+      it "trueを返すこと" do
+        expect(user.favorited_expression?(expression)).to be true
+      end
+    end
+
+    context "指定した表情をお気に入りしていない場合" do
+      it "falseを返すこと" do
+        expect(user.favorited_expression?(expression)).to be false
+      end
+    end
+  end
+
+  describe "#mark_notifications_as_read" do
+    let(:logged_in_user) { create(:user, unread_notification: true) }
+
+    it "unread_notificationをfalseにすること" do
+      expect { logged_in_user.mark_notifications_as_read }
+        .to change(logged_in_user, :unread_notification)
+        .from(true).to(false)
+    end
+  end
+
   describe '#active_for_authentication?' do
     it 'true を返すこと' do
       user.suspended_at = nil

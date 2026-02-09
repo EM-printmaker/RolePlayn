@@ -26,14 +26,15 @@ Rails.application.routes.draw do
     sessions: "users/sessions"
   }
 
-devise_scope :user do
-  get "settings/password", to: "users/registrations#edit_password", as: :edit_password_settings
-  patch "settings/password", to: "users/registrations#update_password", as: :update_password_settings
-end
+  devise_scope :user do
+    get "settings/password", to: "users/registrations#edit_password", as: :edit_password_settings
+    patch "settings/password", to: "users/registrations#update_password", as: :update_password_settings
+  end
 
   # users
   resource :profile, only: [ :show ], controller: "users" do
     get :load_more
+    get "favorited-posts", to: "users#favorited_posts", as: :favorited_posts
   end
 
   # post
@@ -49,6 +50,7 @@ end
   resources :expressions, only: [] do
     collection do
       post :preview
+      get :favorites  # => /expressions/favorites
     end
   end
 
@@ -67,6 +69,23 @@ end
       get :done
     end
   end
+
+  # favorite
+  scope module: :favorites do
+    resources :expressions, only: [] do
+      resource :favorite, only: [ :create, :destroy ], controller: :expressions
+    end
+
+    resources :posts, only: [] do
+      resource :favorite, only: [ :create, :destroy ], controller: :posts
+    end
+  end
+
+  # notifications
+  post "notifications/read", to: "notifications#read", as: :read_notifications
+
+  # login_modal
+  get "login_announcement", to: "pages#login_announcement"
 
   # セキュリティのためこれより下に通常のルーティング設定を追加しないこと
 

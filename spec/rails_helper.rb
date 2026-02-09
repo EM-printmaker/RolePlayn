@@ -4,7 +4,8 @@ SimpleCov.start 'rails' do
   add_filter '/channels/'
   add_filter '/mailbox/'
   add_filter '/jobs/'
-  add_filter 'app/mailers'
+  add_filter '/app/avo/'
+  add_filter '/app/controllers/avo/'
 end
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'

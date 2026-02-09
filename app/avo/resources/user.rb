@@ -50,5 +50,7 @@ class Avo::Resources::User < Avo::BaseResource
           name: "お問い合わせ履歴",
           hide_search: true,
           scope: -> { query.order(created_at: :desc) }
+    field :posts,
+          as: :has_many
   end
 end

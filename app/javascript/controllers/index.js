@@ -7,6 +7,9 @@ import { application } from "controllers/application";
 import ConditionalFieldsController from "controllers/conditional_fields_controller";
 application.register("conditional-fields", ConditionalFieldsController);
 
+import DialogController from "controllers/dialog_controller";
+application.register("dialog", DialogController);
+
 import ModalController from "controllers/modal_controller";
 application.register("modal", ModalController);
 

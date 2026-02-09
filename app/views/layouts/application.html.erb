@@ -14,7 +14,8 @@
         <%= content_tag(:div, message, class: "alert alert-#{key}") %>
       <% end %>
       <%= render 'layouts/header' %>
-      <%= yield %>    
+      <%= yield %>
+      <div id="remote_modal_wrapper"></div>
     </div>  
   </body>
 </html>

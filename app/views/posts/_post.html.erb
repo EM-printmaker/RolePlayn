@@ -4,7 +4,7 @@
         <%= cdn_image_tag post.expression.image, variant: :display, class: "post__avatar" %>
     <% end %>
   </div>
-  <div class="col-8">
+  <div class="col-8 d-flex flex-column justify-content-between">
     <div class="d-flex justify-content-between">
       <p><%= post.character.name %> <%= post.character.city.name %></p>
       <% if user_signed_in? && post.user == current_user %>
@@ -14,6 +14,11 @@
               class: "btn btn-danger" %>
       <% end %>
     </div>
-    <p><%= post.content %></p>
+    <div>
+      <p><%= post.content %></p>
+    </div>
+    <div class="ms-auto mt-auto">
+        <%= render "favorites/post_toggle", post: post %>
+    </div>
   </div>
 </article>

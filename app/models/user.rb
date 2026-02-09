@@ -15,6 +15,16 @@ class User < ApplicationRecord
   has_many :character_assignments, dependent: :destroy
   has_many :posts, dependent: :destroy
   has_many :inquiries, dependent: :nullify
+  has_many :expression_favorites, dependent: :destroy
+  has_many :post_favorites, dependent: :destroy
+
+  has_many :favorited_expressions, through: :expression_favorites, source: :expression
+  has_many :favorited_posts, through: :post_favorites, source: :post
+
+  has_many :favorite_expressions,
+    through: :favorites,
+    source: :favoritable,
+    source_type: "Expression"
 
   enum :role, { general: 0, moderator: 5, admin: 10 }
 
@@ -54,6 +64,20 @@ class User < ApplicationRecord
       safe_conditions = conditions.to_h.select { |k, _v| column_names.include?(k.to_s) }
       where(safe_conditions).first
     end
+  end
+
+  def favorited_expression?(expression)
+    return false if expression.nil?
+    expression_favorites.exists?(expression_id: expression.id)
+  end
+
+  def favorited_post?(post)
+    return false if post.nil?
+    post_favorites.exists?(post_id: post.id)
+  end
+
+  def mark_notifications_as_read
+    update(unread_notification: false) if unread_notification?
   end
 
   # 凍結管理

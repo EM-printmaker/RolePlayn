@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_06_081003) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_08_191535) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -79,6 +79,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_06_081003) do
     t.index ["world_id"], name: "index_cities_on_world_id"
   end
 
+  create_table "expression_favorites", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "expression_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expression_id"], name: "index_expression_favorites_on_expression_id"
+    t.index ["user_id", "expression_id"], name: "index_expression_favorites_on_user_id_and_expression_id", unique: true
+    t.index ["user_id"], name: "index_expression_favorites_on_user_id"
+  end
+
   create_table "expressions", force: :cascade do |t|
     t.integer "emotion_type"
     t.integer "level"
@@ -103,6 +113,16 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_06_081003) do
     t.bigint "user_id"
     t.index ["reply_sent_at"], name: "index_inquiries_on_reply_sent_at"
     t.index ["user_id"], name: "index_inquiries_on_user_id"
+  end
+
+  create_table "post_favorites", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_post_favorites_on_post_id"
+    t.index ["user_id", "post_id"], name: "index_post_favorites_on_user_id_and_post_id", unique: true
+    t.index ["user_id"], name: "index_post_favorites_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -151,6 +171,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_06_081003) do
     t.datetime "datetime"
     t.string "unlock_token"
     t.string "string"
+    t.boolean "unread_notification", default: false, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["login_id"], name: "index_users_on_login_id", unique: true
@@ -175,8 +196,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_06_081003) do
   add_foreign_key "character_assignments", "users"
   add_foreign_key "characters", "cities"
   add_foreign_key "cities", "worlds"
+  add_foreign_key "expression_favorites", "expressions"
+  add_foreign_key "expression_favorites", "users"
   add_foreign_key "expressions", "characters"
   add_foreign_key "inquiries", "users"
+  add_foreign_key "post_favorites", "posts"
+  add_foreign_key "post_favorites", "users"
   add_foreign_key "posts", "characters"
   add_foreign_key "posts", "cities"
   add_foreign_key "posts", "expressions"

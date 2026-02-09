@@ -5,7 +5,7 @@ module CharacterSessionManageable
 
   included do
     before_action :set_modal_expression, if: -> { params[:tab] == "emotions" }
-    helper_method :current_character, :current_expression, :viewing_city, :characters
+    helper_method :current_character, :current_expression, :viewing_city, :characters, :current_favorite_expressions
   end
 
   # 場所(City)の管理
@@ -85,6 +85,16 @@ module CharacterSessionManageable
 
   def characters
     @_characters ||= viewing_city.characters.includes(:expressions)
+  end
+
+  def current_favorite_expressions(city = viewing_city)
+    character = current_character(city)
+    return Expression.none if character.blank? || !user_signed_in?
+
+    @current_favorite_expressions ||=
+      current_user.favorited_expressions
+                  .where(character_id: character.id)
+                  .with_attached_image
   end
 
   # operations/re_rolls
