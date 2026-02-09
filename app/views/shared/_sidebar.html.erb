@@ -1,11 +1,48 @@
-<div class="common-header">
-  <h3>通知</h3>
-</div>
-
-<div class="page-specific-content">
-  <%= yield %>
-</div>
-
-<div>
-  <%= link_to "お問い合わせ", new_inquiry_path %>
+<div class="offcanvas-xl offcanvas-end offcanvas--overlay" tabindex="-1" id="offcanvas-responsive-right" aria-labelledby="offcanvasResponsiveLabel">
+  <div class="offcanvas-header">
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas-responsive-right" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body offcanvas-body__right">
+    <div class="page-specific-content">
+      <%= yield %>
+    </div>
+    <div>
+      <ul role="list">
+        <% if user_signed_in? %>
+        <% if current_user.can_access_admin? %>
+          <li>
+            <%= link_to '管理パネル', avo_path, class: 'text-sm text-gray-600 font-bold', data: { turbo: false } %>
+          </li>
+        <% end %>
+        <li>
+          <%= link_to profile_path do %>
+            <% if current_user.login_id.present? %>
+              <%= current_user.login_id %>
+            <% else %>
+              <%= current_user.email %>
+            <% end %>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to "設定", edit_user_registration_path %>
+        </li>
+        <li>
+          <%= link_to "ログアウト", destroy_user_session_path, 
+            data: { turbo_method: :delete, turbo_confirm: "ログアウトしますか？" }, 
+            class: "btn-logout" %>
+        </li>
+        <% else %>
+          <li>
+            <%= link_to "ログイン", new_user_session_path, class: "btn-login" %>
+          </li>
+          <li>
+            <%= link_to "新規登録", new_user_registration_path, class: "btn-signup" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div>
+      <%= link_to "お問い合わせ", new_inquiry_path %>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,25 @@
+#offcanvas-responsive {
+  --bs-offcanvas-width: 250px;
+}
+
+#offcanvas-responsive-right{
+  --bs-offcanvas-width: 250px;
+}
+
+.offcanvas-header {
+  background-color: #eee;
+}
+
+.offcanvas-body {
+  display: flex;
+  background-color: #eee;
+
+  &__left {
+    justify-content: flex-end;
+  }
+
+  &__right {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}

@@ -2,6 +2,16 @@ module IconHelper
   include EmotionIconData
   include SystemIconData
 
+  def nav_icon(type, options = {})
+    data = NAV_DATA[type.to_sym]
+    return nil unless data
+
+    css_class= "offcanvas__icon #{options[:class]}"
+    size = options[:size] || "20"
+
+    render_base_svg(data[:path], css_class, size)
+  end
+
   def emotion_icon(type, options = {})
     data = EMOTION_DATA[type.to_sym]
     return nil unless data

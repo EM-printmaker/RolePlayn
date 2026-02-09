@@ -1,15 +1,30 @@
+@use "../global" as *;
+
 .header {
   position: sticky;
   top: 0;
   z-index: 10;
   padding: 0.5em;
   background-color: var(--main-color);
-  border-bottom: 1px solid;
+  border-bottom: 1px solid var(--main-border-color);
+
+    &__left-content {
+      display: flex;
+    }
+
 }
 
 .header-logo {
   font-family: var(--font-cinzel);
   font-size: 2em;
+
+  @include media-breakpoint-down(lg) {
+    font-size: 1.2em;
+  }
+
+  @include media-breakpoint-down(md) {
+    display: none;
+  } 
 }
 
 .world-select {

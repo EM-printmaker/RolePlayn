@@ -1,19 +1,27 @@
-<nav class="d-none d-lg-block side-nav">
-  <ul role="list">
-    <li>
-      <p>現在のCity： <%= viewing_city.name %></p>
-      <%#= Cityが増えたら追加 %>
-      <%= button_to "他の街へ移動", shuffles_path, method: :post, class: "btn btn-outline-dark" %>
-    </li>
-    <li>
-    <% if current_character && current_expression %>
-      <p>現在のCharacter: <%= current_character.name %></p>
-      <%= cdn_image_tag current_expression&.image, variant: :display, class: "post__avatar" %>
-      <%= button_to "キャラクターの更新", re_rolls_path, method: :post, class: "btn btn-outline-dark" %>
-    <% else %>
-      <p>キャラクターが未構成です</p>
-      <%= button_to "キャラクターを作成", re_rolls_path, method: :post, class: "btn btn-primary" %>
-    <% end %>
-    </li>
-  </ul>
-</nav>
+<div class="offcanvas-lg offcanvas-start offcanvas--overlay" tabindex="-1" id="offcanvas-responsive" aria-labelledby="offcanvasResponsiveLabel">
+  <div class="offcanvas-header">
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas-responsive" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body offcanvas-body__left">
+    <nav class="side-nav">
+      <ul role="list">
+        <li>
+          <p>現在のCity： <%= viewing_city.name %></p>
+          <%#= Cityが増えたら追加 %>
+          <%= button_to "他の街へ移動", shuffles_path, method: :post, class: "btn btn-outline-dark" %>
+        </li>
+        <li>
+        <% if current_character && current_expression %>
+          <p>現在のCharacter: <%= current_character.name %></p>
+          <%= cdn_image_tag current_expression&.image, variant: :display, class: "post__avatar" %>
+          <%= button_to "キャラクターの更新", re_rolls_path, method: :post, class: "btn btn-outline-dark" %>
+        <% else %>
+          <p>キャラクターが未構成です</p>
+          <%= button_to "キャラクターを作成", re_rolls_path, method: :post, class: "btn btn-primary" %>
+        <% end %>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
