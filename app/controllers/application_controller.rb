@@ -8,43 +8,6 @@ class ApplicationController < ActionController::Base
   before_action :reject_suspended_user
   before_action :basic_auth, if: -> { Rails.env.production? }
 
-  def debug_env
-    # 1. Resend APIキーの状態確認
-    api_key = ENV["RESEND_API_KEY"]
-    key_status = if api_key.blank?
-                   "❌ 未設定 (nil または 空文字)"
-    elsif api_key.match?(/\s/)
-                   "⚠️ 警告: 前後に空白が含まれています！ Renderの設定を確認してください"
-    else
-                   "✅ OK (値: #{api_key.first(5)}...#{api_key.last(5)})" # セキュリティのため一部だけ表示
-    end
-
-    # 2. 送信元アドレスの状態確認
-    mail_from = ENV["MAIL_FROM_ADDRESS"]
-    from_status = mail_from.present? ? "✅ OK (値: #{mail_from})" : "❌ 未設定"
-
-    # 3. ログ設定の状態確認
-    log_stdout = ENV["RAILS_LOG_TO_STDOUT"]
-    log_status = log_stdout.present? ? "✅ OK (値: #{log_stdout})" : "❌ 未設定 (これが原因でログが出ない可能性があります)"
-
-    # 画面に表示するメッセージを作成
-    render plain: <<~TEXT
-      === 環境変数 診断レポート ===
-
-      [1] RESEND_API_KEY
-      #{key_status}
-
-      [2] MAIL_FROM_ADDRESS
-      #{from_status}
-
-      [3] RAILS_LOG_TO_STDOUT
-      #{log_status}
-
-      ===========================
-      ※ 確認後はこのコードとルーティングを削除してください。
-    TEXT
-  end
-
   private
 
     def set_all_worlds
