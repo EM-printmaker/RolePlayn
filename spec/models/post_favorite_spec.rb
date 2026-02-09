@@ -23,4 +23,22 @@ RSpec.describe PostFavorite, type: :model do
       expect(duplicate.errors[:user_id]).to include("はすでに存在します")
     end
   end
+
+  describe "#notify_post_author" do
+    let(:author) { create(:user, unread_notification: false) }
+    let(:visitor) { create(:user) }
+    let(:post) { create(:post, user: author) }
+
+    it "投稿者の通知フラグ(unread_notification)がtrueに更新されること" do
+      expect {
+        create(:post_favorite, user: visitor, post: post)
+      }.to change(author, :unread_notification).from(false).to(true)
+    end
+
+    it "自分の投稿の場合は変化させないこと" do
+      expect {
+        create(:post_favorite, user: author, post: post)
+      }.not_to change(author, :unread_notification)
+    end
+  end
 end
