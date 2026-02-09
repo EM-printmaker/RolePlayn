@@ -1,18 +1,43 @@
-<article id="<%= dom_id(post) %>" class="post row">
+<article id="<%= dom_id(post) %>" class="post row justify-content-between">
   <div class="col-3">
     <%= link_to observation_path(post.character), class: "character-link" do %>
         <%= cdn_image_tag post.expression.image, variant: :display, class: "post__avatar" %>
     <% end %>
   </div>
-  <div class="col-8 d-flex flex-column justify-content-between">
+  <div class="col-9 d-flex flex-column justify-content-between">
     <div class="d-flex justify-content-between">
       <p><%= post.character.name %> <%= post.character.city.name %></p>
-      <% if user_signed_in? && post.user == current_user %>
-        <%= button_to "削除", post_path(post, city_id: params[:city_id]),
-              method: :delete,
-              form: { data: { turbo_confirm: "本当に削除しますか？" } },
-              class: "btn btn-danger" %>
-      <% end %>
+        <div class="dropdown">
+          <button class="btn btn-link text-decoration-none text-secondary p-0 border-0" 
+                  type="button" 
+                  id="dropdownMenuButton_<%= post.id %>" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false">
+            <%= nav_icon(:three_dots, size: 15) %>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow rounded-3 border-0 p-2" 
+              aria-labelledby="dropdownMenuButton_<%= post.id %>" 
+              style="min-width: 180px;">
+            <li>
+              <%= button_to "#",
+                      class: "dropdown-item d-flex align-items-center rounded-2 py-2 w-100" do %>
+                  <i class="bi bi-trash3 me-2"></i>
+                  <span>報告する</span>
+              <% end %>
+            </li>
+            <% if user_signed_in? && post.user == current_user %>
+              <li>
+                <%= button_to post_path(post, city_id: params[:city_id]),
+                      method: :delete,
+                      form: { data: { turbo_confirm: "本当に削除しますか？\n※この操作は取り消せません。" } },
+                      class: "dropdown-item text-danger d-flex align-items-center rounded-2 py-2 w-100" do %>
+                  <i class="bi bi-trash3 me-2"></i>
+                  <span>削除する</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
     </div>
     <div>
       <p><%= post.content %></p>
