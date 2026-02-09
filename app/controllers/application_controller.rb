@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_all_worlds
   before_action :reject_suspended_user
+  before_action :basic_auth, if: -> { Rails.env.production? }
 
   private
 
@@ -27,13 +28,19 @@ class ApplicationController < ActionController::Base
       end
     end
 
-
     # 凍結管理
     def reject_suspended_user
       if user_signed_in? && current_user.suspended_at.present?
         sign_out current_user
         flash[:alert] = t("custom_errors.messages.account_suspended")
         redirect_to root_path
+      end
+    end
+
+    def basic_auth
+      authenticate_or_request_with_http_basic do |username, password|
+      username == ENV["BASIC_AUTH_USER"] &&
+      password == ENV["BASIC_AUTH_PASSWORD"]
       end
     end
 end
