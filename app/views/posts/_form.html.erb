@@ -5,11 +5,17 @@
                   turbo_submitting: "false",
                   controller: "post-form",
                   action: "turbo:submit-end->post-form#reset" 
-                }) do |f| %>
+                },
+                class: "post-form") do |f| %>
                 <div id="post_error_messages">
     <%= render "shared/error_messages", object: post %>
   </div>
-    <%= f.text_area :content, class: "form-control", rows: 5 %>
-    <%= f.submit "Post", class: "btn btn-primary" %>
+    <%= f.text_area :content,
+          class: "post-form__textarea",
+          placeholder: "いまのあなたは？",
+          rows: 5 %>
+    <div class="post-form__button-container">
+      <%= f.submit "つぶやく", class: "button" %>
+    </div>
   <% end %>
 <% end %>
