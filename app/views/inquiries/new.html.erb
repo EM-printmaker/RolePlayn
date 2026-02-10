@@ -1,3 +1,4 @@
+<% provide(:title, "お問い合わせ") %>
 <h1>お問い合わせ</h1>
 <%= form_with model: @inquiry, url: confirm_inquiries_path, local: true, data: { turbo: false } do |f| %>
   <% if @inquiry.errors.any? %>

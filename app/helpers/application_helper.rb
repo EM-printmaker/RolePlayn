@@ -35,6 +35,15 @@ module ApplicationHelper
     image_tag cdn_image_url(image_source), options
   end
 
+  def full_title(page_title = "")
+    base_title = "RolePlayn"
+    if page_title.empty?
+      base_title
+    else
+      "#{base_title} | #{page_title}"
+    end
+  end
+
   # ログインモーダル呼び出し用
   def resource_name
     :user

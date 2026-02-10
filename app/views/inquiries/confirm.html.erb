@@ -1,3 +1,4 @@
+<% provide(:title, "お問い合わせ") %>
 <h1>内容の確認</h1>
 <%= form_with model: @inquiry, url: inquiries_path, local: true, data: { turbo: false } do |f| %>
   <%= f.hidden_field :category %>
