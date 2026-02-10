@@ -53,7 +53,7 @@
   flex-shrink: 0;
   width: 700px;
   max-width: 700px;
-  padding-top: 1em;
+  padding-top: 3em;
   padding-right: 2em;
   padding-left: 2em; 
   transition: padding 0.2s ease;
@@ -64,5 +64,9 @@
     padding-right: 0.5em;
     padding-left: 0.5em;
     border: none; 
+  }
+
+  @include media-breakpoint-down(sm) {
+    padding-top: 1em;
   }
 }
