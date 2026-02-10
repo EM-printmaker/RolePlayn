@@ -31,9 +31,17 @@ module IconHelper
 
   private
 
-    def render_base_svg(path, css_class, size)
+    def render_base_svg(raw_path_data, css_class, size)
+      paths_html = Array(raw_path_data).map do |path_item|
+        if path_item.is_a?(Hash)
+          tag.path(**path_item)
+        else
+          tag.path(d: path_item)
+        end
+      end.join.html_safe
+
       content_tag(:svg,
-        tag.path(d: path),
+        paths_html,
         xmlns: "http://www.w3.org/2000/svg",
         width: size,
         height: size,
