@@ -1,13 +1,15 @@
 <header id="main-header" class="header navbar">
   <div class="container-fluid header-container">
     <div class="header__left-content">
-      <button class="d-lg-none navbar-toggler-button" type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvas-responsive"
-        aria-controls="offcanvas-responsive">
-        <%= nav_icon(:hamburger) %>
-      </button>
-      <%= link_to "RolePlayn", root_path, class: "header-logo col-md-3" %>
+      <% unless hide_sidebar? %>
+        <button class="d-lg-none navbar-toggler-button" type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvas-responsive"
+          aria-controls="offcanvas-responsive">
+          <%= nav_icon(:hamburger) %>
+        </button>
+      <% end %>
+      <%= link_to "RolePlayn", root_path, class: "header-logo #{hide_sidebar? ? 'header-logo--appear' : 'header-logo--hide'}" %>
     </div>
 
     <div class="col-md-6 world-select text-center">
@@ -18,25 +20,27 @@
         <%= @city&.name || "街を選択" %> <%= nav_icon(:chevron_down, size: 15) %>
       </button>
     </div>
-    <div class="navbar-toggler-container">
-      <button class="d-xl-none navbar-toggler-button" type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvas-responsive-right"
-        aria-controls="offcanvas-responsive-right">
-        <%= nav_icon(:three_dots) %>
-      </button>
-    </div>
+      <div class="navbar-toggler-container">
+        <% unless hide_sidebar? %>
+          <button class="d-xl-none navbar-toggler-button" type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvas-responsive-right"
+            aria-controls="offcanvas-responsive-right">
+            <%= nav_icon(:three_dots) %>
+          </button>
+        <% end %>
+      </div>
   </div>
 </header>
 
-  <div class="offcanvas offcanvas-top main-city-nav-container" tabindex="-1" id="offcanva-top-menu">
-    <ul class="main-city-nav" aria-labelledby="offcanvaTopMenu" role="list">
-      <% @worlds.each do |world| %>
-        <% world.menu_cities.each do |city| %>
-          <li>
-            <%= link_to city.name, city_path(city), class: "#{'active' if city == @city}" %>
-          </li>
-        <% end %>
+<div class="offcanvas offcanvas-top main-city-nav-container" tabindex="-1" id="offcanva-top-menu">
+  <ul class="main-city-nav" aria-labelledby="offcanvaTopMenu" role="list">
+    <% @worlds.each do |world| %>
+      <% world.menu_cities.each do |city| %>
+        <li>
+          <%= link_to city.name, city_path(city), class: "#{'active' if city == @city}" %>
+        </li>
       <% end %>
-    </ul>
-  </div>
+    <% end %>
+  </ul>
+</div>

@@ -6,7 +6,7 @@
     <%= render 'layouts/head' %>
   </head>
 
-  <body>
+  <body class="<%= hide_sidebar? ? 'state-sidebar-hidden' : 'state-sidebar-visible' %>">
     <div class="wrapper">
       <% discard_keys = ['scroll_to_top'] %>
       <% flash.each do |key, message| %>

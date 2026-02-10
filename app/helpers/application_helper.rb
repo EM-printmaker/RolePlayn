@@ -44,6 +44,11 @@ module ApplicationHelper
     end
   end
 
+  def hide_sidebar?
+    no_sidebar_controllers = %w[inquiries]
+    devise_controller? || no_sidebar_controllers.include?(controller_name)
+  end
+
   # ログインモーダル呼び出し用
   def resource_name
     :user
