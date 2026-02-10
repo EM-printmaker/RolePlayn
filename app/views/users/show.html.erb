@@ -2,7 +2,6 @@
 <%= render layout: 'shared/layouts_wrapper' do %>
 
   <div id="profile_feed_and_post_section">
-    <%# current_form_post = (@tab == 'posts' ? @post : nil) %>
     <%= render layout: 'shared/feed_and_post_section', locals: { posts: @posts, post: @post, city: @city } do %>
       <div class="filter-bar">
         <div id="city-filter-container">
