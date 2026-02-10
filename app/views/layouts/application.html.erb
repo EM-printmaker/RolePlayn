@@ -8,7 +8,7 @@
 
   <body class="<%= hide_sidebar? ? 'state-sidebar-hidden' : 'state-sidebar-visible' %>">
     <div class="wrapper">
-      <% discard_keys = ['scroll_to_top'] %>
+      <% discard_keys = ['scroll_to_top', 'new_post_id'] %>
       <% flash.each do |key, message| %>
         <% next if discard_keys.include?(key.to_s) %>
         <%= content_tag(:div, message, class: "alert alert-#{key}") %>

@@ -1,9 +1,30 @@
+@keyframes feed-expand {
+  0% {
+    grid-template-rows: 0fr;
+    max-height: 0;
+    margin-top: 0;
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  100% {
+    max-height: 1000px;
+    margin-top: 2em;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: feed-expand 0.5s ease-out forwards;
+}
+
 .feed-item {
   min-height: 120px;
   padding: 1em;
   margin-top: 2em;
   background-color: #fff;
-  border: 1px solid var(--main-border-color);
+  border: 1px solid color-mix(in srgb, var(--main-border-color), transparent 50%);
   border-radius: 14px;
   box-shadow: 0 2px 4px rgb(0 0 0 / 2%), 0 4px 10px rgb(0 0 0 / 5%);
 }

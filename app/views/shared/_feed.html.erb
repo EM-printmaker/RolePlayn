@@ -1,7 +1,7 @@
 <ol id="feed" class="feed" role='list'>
   <% if posts.any? %>
     <% posts.each do |post| %>
-      <li class="feed-item">
+      <li class="feed-item <%= 'animate-slide-in' if post.id == flash[:new_post_id] %>">
         <%= render 'posts/post', post: post %>
       </li>
     <% end %>
