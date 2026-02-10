@@ -62,7 +62,8 @@ $header-height: 60px;
   z-index: 1040;
   display: block;
   width: 100%;
-  min-height: 50vh;
+  min-height: 70vh;
+  padding-top: 2em;
   overflow-y: auto;
   background-color: var(--main-color);
   border-top: none;
@@ -107,8 +108,4 @@ $header-height: 60px;
       text-decoration: none;
     }
   }
-}
-
-.offcanvas-backdrop {
-  z-index: 1030;
 }

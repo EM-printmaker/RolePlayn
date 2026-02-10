@@ -1,79 +1,112 @@
-<div class="modal-content" data-controller="tabs" data-tabs-default-tab="<%= params[:tab].presence || 'emotions' %>">
-<div class="modal-header">
-  <h5 class="m-0">表情を選択</h5>
-  <ul class="nav nav-tabs card-header-tabs">
-    <li class="nav-item"><%= tag.button "お気に入り", **modal_tab_button_config("favorites") %></li>
-    <li class="nav-item"><%= tag.button "感情を追加", **modal_tab_button_config("emotions") %></li>
-    <li class="nav-item"><%= tag.button "一覧から選ぶ", **modal_tab_button_config("all") %></li>
-  </ul>
-  <button type="button" class="btn-close" data-action="click->modal#close"></button>
-</div>
+<div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;"
+     data-controller="tabs" 
+     data-tabs-default-tab="<%= params[:tab].presence || 'emotions' %>">
+  
+  <%# ヘッダー：タイトルと閉じるボタン %>
+  <div class="modal-header border-0 pb-0 pt-4 px-4">
+    <h5 class="modal-title fw-bold text-muted small ls-1">SELECT EXPRESSION</h5>
+    <button type="button" class="btn-close" data-action="click->modal#close" aria-label="Close"></button>
+  </div>
 
-<div class="modal-body p-3">
-  <%= turbo_frame_tag "character_expression_wrapper" do %>
-    <% if user_signed_in? %>
-      <div class="character-selector-wrapper mb-4 border-bottom pb-3">
-        <div class="d-flex flex-nowrap overflow-x-auto gap-3 pb-2" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
-          <%= render partial: "expressions/character_selection_button", collection: characters, as: :character %>
+  <%# タブナビゲーション：デザインをカスタムクラスで上書き %>
+  <div class="px-4 mt-2 border-bottom">
+    <ul class="nav nav-tabs custom-tabs border-0 gap-4">
+      <li class="nav-item">
+        <%= tag.button "お気に入り", **modal_tab_button_config("favorites"), class: "nav-link px-0 py-3 border-0 bg-transparent" %>
+      </li>
+      <li class="nav-item">
+        <%= tag.button "いまのきもち", **modal_tab_button_config("emotions"), class: "nav-link px-0 py-3 border-0 bg-transparent" %>
+      </li>
+      <li class="nav-item">
+        <%= tag.button "表情一覧", **modal_tab_button_config("all"), class: "nav-link px-0 py-3 border-0 bg-transparent" %>
+      </li>
+    </ul>
+  </div>
+
+  <div class="modal-body p-4 bg-light-subtle">
+    <%= turbo_frame_tag "character_expression_wrapper" do %>
+      
+      <%# キャラクター選択エリア：横スクロールを明示 %>
+      <% if user_signed_in? %>
+        <div class="character-selector-wrapper mb-4">
+          <p class="text-muted small mb-2 fw-bold">CHARACTER</p>
+          <div class="d-flex flex-nowrap overflow-x-auto gap-2 pb-2 mask-scroll" style="-webkit-overflow-scrolling: touch;">
+            <%= render partial: "expressions/character_selection_button", collection: characters, as: :character %>
+          </div>
+        </div>
+      <% end %>
+
+      <%# タブ1：お気に入り %>
+      <div class="d-none animate-fade-in" data-tabs-target="pane" data-tab-name="favorites">
+        <%= turbo_frame_tag "favorites-pane", src: favorites_expressions_path, loading: :lazy do %>
+          <div class="text-center py-5">
+            <div class="spinner-border text-secondary opacity-25" role="status"></div>
+          </div>
+        <% end %>
+      </div>
+
+      <%# タブ2：一覧 %>
+      <div class="d-none animate-fade-in" data-tabs-target="pane" data-tab-name="all">
+        <% if current_character.present? %>
+          <div class="expression-grid">
+            <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression, locals: { prefix: "grid" } %>
+          </div>
+        <% else %>
+          <div class="text-center py-5 text-muted">
+            <i class="bi bi-person-x display-4 opacity-25"></i>
+            <p class="mt-2 small">キャラクターがいません</p>
+          </div>
+        <% end %>
+      </div>
+
+      <%# タブ3：感情ビルダー（メイン） %>
+      <div class="" data-tabs-target="pane" data-tab-name="emotions">
+        <div id="emotions_preview_area" class="d-flex flex-column gap-3">
+          
+          <%# 感情パレット %>
+          <div class="d-flex justify-content-between px-2 py-1">
+            <%= render partial: "expressions/emotion_button", collection: emotion_types_for_toggle, as: :emotion_type %>
+          </div>
+
+          <%# 現在のステータス表示（カード風） %>
+          <div class="selection-indicator card border-0 shadow-sm">
+            <div class="card-body py-3 d-flex align-items-center justify-content-center min-h-60">
+              <% if params[:view_type].present? && params[:view_level].to_i > 0 %>
+                <div class="d-flex align-items-center animate-slide-up">
+                  <span class="h4 mb-0 me-3 text-theme">
+                    <% params[:view_level].to_i.times do %>
+                      <%= emotion_icon(params[:view_type], class: "me-1") %>
+                    <% end %>
+                  </span>
+                  <%= button_to preview_expressions_path(view_type: nil, view_level: nil, tab: "emotions"),
+                                method: :post, 
+                                class: "btn-close small shadow-none opacity-50 hover-opacity-100" do %>
+                  <% end %>
+                </div>
+              <% else %>
+                <span class="text-muted small fst-italic opacity-75">
+                  <i class="bi bi-stars me-1"></i> いまのきもちは？
+                </span>
+              <% end %>
+            </div>
+          </div>
+
+          <%# プレビュー表示エリア %>
+          <div class="preview-display text-center mt-2">
+            <% if @target_expression %>
+              <div class="animate-pop-in">
+                <%= render partial: "expressions/expression_button", locals: { expression: @target_expression, prefix: "preview" } %>
+              </div>
+            <% else %>
+              <div class="empty-state">
+                <i class="bi bi-image text-muted opacity-25" style="font-size: 2.5rem;"></i>
+                <p class="mt-2 text-muted small mb-0">プレビューが表示されます</p>
+              </div>
+            <% end %>
+          </div>
+
         </div>
       </div>
     <% end %>
-
-    <div class="d-none" data-tabs-target="pane" data-tab-name="favorites">
-      <%= turbo_frame_tag "favorites-pane", src: favorites_expressions_path do %>
-        <div class="text-center py-5">
-          <div class="spinner-border text-warning"></div>
-        </div>
-      <% end %>
-    </div>
-
-    <div class="d-none" data-tabs-target="pane" data-tab-name="all">
-      <% if current_character.present? %>
-        <div class="expression-grid">
-          <%= render partial: "expressions/expression_button", collection: current_character.expressions, as: :expression, locals: { prefix: "grid" } %>
-        </div>
-      <% else %>
-        <div class="text-center py-5">
-          <p class="text-muted">表示できるキャラクターがいません</p>
-        </div>
-      <% end %>
-    </div>
-
-    <div class="" data-tabs-target="pane" data-tab-name="emotions">
-      <div id="emotions_preview_area">
-        <div class="d-flex justify-content-between mb-4">
-          <%= render partial: "expressions/emotion_button", collection: emotion_types_for_toggle, as: :emotion_type %>
-        </div>
-
-        <div class="selection-indicator text-center mb-4 p-3 rounded-pill bg-light border position-relative">
-          <% if params[:view_type].present? && params[:view_level].to_i > 0 %>
-            <div class="d-flex align-items-center justify-content-center">
-              <span class="h3 mb-0 me-3">
-                <% params[:view_level].to_i.times do %>
-                  <%= emotion_icon(params[:view_type], class: "me-1") %>
-                <% end %>
-              </span>
-              <%= button_to preview_expressions_path(view_type: nil, view_level: nil, tab: "emotions"),
-                            method: :post, 
-                            class: "btn-close small shadow-none" do %>
-              <% end %>
-            </div>
-          <% else %>
-            <span class="text-muted small italic">今の心は？</span>
-          <% end %>
-        </div>
-
-        <div class="preview-display text-center">
-          <% if @target_expression %>
-            <%= render partial: "expressions/expression_button", locals: { expression: @target_expression, prefix: "preview" } %>
-          <% else %>
-            <div class="empty-state py-5 border rounded bg-light border-dashed">
-              <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
-              <p class="mt-2 text-muted">画像が生成されていません</p>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  <% end %>
+  </div>
 </div>

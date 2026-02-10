@@ -17,7 +17,7 @@ module IconHelper
   def favorite_icon(favoritable, is_on: false, **options)
     if favoritable.is_a?(Post)
       path = is_on ? FAVORITE_DATA[:post_on][:path] : FAVORITE_DATA[:post_off][:path]
-      color = is_on ? "text-primary" : "text-secondary"
+      color = is_on ? "favorite__icon--on" : "text-secondary"
     else
       path = is_on ? FAVORITE_DATA[:expression_on][:path] : FAVORITE_DATA[:expression_off][:path]
       color = is_on ? "text-danger" : "text-secondary"
