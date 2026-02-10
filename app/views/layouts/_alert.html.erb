@@ -1,0 +1,17 @@
+<div class="flash-container">
+  <% discard_keys = ['scroll_to_top', 'new_post_id'] %>
+  <% flash.each do |key, message| %>
+    <% next if discard_keys.include?(key.to_s) %>
+    <div class="custom-alert alert-<%= key %>" 
+         data-controller="flash"
+         data-action="click->flash#dismiss"
+         role="alert">
+      <% if key.to_s == "notice" %>
+        <%= system_icon(:check, size: 18, class: "me-2") %>
+      <% end %>
+      <span><%= message %></span>
+    
+      <small class="ms-3 text-muted" style="font-size: 0.6em;">✕</small>
+    </div>
+  <% end %>
+</div>
