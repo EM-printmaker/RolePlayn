@@ -19,6 +19,7 @@ class City < ApplicationRecord
   }, default: :self_only
 
   validates :name, presence: true, length: { maximum: 50 }
+  validates :description, length: { maximum: 200 }
   validates :target_world_id, presence: true, if: :specific_world?
 
   scope :global, -> { joins(:world).merge(World.global) }

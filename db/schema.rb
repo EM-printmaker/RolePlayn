@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_08_191535) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_10_110358) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_08_191535) do
     t.integer "target_scope_type", default: 0
     t.bigint "target_world_id"
     t.string "slug"
+    t.text "description"
     t.index ["slug"], name: "index_cities_on_slug", unique: true
     t.index ["target_world_id"], name: "index_cities_on_target_world_id"
     t.index ["world_id"], name: "index_cities_on_world_id"
