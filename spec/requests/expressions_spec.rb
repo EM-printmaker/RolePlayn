@@ -31,9 +31,9 @@ RSpec.describe "Expressions", type: :request do
     end
 
     context "表情データが見つからない場合" do
-      it "『画像が生成されていません』というメッセージを表示すること" do
+      it "『プレビューが表示されます』というメッセージを表示すること" do
         post preview_expressions_path, params: { view_type: "sad", view_level: "2" }, as: :turbo_stream
-        expect(response.body).to include("画像が生成されていません")
+        expect(response.body).to include("プレビューが表示されます")
       end
     end
   end

@@ -14,7 +14,7 @@ RSpec.shared_examples "character_session_manageable" do |path_proc|
       assignment = current_guest_assignment(city)
       expect(assignment).to be_present
       current_character = Character.find(assignment["character_id"])
-      expect(response.body).to have_selector(".side-nav", text: current_character.name)
+      expect(response.body).to have_selector(".nav-block", text: current_character.name)
     end
 
     it "セッションに保存されたキャラクターの画像がサイドバーに含まれていること" do
@@ -23,7 +23,7 @@ RSpec.shared_examples "character_session_manageable" do |path_proc|
       expect(assignment).to be_present
       current_expression = Expression.find(assignment["expression_id"])
       expected_filename = current_expression.image.filename.to_s
-      expect(response.body).to have_selector(".side-nav img[src*='#{expected_filename}']")
+      expect(response.body).to have_selector(".nav-block img[src*='#{expected_filename}']")
     end
 
     context "ログインユーザーの場合" do
@@ -43,7 +43,7 @@ RSpec.shared_examples "character_session_manageable" do |path_proc|
       it "サイドバーにDBに保存されたキャラクター名が表示されること" do
         get target_path
         assignment = CharacterAssignment.find_by(user: user, city: city, assigned_date: Time.zone.today)
-        expect(response.body).to have_selector(".side-nav", text: assignment.character.name)
+        expect(response.body).to have_selector(".nav-block", text: assignment.character.name)
       end
     end
 
@@ -58,7 +58,7 @@ RSpec.shared_examples "character_session_manageable" do |path_proc|
 
       it "「キャラクターを作成」ボタンがサイドバーに表示されること" do
         get target_path
-        expect(response.body).to have_selector(".side-nav", text: "キャラクターを作成")
+        expect(response.body).to have_selector(".nav-block", text: "キャラクターを作成")
       end
     end
   end
