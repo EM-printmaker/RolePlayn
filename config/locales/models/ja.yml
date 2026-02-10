@@ -61,6 +61,8 @@ ja:
               not_owned_by_character: "が指定されたキャラクターのものではありません。"
             base:
               too_soon: "あと %{count} 秒でまたお話しできます。"
+            content:
+              line_break_limit: "改行は%{count}回まで可能です。"
         inquiry:
           attributes:
             base:
