@@ -15,6 +15,7 @@ class Avo::Resources::City < Avo::BaseResource
     field :image, as: :file, is_image: true,
           accept: ImageValidatable::ALLOWED_IMAGE_TYPES.join(","),
           **admin_only_options
+    field :description, as: :textarea, hide_on: :index
     field :created_at, as: :date_time,
           name: "作成日",
           readonly: true,

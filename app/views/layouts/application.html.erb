@@ -1,18 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Role Playn" %></title>
+    <title><%= full_title(yield(:title)) %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= render 'layouts/head' %>
   </head>
 
-  <body>
+  <body class="<%= hide_sidebar? ? 'state-sidebar-hidden' : 'state-sidebar-visible' %>">
+    <%= render 'layouts/alert' %>
     <div class="wrapper">
-      <% discard_keys = ['scroll_to_top'] %>
-      <% flash.each do |key, message| %>
-        <% next if discard_keys.include?(key.to_s) %>
-        <%= content_tag(:div, message, class: "alert alert-#{key}") %>
-      <% end %>
       <%= render 'layouts/header' %>
       <%= yield %>
       <div id="remote_modal_wrapper"></div>

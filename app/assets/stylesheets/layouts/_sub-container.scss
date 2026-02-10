@@ -1,9 +1,13 @@
 .sub-container {
   position: sticky;
   top: 65px;
+  z-index: 1070;
   flex-shrink: 0;
-  width: 300px;
   height: 100vh;
-  padding-left: 20px;
+  padding-top: 2em;
   overflow: hidden;
+}
+
+.nav-list-item{
+  padding-left: 1em;
 }

@@ -1,8 +1,11 @@
+@use "../global" as *;
+
 /* モーダルのサイズ調整 */
 .expression-modal {
   width: 90%;
   max-width: 700px;
   padding: 0;
+  margin-top: 2em;
   border: none;
   border-radius: 8px;
 }
@@ -18,6 +21,10 @@
   max-height: 300px;
   padding: 10px;
   overflow-y: auto;
+
+  @include media-breakpoint-down(xl) {
+    flex-grow: 0.1;
+  }
 }
 
 .expression-item-wrapper {
@@ -54,3 +61,91 @@
 .text--sad { color: #8ac4d2; }
 .text--fun { color: #ffa176; }
 .text-normal { color: #b1ada1; }
+
+.custom-tabs {
+  .nav-link {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #888;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #555;
+    }
+
+    &.active {
+      color: var(--sub-color, #c1ce7e) !important;
+      background: transparent !important;
+      border-bottom: 2px solid var(--sub-color, #c1ce7e);
+    }
+  }
+}
+
+.selection-indicator {
+  background: #fff;
+  transition: all 0.3s ease;
+  
+  &:has(.text-theme) {
+    border-color: var(--sub-color, #c1ce7e) !important;
+    box-shadow: 0 4px 12px rgb(193 206 126 / 20%) !important;
+  }
+}
+
+.text-theme {
+  color: var(--sub-color, #c1ce7e);
+}
+
+.border-dashed {
+  border-color: #dee2e6 !important;
+  border-style: dashed !important;
+}
+
+.mask-scroll {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { 
+    display: none;
+  }
+}
+
+.animate-pop-in {
+  animation: pop-in 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.preview-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  margin-top: 1rem;
+  overflow: hidden;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  background-color: #fff;
+  border: 2px dashed #dee2e6;
+  border-radius: 12px;
+}

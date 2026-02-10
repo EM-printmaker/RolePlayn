@@ -1,51 +1,63 @@
 <header id="main-header" class="header navbar">
   <div class="container-fluid header-container">
-    <%= link_to "RolePlayn", root_path, class: "header-logo col-md-3" %>
+    <div class="header__left-content">
+      <% unless hide_sidebar? %>
+        <button class="d-lg-none navbar-toggler-button" type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvas-responsive"
+          aria-controls="offcanvas-responsive">
+          <%= nav_icon(:hamburger) %>
+        </button>
+      <% end %>
+      <%= link_to "RolePlayn", root_path, class: "header-logo #{hide_sidebar? ? 'header-logo--appear' : 'header-logo--hide'}" %>
+    </div>
 
     <div class="col-md-6 world-select text-center">
-      <div class="dropdown">
-        <button class="btn btn-link dropdown-toggle city-select-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-          <%= @city&.name || "街を選択" %>
-        </button>
-        
-        <ul class="dropdown-menu shadow" aria-labelledby="dropdownMenuButton">
-          <% @worlds.each do |world| %>
-            <li class="dropdown-header text-uppercase small fw-bold text-muted border-bottom">
-              <%= world.name %>
-            </li>
-            <% world.menu_cities.each do |city| %>
-              <li>
-                <%= link_to city.name, city_path(city), class: "dropdown-item #{'active' if city == @city}" %>
-              </li>
-            <% end %>
-          <% end %>
-        </ul>
+      <button class="btn city-select-button" type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanva-top-menu"
+        aria-controls="offcanva-top-menu">
+        <%= @city&.name || "街を選択" %> <%= nav_icon(:chevron_down, size: 15) %>
+      </button>
+    </div>
+      <div class="navbar-toggler-container">
+        <% unless hide_sidebar? %>
+          <button class="d-xl-none navbar-toggler-button" type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvas-responsive-right"
+            aria-controls="offcanvas-responsive-right">
+            <%= nav_icon(:three_dots) %>
+          </button>
+        <% end %>
       </div>
-    </div>
-
-    <div class="col-md-3 notification text-end">
-      <% if user_signed_in? %>
-        <% if current_user.can_access_admin? %>
-          <%= link_to '管理パネル', avo_path, class: 'text-sm text-gray-600 font-bold', data: { turbo: false } %>
-        <% end %>
-        <span>
-          <%= link_to profile_path do %>
-            <% if current_user.login_id.present? %>
-              <%= current_user.login_id %>
-            <% else %>
-              <%= current_user.email %>
-            <% end %>
-          <% end %>
-          でログイン中
-        </span>
-        <%= link_to "設定", edit_user_registration_path %>
-        <%= link_to "ログアウト", destroy_user_session_path, 
-          data: { turbo_method: :delete, turbo_confirm: "ログアウトしますか？" }, 
-          class: "btn-logout" %>
-        <% else %>
-          <%= link_to "ログイン", new_user_session_path, class: "btn-login" %>
-          <%= link_to "新規登録", new_user_registration_path, class: "btn-signup" %>
-        <% end %>
-    </div>
   </div>
 </header>
+
+<div class="offcanvas offcanvas-top main-city-nav-container" tabindex="-1" id="offcanva-top-menu">
+  <ul class="main-city-nav" aria-labelledby="offcanvaTopMenu" role="list">
+    <% @worlds.local.each do |world| %>
+      <li><%= world.name %></li>
+      <% world.menu_cities.local.each do |city| %>
+        <li class="main-city-nav__item">
+          <%= link_to city_path(city), class: "main-city-nav__link #{'active' if city == @city}" do %>
+            <div class="main-city-nav__image-wrapper">
+              <% if city.image.attached? %>
+                <%= cdn_image_tag city&.image, variant: :display, class: "main-city-nav__img" %>
+              <% else %>
+                <div class="main-city-nav__placeholder">
+                  <i class="bi bi-image text-muted opacity-50"></i> 
+                </div>
+              <% end %>
+            </div>
+            <div class="main-city-nav__info">
+              <span class="main-city-nav__name"><%= city.name %></span>
+              <span class="main-city-nav__description">
+                <%= city.description.presence || "No description available." %>
+              </span>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>

@@ -9,8 +9,14 @@ class City < ApplicationRecord
   has_many :posts, dependent: :restrict_with_error
   has_many :character_assignments, dependent: :destroy
 
-  has_one_attached :image
+  has_one_attached :image do |attachable|
+    attachable.variant :display, resize_to_limit: [ 683,	384 ]
+  end
   validates_image :image
+
+  scope :with_attached_images, -> {
+    includes(image_attachment: { blob: { variant_records: { image_attachment: :blob } } })
+  }
 
   enum :target_scope_type, {
     self_only:      0,      # 自分自身の投稿のみ
@@ -19,6 +25,7 @@ class City < ApplicationRecord
   }, default: :self_only
 
   validates :name, presence: true, length: { maximum: 50 }
+  validates :description, length: { maximum: 200 }
   validates :target_world_id, presence: true, if: :specific_world?
 
   scope :global, -> { joins(:world).merge(World.global) }

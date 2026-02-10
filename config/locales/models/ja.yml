@@ -10,7 +10,7 @@ ja:
       character:
         name: "名前"
         city: "街"
-        description: "自己紹介"
+        description: "説明"
       expression:
         level: "レベル"
       post:
@@ -19,6 +19,7 @@ ja:
         name: "名前"
         world: "所属世界"
         slug: "識別子(Slug)"
+        description: "説明"
       user:
         login: "ユーザーID・メールアドレス"
         login_id: "ユーザーID"
@@ -60,6 +61,8 @@ ja:
               not_owned_by_character: "が指定されたキャラクターのものではありません。"
             base:
               too_soon: "あと %{count} 秒でまたお話しできます。"
+            content:
+              line_break_limit: "改行は%{count}回まで可能です。"
         inquiry:
           attributes:
             base:

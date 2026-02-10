@@ -10,6 +10,12 @@ application.register("conditional-fields", ConditionalFieldsController);
 import DialogController from "controllers/dialog_controller";
 application.register("dialog", DialogController);
 
+import FlashController from "controllers/flash_controller";
+application.register("flash", FlashController);
+
+import LimiterController from "controllers/limiter_controller";
+application.register("limiter", LimiterController);
+
 import ModalController from "controllers/modal_controller";
 application.register("modal", ModalController);
 

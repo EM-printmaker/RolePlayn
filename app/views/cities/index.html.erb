@@ -1,3 +1,4 @@
+<% provide(:title, @city.name) %>
 <%= render layout: 'shared/layouts_wrapper' do %>
   <%= render 'shared/feed_and_post_section', posts: @posts, post: @post, city: @city %>
 <% end %>

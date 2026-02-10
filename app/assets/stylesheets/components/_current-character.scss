@@ -3,8 +3,14 @@
 .current-character {
   display: flex;
   flex-direction: column;
+  gap: 1em;
+  align-items: center;
+  justify-content: center;
   @include media-breakpoint-down(sm) {
-    align-items: center;
+    position: relative;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 1em;
   }
 
   &__image {
@@ -14,5 +20,10 @@
 
   &__button {
     width: 150px;
+    @include media-breakpoint-down(sm) {
+      position: absolute;
+      right: 0;
+      width: 50px;
+    }
   }
 }

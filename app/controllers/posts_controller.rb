@@ -20,6 +20,7 @@ class PostsController < ApplicationController
     @post.sender_session_token = helpers.session_token(session.id)
 
     if @post.save
+      flash[:new_post_id] = @post.id
       redirect_to determine_redirect_path, status: :see_other
     else
       respond_to do |format|

@@ -1,0 +1,74 @@
+/* --- フラッシュメッセージのコンテナ --- */
+.flash-container {
+  position: fixed;
+  right: 0;
+  bottom: 20px;
+  left: 0;
+  z-index: 10000; /* ヘッダー等より手前に */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center; /* これで左右中央寄せになります */
+  width: 90%;
+  max-width: 400px;
+  margin-inline: auto;
+  pointer-events: none; /* コンテナ自体はクリックを邪魔しない */
+}
+
+/* --- アラート本体のデザイン --- */
+.custom-alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+  pointer-events: auto; /* 本体はクリック可能に */
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid var(--main-border-color, #ddd); /* 変数がない時の予備色も指定 */
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgb(0 0 0 / 10%);
+  
+  /* 出現アニメーション */
+  animation: alert-slide-up 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+}
+
+/* --- タイプ別の色分け --- */
+.alert-notice {
+  color: var(--main-text-color, #333);
+  border-left: 5px solid var(--sub-color, #c1ce7e);
+}
+
+.alert-alert {
+  color: var(--main-text-color, #333);
+  border-left: 5px solid #d9534f;
+}
+
+/* --- 消える時のアニメーション --- */
+.fade-out {
+  animation: alert-fade-out 0.5s ease forwards;
+}
+
+/* --- キーフレーム定義 --- */
+@keyframes alert-slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes alert-fade-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}

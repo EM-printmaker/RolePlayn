@@ -1,5 +1,6 @@
 class Post < ApplicationRecord
   POST_INTERVAL = 3.seconds.freeze
+  MAX_LINE_BREAKS = 8.freeze
 
   belongs_to :city
   belongs_to :character
@@ -10,6 +11,7 @@ class Post < ApplicationRecord
 
   validates :content, presence: true, length: { maximum: 300 }
   validates :sender_session_token, presence: true
+  validate :limit_line_breaks
   validate :character_must_belong_to_city
   validate :expression_must_belong_to_character
   validate :post_interval_limit, on: :create
@@ -71,6 +73,12 @@ class Post < ApplicationRecord
       if last_post && last_post.created_at > POST_INTERVAL.ago
         wait_time = (POST_INTERVAL - (Time.current - last_post.created_at)).ceil
         errors.add(:base, :too_soon, count: wait_time)
+      end
+    end
+
+    def limit_line_breaks
+      if content.present? && content.count("\n") > MAX_LINE_BREAKS
+        errors.add(:content, :line_break_limit)
       end
     end
 end

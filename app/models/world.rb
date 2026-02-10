@@ -3,7 +3,8 @@ class World < ApplicationRecord
   include ImageValidatable
 
   has_many :cities, dependent: :restrict_with_error
-  has_many :menu_cities, -> { select(:id, :name, :slug, :world_id) },
+  has_many :menu_cities,
+    -> { with_attached_images },
     class_name: "City",
     dependent: :restrict_with_error,
     inverse_of: :world

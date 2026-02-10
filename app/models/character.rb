@@ -12,6 +12,7 @@ class Character < ApplicationRecord
   delegate :world, to: :city, allow_nil: true
 
   validates :name, presence: true, length: { maximum: 50 }
+  validates :description, length: { maximum: 200 }
 
 
   def primary_observer
