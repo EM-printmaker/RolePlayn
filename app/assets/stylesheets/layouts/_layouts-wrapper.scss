@@ -16,6 +16,7 @@
   flex-shrink: 0;
   justify-content: flex-end;
   height: calc(100vh - 65px);
+  padding-top: 2em;
   overflow: hidden;
   overflow-y: auto;
   opacity: 1;
@@ -53,11 +54,15 @@
   width: 700px;
   max-width: 700px;
   padding-top: 1em;
+  padding-right: 2em;
+  padding-left: 2em; 
   transition: padding 0.2s ease;
 
   @media (width <= 700px) {
     width: 100svw;
     min-width: 300px;
-    border: none;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    border: none; 
   }
 }

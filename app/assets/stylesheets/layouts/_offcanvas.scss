@@ -24,6 +24,6 @@
   &__right {
     flex-direction: column;
     justify-content: flex-start;
-    width: 200px;
+    min-width: 250px;
   }
 }

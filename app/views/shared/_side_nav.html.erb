@@ -1,28 +1,52 @@
 <div class="offcanvas-lg offcanvas-start offcanvas--overlay" tabindex="-1" id="offcanvas-responsive" aria-labelledby="offcanvasResponsiveLabel">
-  <div class="offcanvas-header">
-    <%= link_to "RolePlayn", root_path, class: "side-nav__logo col-md-3" %>
+  
+  <div class="offcanvas-header mb-3">
+    <%= link_to "RolePlayn", root_path, class: "side-nav__logo fw-bold text-decoration-none text-dark fs-4" %>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas-responsive" aria-label="Close"></button>
   </div>
-  <div class="offcanvas-body offcanvas-body__left">
-    <nav class="side-nav">
-      <ul role="list">
-        <li>
-          <p>現在のCity： <%= viewing_city.name %></p>
-          <%#= Cityが増えたら追加 %>
-          <%= button_to "他の街へ移動", shuffles_path, method: :post, class: "btn btn-outline-dark" %>
-        </li>
-        <li>
-        <% if current_character && current_expression %>
-          <p>現在のCharacter: <%= current_character.name %></p>
-          <%= cdn_image_tag current_expression&.image, variant: :display, class: "post__avatar" %>
-          <%= button_to "キャラクターの更新", re_rolls_path, method: :post, class: "btn btn-outline-dark" %>
-        <% else %>
-          <p>キャラクターが未構成です</p>
-          <%= button_to "キャラクターを作成", re_rolls_path, method: :post, class: "btn btn-primary" %>
+
+  <div class="offcanvas-body offcanvas-body__left d-flex flex-column gap-3">
+
+    <div class="nav-block">
+      <h6 class="nav-block__title text-muted small mb-2">CURRENT CITY</h6>
+      <div class="nav-block__content p-3 rounded-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="fw-bold">
+            <%= system_icon(:geo, class: "me-1") %> <%= viewing_city.name %>
+          </span>
+        </div>
+        <%= button_to shuffles_path, method: :post, class: "btn btn-outline-secondary w-100 btn-sm", form: { class: "d-grid" } do %>
+          <%= system_icon(:shuffle, class: "me-1") %> 他の街へ移動
         <% end %>
-        </li>
-      </ul>
-    </nav>
+      </div>
+    </div>
+
+    <div class="nav-block">
+      <h6 class="nav-block__title text-muted small mb-2">YOUR CHARACTER</h6>
+      <div class="nav-block__content p-3 rounded-3">
+        
+        <% if current_character && current_expression %>
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="flex-shrink-0">
+              <%= cdn_image_tag current_expression&.image, variant: :display, class: "rounded-circle border", style: "width: 50px; height: 50px; object-fit: cover;" %>
+            </div>
+            <div class="flex-grow-1 overflow-hidden">
+              <p class="mb-0 fw-bold text-truncate"><%= current_character.name %></p>
+              <small class="text-muted" style="font-size: 0.75rem;">Lv.<%= current_expression.level %> <%= current_expression.emotion_type %> </small>
+            </div>
+          </div>
+          <%= button_to re_rolls_path, method: :post, class: "btn btn-outline-secondary w-100 btn-sm", form: { class: "d-grid" } do %>
+            <%= system_icon(:repeat, class: "me-1") %> キャラクター更新
+          <% end %>
+        <% else %>
+          <p class="small text-muted mb-3">まだキャラクターがいません。<br>新しい物語を始めましょう。</p>
+          <%= button_to re_rolls_path, method: :post, class: "button w-100" do %>
+            キャラクターを作成
+          <% end %>
+        <% end %>
+        
+      </div>
+    </div>
+
   </div>
 </div>
-

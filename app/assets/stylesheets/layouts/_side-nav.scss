@@ -26,3 +26,13 @@
   //  width: 0;
   // }
 }
+
+.nav-block {
+  &__title {
+    font-family: var(--font-cinzel);
+  }
+
+  &__content {
+    background-color: var(--main-white);
+  }
+}

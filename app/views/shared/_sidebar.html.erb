@@ -1,48 +1,67 @@
-<div class="offcanvas-xl offcanvas-end offcanvas--overlay" tabindex="-1" id="offcanvas-responsive-right" aria-labelledby="offcanvasResponsiveLabel">
-  <div class="offcanvas-header">
+<div class="offcanvas-xl offcanvas-end offcanvas--overlay" tabindex="-1" id="offcanvas-responsive-right">
+  
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title fw-bold text-muted small ps-2">SYSTEM MENU</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas-responsive-right" aria-label="Close"></button>
   </div>
-  <div class="offcanvas-body offcanvas-body__right">
-    <div class="page-specific-content">
+
+  <div class="offcanvas-body offcanvas-body__right d-flex flex-column p-0">
+    
+    <div class="mb-3">
       <%= yield %>
     </div>
-    <div>
-      <ul role="list">
-        <% if user_signed_in? %>
-        <% if current_user.can_access_admin? %>
-          <li>
-            <%= link_to '管理パネル', avo_path, class: 'text-sm text-gray-600 font-bold', data: { turbo: false } %>
-          </li>
-        <% end %>
-        <li>
-          <%= link_to profile_path do %>
-            <% if current_user.login_id.present? %>
-              <%= current_user.login_id %>
-            <% else %>
-              <%= current_user.email %>
-            <% end %>
+
+    <div class="mb-3">
+      <div class="nav-block">
+        <div class="nav-block__content p-3 rounded-3">
+          <% if user_signed_in? %>
+            <div class="mb-3">
+              <p class="text-muted small mb-1">Signed in as</p>
+              <p class="fw-bold mb-0 text-truncate">
+                <%= current_user.login_id.presence || current_user.email %>
+              </p>
+            </div>
+
+            <div class="d-grid gap-2">
+              <%= link_to profile_path, class: "btn btn-sm btn-outline-secondary text-start" do %>
+                <%= system_icon(:person, class: "me-2") rescue nil %> プロフィール
+              <% end %>
+              
+              <%= link_to edit_user_registration_path, class: "btn btn-sm btn-outline-secondary text-start" do %>
+                <%= system_icon(:gear, class: "me-2") rescue nil %> 設定
+              <% end %>
+
+              <% if current_user.try(:can_access_admin?) %>
+                <%= link_to avo_path, class: "btn btn-sm btn-outline-dark text-start", data: { turbo: false } do %>
+                  <%= system_icon(:shield, class: "me-2") rescue nil %> 管理パネル
+                <% end %>
+              <% end %>
+
+              <hr class="my-1 opacity-25">
+
+              <%= link_to destroy_user_session_path, 
+                  data: { turbo_method: :delete, turbo_confirm: "ログアウトしますか？" }, 
+                  class: "btn btn-sm btn-link text-danger text-decoration-none p-0 text-start ps-1" do %>
+                <%= system_icon(:box_arrow_right, class: "me-1") rescue nil %> ログアウト
+              <% end %>
+            </div>
+
+          <% else %>
+            <p class="small text-muted mb-3">ログインしてRolePlaynへ</p>
+            <div class="d-grid gap-2">
+              <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-secondary btn-sm" %>
+              <%= link_to "新規登録", new_user_registration_path, class: "btn btn-primary btn-sm" %>
+            </div>
           <% end %>
-        </li>
-        <li>
-          <%= link_to "設定", edit_user_registration_path %>
-        </li>
-        <li>
-          <%= link_to "ログアウト", destroy_user_session_path, 
-            data: { turbo_method: :delete, turbo_confirm: "ログアウトしますか？" }, 
-            class: "btn-logout" %>
-        </li>
-        <% else %>
-          <li>
-            <%= link_to "ログイン", new_user_session_path, class: "btn-login" %>
-          </li>
-          <li>
-            <%= link_to "新規登録", new_user_registration_path, class: "btn-signup" %>
-          </li>
-        <% end %>
-      </ul>
+        </div>
+      </div>
     </div>
-    <div>
-      <%= link_to "お問い合わせ", new_inquiry_path %>
+
+    <div class="nav-list-group border-top mt-2 py-2">
+      <%= link_to new_inquiry_path, class: "nav-list-item" do %>
+        <%= system_icon(:question_circle, class: "me-3") rescue nil %> お問い合わせ
+      <% end %>
     </div>
+
   </div>
 </div>
