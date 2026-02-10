@@ -93,8 +93,12 @@ Rails.application.routes.draw do
   # notifications
   post "notifications/read", to: "notifications#read", as: :read_notifications
 
+  # pages
   # login_modal
   get "login_announcement", to: "pages#login_announcement"
+  # legal-pages
+  get "terms", to: "pages#terms", as: "terms"
+  get "privacy", to: "pages#privacy", as: "privacy"
 
   # セキュリティのためこれより下に通常のルーティング設定を追加しないこと
 
