@@ -59,7 +59,7 @@ $header-height: 60px;
 
 #offcanva-top-menu {
   top: $header-height;
-  z-index: 1055;
+  z-index: 1040;
   display: block;
   width: 100%;
   min-height: 50vh;
@@ -107,4 +107,8 @@ $header-height: 60px;
       text-decoration: none;
     }
   }
+}
+
+.offcanvas-backdrop {
+  z-index: 1030;
 }

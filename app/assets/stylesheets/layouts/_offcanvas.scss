@@ -1,18 +1,21 @@
 #offcanvas-responsive {
+  background-color: var(--main-color);
+
   --bs-offcanvas-width: 250px;
 }
 
 #offcanvas-responsive-right{
+  background-color: var(--main-color);
+
   --bs-offcanvas-width: 250px;
 }
 
 .offcanvas-header {
-  background-color: #eee;
+  background-color: var(--main-color);
 }
 
 .offcanvas-body {
   display: flex;
-  background-color: #eee;
 
   &__left {
     justify-content: flex-end;
