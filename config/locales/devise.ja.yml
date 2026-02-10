@@ -119,6 +119,8 @@ ja:
         sign_in: ログイン
       signed_in: ログインしました。
       signed_out: ログアウトしました。
+      guest_signed_in: "ゲストユーザーとしてログインしました。"
+      moderator_signed_in: "ゲストモデレーターとしてログインしました。"
     shared:
       links:
         back: 戻る
@@ -145,3 +147,4 @@ ja:
       not_locked: はロックされていません。
       not_saved:
         other: "%{count} 件のエラーが発生したため %{resource} は保存されませんでした。"
+      guest_access_forbidden: "ゲストユーザーは、プロフィールの編集・削除はできません。"

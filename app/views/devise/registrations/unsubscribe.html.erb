@@ -1,0 +1,44 @@
+<% provide(:title, "退会手続き") %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      
+      <h2 class="text-center mb-4 fw-bold text-danger">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i><%= yield(:title) %>
+      </h2>
+
+      <div class="card shadow-sm border-danger">
+        <div class="card-body p-4">
+          
+          <div class="alert alert-warning" role="alert">
+            <h5 class="alert-heading fw-bold"><i class="bi bi-exclamation-circle me-1"></i> ご注意ください</h5>
+            <p class="mb-0 small">
+              退会すると、これまでの<strong>投稿データ、プロフィール、設定などすべての情報が完全に削除</strong>され、復元することはできません。
+            </p>
+          </div>
+
+          <div class="text-center my-4">
+            <p class="mb-1 fw-bold">本当によろしいですか？</p>
+            <p class="text-muted small">この操作は取り消せません。</p>
+          </div>
+
+          <div class="d-grid gap-3">
+            <%# 削除実行ボタン %>
+            <%= button_to registration_path(resource_name), method: :delete, class: "btn btn-danger btn-lg w-100", form: { data: { turbo_confirm: "本当に退会しますか？この操作は取り消せません。" } } do %>
+              <i class="bi bi-trash-fill me-1"></i> 同意して退会する
+            <% end %>
+
+            <%# キャンセルボタン %>
+            <%= link_to "キャンセルして戻る", edit_user_registration_path, class: "btn btn-outline-secondary w-100" %>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="text-center mt-3">
+        <%= link_to "トップページに戻る", root_path, class: "text-decoration-none text-muted small" %>
+      </div>
+
+    </div>
+  </div>
+</div>

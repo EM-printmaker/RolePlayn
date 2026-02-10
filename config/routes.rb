@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   authenticate :user, ->(user) { user.admin? || user.moderator? } do
-    mount_avo at: "/avo"
+    mount Avo::Engine => Avo.configuration.root_path
   end
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
@@ -29,6 +29,15 @@ Rails.application.routes.draw do
   devise_scope :user do
     get "settings/password", to: "users/registrations#edit_password", as: :edit_password_settings
     patch "settings/password", to: "users/registrations#update_password", as: :update_password_settings
+  end
+
+  devise_scope :user do
+    # 一般ゲストログイン用
+    post "users/guest_sign_in", to: "users/sessions#new_guest"
+    # モデレーターゲストログイン用
+    post "users/guest_moderator_sign_in", to: "users/sessions#new_guest_moderator"
+    # 退会ページ
+    get "users/unsubscribe", to: "users/registrations#unsubscribe", as: "unsubscribe"
   end
 
   # users

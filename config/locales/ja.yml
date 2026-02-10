@@ -9,3 +9,6 @@ ja:
   custom_errors:
     messages:
       account_suspended: "あなたのアカウントは凍結されました。強制的にログアウトします。"
+  avo:
+    alerts:
+      unauthorized: "権限がありません。"

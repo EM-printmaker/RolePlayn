@@ -4,6 +4,7 @@ class User < ApplicationRecord
     login logout signin signout register dashboard api
     guest everyone group public private
   ].freeze
+  GUEST_EMAILS = %w[guest@example.com guest_moderator@example.com].freeze
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -49,6 +50,10 @@ class User < ApplicationRecord
 
   def can_access_admin?
     admin? || moderator?
+  end
+
+  def guest?
+    GUEST_EMAILS.include?(email)
   end
 
   # 初めてログインIDが設定されたかどうか

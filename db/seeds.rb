@@ -8,15 +8,15 @@ node_02 = global_world.cities.find_or_create_by!(name: "境界観測点 [Node.02
 # local World
 velstria = World.find_or_create_by!(name: "ヴェルストリア", slug: "velstria")
 
-test_world = World.find_or_create_by!(name: "テストワールド", slug: "test-world")
+protorys = World.find_or_create_by!(name: "プロトリス", slug: "protorys")
 
 # City
 # ヴェルストリア(velstria)
 luminoir      = velstria.cities.find_or_create_by!(name: "ルミノア", slug: "luminoir")
-velstria_city = velstria.cities.find_or_create_by!(name: "ヴェルストリア所属City", slug: "velstria-city")
+velstria_city = velstria.cities.find_or_create_by!(name: "シミュラクラ", slug: "simulacra")
 
-# テストワールド(test_world)
-test_city = test_world.cities.find_or_create_by!(name: "テストワールド所属City", slug: "test-city")
+# プロトリス(protorys)
+blank_node = protorys.cities.find_or_create_by!(name: "ブランノード", slug: "blank-node")
 
 
 # feed_posts(postの参照先)
@@ -29,20 +29,20 @@ node_01.update!(
   target_world_id: velstria.id
 )
 
-# テストワールド(test_world)のみを参照
+# プロトリス(protorys)のみを参照
 node_02.update!(
   target_scope_type: :specific_world,
-  target_world_id: test_world.id
+  target_world_id: protorys.id
 )
 
 # character
 characters_data = [
   { name: "村人", city: luminoir,      emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] },
-  { name: "騎士", city: luminoir,      emotion_types: [ :fun, :sad,   :normal ] },
+  { name: "騎士", city: luminoir,      emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] },
   { name: "衛兵", city: velstria_city, emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] },
-  { name: "商人", city: velstria_city, emotion_types: [ :joy, :fun,   :normal ] },
-  { name: "町人", city: test_city,     emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] },
-  { name: "旅人", city: test_city,     emotion_types: [ :sad, :fun,   :normal ] }
+  { name: "商人", city: velstria_city, emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] },
+  { name: "町人", city: blank_node,      emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] },
+  { name: "旅人", city: blank_node,      emotion_types: [ :joy, :angry, :sad,   :fun, :normal ] }
 ]
 
 characters_data.each do |data|
@@ -80,7 +80,7 @@ characters_data.each do |data|
   end
 
   # post
-  (1..10).each do |num|
+  (1..2).each do |num|
     content = "[#{character.city.name}]テスト投稿その#{num}：#{data[:name]}の文章です。"
     character.posts.find_or_create_by!(content: content) do |p|
       p.city = character.city
@@ -91,10 +91,11 @@ characters_data.each do |data|
 end
 
 # users
+admin_email = ENV.fetch("ADMIN_USER_EMAIL", "admin@example.com")
 users_data = [
-{ login_id: "test",  email: "test@example.com",  role: :admin },
-  { login_id: "test2", email: "test2@example.com", role: :moderator },
-  { login_id: "test3", email: "test3@example.com", role: :general }
+  { login_id: "admin_user",  email: admin_email,  role: :admin },
+  { login_id: "guest_moderator", email: "guest_moderator@example.com", role: :moderator },
+  { login_id: "guest_user", email: "guest@example.com", role: :general }
 ]
 users_data.each do |data|
   user = User.find_or_initialize_by(login_id: data[:login_id])
@@ -105,8 +106,14 @@ users_data.each do |data|
   user.confirmed_at = Time.current
 
   if user.new_record?
-    user.password = "password"
-    user.password_confirmation = "password"
+    if data[:role] == :admin
+      password = Rails.application.credentials.seed_user_password || ENV.fetch("SEED_USER_PASSWORD", "password")
+    else
+      password = SecureRandom.urlsafe_base64(12)
+    end
+
+    user.password = password
+    user.password_confirmation = password
   end
 
   user.save!
