@@ -2,25 +2,34 @@
   <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" id="cityFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
     <%= params[:city_id].present? ? "都市: #{city.name}" : "全ての都市" %>
   </button>
-
-  <ul class="dropdown-menu shadow" aria-labelledby="cityFilterDropdown">
+  <ul class="dropdown-menu shadow-lg border-0 rounded-3 p-2" aria-labelledby="cityFilterDropdown" style="min-width: 240px;">
     <li>
-      <%= link_to "全ての都市", 
-            profile_tab_filter_path(@tab),
-            class: "dropdown-item #{params[:city_id].blank? ? 'active' : ''}" %>
+      <% is_all_active = params[:city_id].blank? %>
+      <%= link_to profile_tab_filter_path(@tab),
+            class: "dropdown-item rounded-2 d-flex align-items-center justify-content-between py-2 mb-1 #{'active-item' if is_all_active}" do %>
+        <span>全ての都市</span>
+        <% if is_all_active %>
+          <%= system_icon(:check, class: "text-theme") rescue "✓" %>
+        <% end %>
+      <% end %>
     </li>
-    
-    <div class="dropdown-divider"></div>
-
+    <li><hr class="dropdown-divider my-2 opacity-25"></li>
     <% @worlds.local.each do |world| %>
-      <li class="dropdown-header text-uppercase small fw-bold text-muted border-bottom">
-        <%= world.name %>
+      <li>
+        <h6 class="dropdown-header text-uppercase small fw-bold text-muted py-2 ps-3" style="font-size: 0.7rem; letter-spacing: 0.05em;">
+          <%= world.name %>
+        </h6>
       </li>
       <% world.menu_cities.each do |city| %>
+        <% is_active = (params[:city_id].to_s == city.id.to_s) %>
         <li>
-          <%= link_to city.name, 
-                  profile_tab_filter_path(@tab, city.id), 
-                  class: "dropdown-item #{params[:city_id].to_s == city.id.to_s ? 'active' : ''}" %>
+          <%= link_to profile_tab_filter_path(@tab, city.id), 
+                class: "dropdown-item rounded-2 d-flex align-items-center justify-content-between py-2 mb-1 #{'active-item' if is_active}" do %>
+            <span><%= city.name %></span>
+            <% if is_active %>
+              <%= system_icon(:check, class: "text-theme") rescue "✓" %>
+            <% end %>
+          <% end %>
         </li>
       <% end %>
     <% end %>
