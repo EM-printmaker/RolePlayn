@@ -24,7 +24,7 @@ class Avo::Resources::Inquiry < Avo::BaseResource
     field :name, as: :text, sortable: true, only_on: :index, format_using: -> { value.truncate 20 }
     field :name, as: :text
     field :message, as: :text, only_on: :index, format_using: -> { value.truncate 30 }
-    field :email, as: :text do
+    field :email, as: :text, visible: -> { current_user.admin? } do
             if record.user.present?
               link_to record.email, avo.resources_user_path(record.user), class: "text-blue-600 underline"
             else

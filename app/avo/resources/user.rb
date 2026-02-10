@@ -4,12 +4,38 @@ class Avo::Resources::User < Avo::BaseResource
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
+  #
+  def row_controls
+    # 詳細・編集ボタンは全員に表示
+    show_button
+    edit_button
+
+    # 削除ボタンだけ条件付きで表示（管理者のみ）
+    if current_user.admin?
+      delete_button
+    end
+  end
+
+  # ▼ 詳細画面（Show）のボタン制御
+  def show_controls
+    # 戻る・編集ボタンは全員に表示
+    back_button
+    edit_button
+
+    # 削除ボタンだけ条件付きで表示
+    if current_user.admin?
+      delete_button
+    end
+
+    # アクションボタン（パスワードリセットなど）がある場合もここで制御
+    # actions_list if current_user.admin?
+  end
 
   def fields
     field "基本情報", as: :heading
     field :id, as: :id
     field :login_id, as: :text, **admin_only_options
-    field :email, as: :text, sortable: true, **admin_only_options
+    field :email, as: :text, sortable: true, visible: -> { current_user.admin? }, **admin_only_options
     field :role, as: :select, enum: ::User.roles, sortable: true, **admin_only_options
     field :confirmed_at, as: :date_time, sortable: true, **admin_only_options
 
@@ -37,8 +63,8 @@ class Avo::Resources::User < Avo::BaseResource
     field :sign_in_count, as: :number, only_on: :show, **admin_only_options
     field :current_sign_in_at, as: :date_time, only_on: :show, **admin_only_options
     field :last_sign_in_at, as: :date_time, only_on: :show, **admin_only_options
-    field :current_sign_in_ip, as: :text, only_on: :show, **admin_only_options
-    field :last_sign_in_ip, as: :text, only_on: :show, **admin_only_options
+    field :current_sign_in_ip, as: :text, only_on: :show, visible: -> { current_user.admin? }, **admin_only_options
+    field :last_sign_in_ip, as: :text, only_on: :show, visible: -> { current_user.admin? }, **admin_only_options
     field "パスワード", as: :heading, only_on: :new
     field :password, as: :password, only_on: :new
     field :password_confirmation, as: :password, only_on: :new
