@@ -8,6 +8,12 @@
   overflow: hidden;
 }
 
+.nav-list-group {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+}
+
 .nav-list-item{
   padding-left: 1em;
 }
