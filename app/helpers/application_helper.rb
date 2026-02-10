@@ -45,7 +45,7 @@ module ApplicationHelper
   end
 
   def hide_sidebar?
-    no_sidebar_controllers = %w[inquiries]
+    no_sidebar_controllers = %w[inquiries pages]
     devise_controller? || no_sidebar_controllers.include?(controller_name)
   end
 
