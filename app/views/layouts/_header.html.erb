@@ -52,8 +52,7 @@
             <div class="main-city-nav__info">
               <span class="main-city-nav__name"><%= city.name %></span>
               <span class="main-city-nav__description">
-                <%#= city.description.presence || "No description available." %>
-                テスト説明文
+                <%= city.description.presence || "No description available." %>
               </span>
             </div>
           <% end %>
