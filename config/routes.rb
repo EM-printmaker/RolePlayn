@@ -31,6 +31,13 @@ Rails.application.routes.draw do
     patch "settings/password", to: "users/registrations#update_password", as: :update_password_settings
   end
 
+  devise_scope :user do
+    # 一般ゲストログイン用
+    post "users/guest_sign_in", to: "users/sessions#new_guest"
+    # モデレーターゲストログイン用
+    post "users/guest_moderator_sign_in", to: "users/sessions#new_guest_moderator"
+  end
+
   # users
   resource :profile, only: [ :show ], controller: "users" do
     get :load_more
