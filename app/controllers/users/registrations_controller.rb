@@ -3,6 +3,13 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [ :create ]
   before_action :configure_account_update_params, only: [ :update ]
+  before_action :ensure_normal_user, only: [ :edit, :update, :destroy ]
+
+  # rubocop:disable Lint/UselessMethodDefinition
+  # GET /resource/edit
+  def edit
+    super
+  end
 
   # GET /resource/sign_up
   # def new
@@ -10,26 +17,22 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # rubocop:disable Lint/UselessMethodDefinition
   def create
     super
   end
 
-  # GET /resource/edit
-  # def edit
-  #   super
-  # end
 
   # PUT /resource
   def update
     super
   end
-  # rubocop:enable Lint/UselessMethodDefinition
+
 
   # DELETE /resource
-  # def destroy
-  #   super
-  # end
+  def destroy
+    super
+  end
+  # rubocop:enable Lint/UselessMethodDefinition
 
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign
@@ -110,5 +113,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     def password_update_params
       params.require(:user).permit(:password, :password_confirmation, :current_password)
+    end
+
+    def ensure_normal_user
+      if resource.guest?
+        redirect_to root_path, alert: t("errors.messages.guest_access_forbidden")
+      end
     end
 end
