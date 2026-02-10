@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   authenticate :user, ->(user) { user.admin? || user.moderator? } do
-    mount_avo at: "/avo"
+    mount Avo::Engine => Avo.configuration.root_path
   end
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 

@@ -16,7 +16,7 @@ class Avo::Resources::Post < Avo::BaseResource
           sortable: true,
           hide_on: :forms
     field "投稿者", as: :heading
-    field :user, as: :belongs_to,
+    field :user, as: :belongs_to, hide_on: :forms,
           sortable: -> {
             query.joins(:user).order("user.email": direction)
           }
