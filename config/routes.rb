@@ -36,6 +36,8 @@ Rails.application.routes.draw do
     post "users/guest_sign_in", to: "users/sessions#new_guest"
     # モデレーターゲストログイン用
     post "users/guest_moderator_sign_in", to: "users/sessions#new_guest_moderator"
+    # 退会ページ
+    get "users/unsubscribe", to: "users/registrations#unsubscribe", as: "unsubscribe"
   end
 
   # users

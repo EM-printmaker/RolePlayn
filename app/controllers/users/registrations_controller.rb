@@ -58,6 +58,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def unsubscribe; end
+
   protected
 
   # プロフィール更新（ID/Email）時の保存ロジック
