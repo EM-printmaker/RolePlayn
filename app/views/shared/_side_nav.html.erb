@@ -1,0 +1,93 @@
+<div class="offcanvas-lg offcanvas-start offcanvas--overlay" tabindex="-1" id="offcanvas-responsive" aria-labelledby="offcanvasResponsiveLabel">
+  
+  <div class="offcanvas-header mb-3">
+    <%= link_to "RolePlayn", root_path, class: "side-nav__logo fw-bold text-decoration-none text-dark fs-4" %>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas-responsive" aria-label="Close"></button>
+  </div>
+
+  <div class="offcanvas-body offcanvas-body__left d-flex flex-column gap-3">
+
+    <div class="nav-block">
+      <h6 class="nav-block__title text-muted small mb-2">WORLD CROSSROADS</h6>
+      <div class="nav-block__content p-3 rounded-3">
+        <%= link_to city_path(City.first), method: :post, class: "btn btn-outline-secondary w-100 btn-sm", form: { class: "d-grid" } do %>
+          <%= system_icon(:shuffle, class: "me-1") %> アセラ・ポリスへ行く
+        <% end %>
+        <% if viewing_city.global? %>
+          <div class="list-group list-group-flush mt-3">
+            <% @worlds.each do |world| %>
+              <% world.menu_cities.global.each do |city| %>
+                <% is_active = (city == @city) %>
+                
+                <%= link_to city_path(city), class: "list-group-item list-group-item-action border-0 rounded-3 mb-1 px-3 py-2 d-flex align-items-center justify-content-between #{'active-city' if is_active}" do %>
+                  <div class="d-flex align-items-center">
+                    <span class="me-2 d-flex align-items-center" style="opacity: 0.6;">
+                      <% if is_active %>
+                        <%= system_icon(:geo_fill, size: 16) rescue "●" %>
+                      <% else %>
+                        <%= system_icon(:geo, size: 16) rescue "○" %>
+                      <% end %>
+                    </span>
+                    <span class="<%= 'fw-bold' if is_active %>"><%= city.name %></span>
+                  </div>
+                  
+                  <% if is_active %>
+                    <small class="text-muted" style="font-size: 0.7em; letter-spacing: 1px;">HERE</small>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="nav-block">
+      <h6 class="nav-block__title text-muted small mb-2">CURRENT CITY</h6>
+      <div class="nav-block__content p-3 rounded-3">
+        <% if viewing_city.local? %>
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="flex-shrink-0">
+              <%= cdn_image_tag viewing_city&.image, variant: :display, class: "rounded-circle border", style: "width: 50px; height: 50px; object-fit: cover;" %>
+            </div>
+            <div class="flex-grow-1 overflow-hidden">
+              <p class="mb-0 fw-bold text-truncate"> <%= viewing_city.name %></p>
+            </div>
+          </div>
+          <% end %>
+        <%= button_to shuffles_path, method: :post, class: "btn btn-outline-secondary w-100 btn-sm", form: { class: "d-grid" } do %>
+          <%= system_icon(:repeat, class: "me-1") %> 他の街へ移動
+        <% end %>
+      </div>
+    </div>
+
+    <% if viewing_city.local? %>
+      <div class="nav-block">
+        <h6 class="nav-block__title text-muted small mb-2">YOUR CHARACTER</h6>
+        <div class="nav-block__content p-3 rounded-3">
+          
+          <% if current_character && current_expression %>
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="flex-shrink-0">
+                <%= cdn_image_tag current_expression&.image, variant: :display, class: "rounded-circle border", style: "width: 50px; height: 50px; object-fit: cover;" %>
+              </div>
+              <div class="flex-grow-1 overflow-hidden">
+                <p class="mb-0 fw-bold text-truncate"><%= current_character.name %></p>
+                <small class="text-muted" style="font-size: 0.75rem;">Lv.<%= current_expression.level %> <%= current_expression.emotion_type %> </small>
+              </div>
+            </div>
+            <%= button_to re_rolls_path, method: :post, class: "btn btn-outline-secondary w-100 btn-sm", form: { class: "d-grid" } do %>
+              <%= system_icon(:repeat, class: "me-1") %> キャラクター更新
+            <% end %>
+          <% else %>
+            <p class="small text-muted mb-3">まだキャラクターがいません。<br>新しい物語を始めましょう。</p>
+            <%= button_to re_rolls_path, method: :post, class: "button w-100" do %>
+              キャラクターを作成
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</div>

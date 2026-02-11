@@ -1,0 +1,57 @@
+@use "../../global" as *;
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  @include media-breakpoint-down(sm) {
+    align-items: center;
+  }
+
+  &__button-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__textarea {
+    width: 100%; 
+    height: auto;
+    min-height: 120px;
+    padding: 0 0.5em;
+    overflow-y: hidden;
+    font-size: 1.1em;
+    line-height: 1.6;
+    resize: none;
+    background-color: var(--main-white);
+    border: none;
+    field-sizing: content;
+
+    &:focus {
+      outline: none; 
+      background-color: #fff;
+      border-bottom: 1px solid color-mix(in srgb, var(--main-border-color), transparent 80%);
+      box-shadow: 0 4px 4px -2px color-mix(in srgb, var(--main-border-color), transparent 80%);
+    }
+
+    &::placeholder {
+      color: #ccc;
+      letter-spacing: 0.1em;
+    }
+  }
+}
+
+.is-invalid-custom {
+  color: #dc3545 !important;
+  background-color: #fff8f8;
+  border-color: #dc3545 !important;
+  
+  &:focus {
+    box-shadow: 0 0 0 0.25rem rgb(220 53 69 / 25%) !important;
+  }
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

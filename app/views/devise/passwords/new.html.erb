@@ -1,0 +1,38 @@
+<% provide(:title, "パスワードの再設定") %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+
+      <h2 class="text-center mb-4 fw-bold">パスワードの再設定</h2>
+
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          
+          <p class="text-muted small mb-4 text-center">
+            ご登録済みのメールアドレスを入力してください。<br>
+            パスワード再設定用のリンクをお送りします。
+          </p>
+
+          <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+            <%= render "devise/shared/error_messages", resource: resource %>
+
+            <div class="mb-4">
+              <%= f.label :email, "メールアドレス", class: "form-label fw-bold" %>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "example@email.com" %>
+            </div>
+
+            <div class="d-grid">
+              <%= f.submit "再設定メールを送信する", class: "btn btn-primary btn-lg" %>
+            </div>
+          <% end %>
+
+        </div>
+      </div>
+
+      <div class="text-center mt-3 small">
+        <%= render "devise/shared/links" %>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<% if post.present? %>
+  <%= form_with(model: post, id: "post-form",
+                url: posts_path(city_id: params[:city_id]),
+                data: {
+                  turbo_submitting: "false",
+                  controller: "post-form limiter",
+                  action: "turbo:submit-end->post-form#reset input->limiter#check",
+                  limiter_char_max_value: 300,
+                  limiter_line_max_value: 8
+                },
+                class: "post-form") do |f| %>
+
+    <div id="post_error_messages">
+      <%= render "shared/error_messages", object: post %>
+    </div>
+
+    <%= f.text_area :content,
+          class: "post-form__textarea",
+          placeholder: "いまのあなたは？",
+          rows: 5,
+          data: { limiter_target: "input" } %>
+    <div class="post-form__button-container">
+      <%= f.submit "つぶやく", class: "button", data: { limiter_target: "submit" } %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,18 @@
+<div class="layouts-wrapper">
+  <div class="side-nav-container" id="side-nav-container">
+    <%= render 'shared/side_nav' %>
+  </div>
+  <div class="main-wrapper">
+    <div class="main-container">
+      <main class="main" data-controller="<%= flash[:scroll_to_top] ? 'scroll-reset' : '' %>"
+            data-scroll-reset-timestamp-value="<%= Time.current.to_i %>">
+        <%= yield %>
+      </main>
+      <aside class="sub-container">
+        <%= render layout: 'shared/sidebar' do %>
+          <%= content_for?(:side_content) ? yield(:side_content) : nil %>
+        <% end %>
+      </aside>
+    </div>
+  </div>
+</div>

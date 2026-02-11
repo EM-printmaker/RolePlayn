@@ -1,0 +1,11 @@
+.state-sidebar-hidden {
+  .navbar-toggler-button {
+    display: none;
+  }
+}
+
+.state-sidebar-visible {
+  .navbar-toggler-button {
+    display: block;
+  }
+}

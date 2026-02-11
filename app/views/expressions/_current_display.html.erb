@@ -1,0 +1,7 @@
+<%= cdn_image_tag current_expression&.image, variant: :display, class: "current-character__image" %>
+<button type="button" class="btn btn-outline-secondary current-character__button d-none d-sm-block" data-action="click->modal#open">
+  表情を変更
+</button>
+<button type="button" class="btn btn-outline-secondary current-character__button d-sm-none" data-action="click->modal#open">
+  <%= system_icon(:repeat) %>
+</button>

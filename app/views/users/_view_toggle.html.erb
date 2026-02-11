@@ -1,0 +1,15 @@
+<%# locals: (current_tab: 'posts') %>
+
+<div class="btn-group btn-group-sm" role="group" aria-label="表示切り替え">
+  <%= link_to profile_path(city_id: params[:city_id]), 
+        class: "btn #{current_tab == 'posts' ? 'btn-secondary' : 'btn-outline-secondary'}",
+        data: { turbo_action: "replace" } do %>
+    <i class="bi bi-person-fill"></i> 投稿
+  <% end %>
+
+  <%= link_to favorited_posts_profile_path(city_id: params[:city_id]), 
+        class: "btn #{current_tab == 'favorites' ? 'btn-secondary' : 'btn-outline-secondary'}",
+        data: { turbo_action: "replace" } do %>
+    <i class="bi bi-heart-fill"></i> お気に入り
+  <% end %>
+</div>

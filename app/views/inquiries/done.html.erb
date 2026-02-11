@@ -1,0 +1,35 @@
+<% provide(:title, "送信完了") %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4 p-md-5 text-center">
+          <div class="mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success rounded-circle" style="width: 80px; height: 80px;">
+              <%= system_icon(:check, size: 80) %>
+            </div>
+          </div>
+
+          <h2 class="fw-bold mb-3">お問い合わせ完了</h2>
+          
+          <div class="text-muted mb-5">
+            <p class="mb-2">お問い合わせ内容は無事に送信されました。</p>
+            <p class="small">内容を確認させていただき、通常3営業日以内にご返信いたします。</p>
+            <hr class="my-4 mx-auto w-25">
+            <p class="small mb-0">
+              しばらく経っても自動返信メールが届かない場合は、迷惑メールフォルダをご確認いただくか、再度お問い合わせください。
+            </p>
+          </div>
+
+          <div class="d-grid">
+            <%= link_to "トップページへ戻る", root_path, class: "btn btn-primary btn-lg shadow-sm" %>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

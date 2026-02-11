@@ -1,0 +1,21 @@
+<div id="notification_banner_container" >
+  <% if user_signed_in? && current_user.unread_notification? %>
+    <div id="notification_banner">
+      <%= button_to read_notifications_path, 
+                    method: :post, 
+                    class: "notification-card" do %>
+        <div class="notification-card__body">
+          <div class="notification-card__icon">
+            <%= system_icon(:feather, size: 18) %>
+          </div>
+          <div class="notification-card__text">
+            あなたの言葉が、誰かの物語に編み込まれました。
+          </div>
+          <div class="notification-card__arrow">
+            <small>✕</small>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

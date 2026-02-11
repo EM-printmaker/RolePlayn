@@ -1,0 +1,19 @@
+.sub-container {
+  position: sticky;
+  top: 65px;
+  z-index: 1070;
+  flex-shrink: 0;
+  height: 100vh;
+  padding-top: 2em;
+  overflow: hidden;
+}
+
+.nav-list-group {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+}
+
+.nav-list-item{
+  padding-left: 1em;
+}

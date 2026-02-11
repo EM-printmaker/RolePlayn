@@ -1,0 +1,12 @@
+<div id="new-posts-alert" 
+  data-controller="post-alert"
+  data-post-alert-sender-id-value="<%= sender_session_token %>"
+  data-action="click->post-alert#reloadAndClear">
+  
+  <div class="new-post-alert-banner text-center p-3" 
+    style="background-color: #e3f2fd; cursor: pointer; border: 1px solid #bbdefb;">
+    <span style="color: #0d47a1; font-weight: bold;">
+      新しい投稿を表示（<span data-post-alert-target="count">1</span>）
+    </span>
+  </div>
+</div>

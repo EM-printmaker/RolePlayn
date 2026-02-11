@@ -28,3 +28,18 @@ Rails:
 
 Security:
   Enabled: true
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 10
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 8
+
+FactoryBot/ExcessiveCreateList:
+  MaxAmount: 15

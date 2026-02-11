@@ -1,23 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Role Playn" %></title>
+    <title><%= full_title(yield(:title)) %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-
-    <%= yield :head %>
-
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= render 'layouts/head' %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="<%= hide_sidebar? ? 'state-sidebar-hidden' : 'state-sidebar-visible' %>">
+    <%= render 'layouts/alert' %>
+    <div class="wrapper">
+      <%= render 'layouts/header' %>
+      <%= yield %>
+      <div id="remote_modal_wrapper"></div>
+    </div>  
   </body>
 </html>

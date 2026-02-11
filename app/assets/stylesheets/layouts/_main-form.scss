@@ -1,0 +1,21 @@
+@use "../global" as *;
+
+.post-form-container {
+  padding: 1em;
+  background-color: var(--main-white);
+  border: 1px solid var(--main-border-color);
+  border-radius: 16px;
+}
+
+.main-form {
+  width: auto;
+  height: fit-content;
+  min-height: 200px;
+  padding-bottom: 2em;
+  margin: 0 1em;
+  border-bottom: 1px solid var(--main-border-color);
+
+  @include media-breakpoint-down(sm) {
+    height: fit-content;
+  }
+}

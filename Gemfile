@@ -3,7 +3,9 @@ source "https://rubygems.org"
 gem "rails", "~> 7.2.3"
 gem "bootsnap", require: false
 gem "jbuilder"
+gem "dartsass-rails"
 gem "sprockets-rails"
+gem "bootstrap", "~> 5.3.0", require: false
 gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -14,17 +16,35 @@ gem "bcrypt", "~> 3.1.7"
 gem "active_storage_validations"
 gem "image_processing", "~> 1.2"
 gem "aws-sdk-s3", require: false
+gem "pagy", "~> 9.4"
+gem "rails-i18n"
+gem "devise"
+gem "devise-i18n"
+gem "resend"
+gem "avo", ">= 3.2"
+gem "avo-record_link_field"
+gem "ransack"
+gem "rack-attack"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
-  gem "brakeman", require: false
-  gem "rubocop-rails-omakase", require: false
   gem "rspec-rails", "~> 7.1", ">= 7.1.1"
   gem "factory_bot_rails"
-  gem "rubocop-rspec", require: false
-  gem "rubocop-factory_bot", require: false
+  gem "faker"
 end
 
 group :development do
   gem "web-console"
+  gem "rubocop-rails-omakase", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-factory_bot", require: false
+  gem "brakeman", require: false
+  gem "prism", "1.2.0"
+  gem "ruby-lsp", require: false
+  gem "letter_opener_web"
+end
+
+group :test do
+  gem "capybara"
+  gem "simplecov", require: false
 end

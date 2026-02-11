@@ -1,0 +1,84 @@
+class Post < ApplicationRecord
+  POST_INTERVAL = 3.seconds.freeze
+  MAX_LINE_BREAKS = 8.freeze
+
+  belongs_to :city
+  belongs_to :character
+  belongs_to :expression, -> { with_attached_images }, inverse_of: :posts
+  belongs_to :user, optional: true
+
+  has_many :post_favorites, dependent: :destroy
+
+  validates :content, presence: true, length: { maximum: 300 }
+  validates :sender_session_token, presence: true
+  validate :limit_line_breaks
+  validate :character_must_belong_to_city
+  validate :expression_must_belong_to_character
+  validate :post_interval_limit, on: :create
+
+  scope :from_local_worlds, ->       { joins(city: :world).merge(World.local) }
+  scope :from_world,        ->(w_id) { joins(city: :world).where(cities: { world_id: w_id }) }
+  scope :from_city,         ->(c_id) { joins(city: :world).where(city_id: c_id) }
+
+  scope :latest, -> { order(created_at: :desc) }
+  scope :sorted, ->(dir) {
+    direction = (dir.to_s.downcase == "asc") ? :asc : :desc
+    order(created_at: direction)
+  }
+
+  # 一覧表示に必要な関連（Character, City, World, 画像）を一括ロードするスコープ
+  scope :with_details, -> {
+    includes(:city, character: { city: { world: { observation_city_association: :world } } })
+    .preload(
+      expression: { image_attachment: { blob: { variant_records: { image_attachment: :blob } } } }
+    )
+  }
+
+  # after_create_commit :broadcast_new_post_notification
+
+  private
+
+    def broadcast_new_post_notification
+      broadcast_replace_to(
+        "posts_channel_city_#{city_id}",
+        target: "new-posts-alert",
+        partial: "shared/new_post_notification",
+        locals: { sender_session_token: sender_session_token }
+      )
+    end
+
+    def character_must_belong_to_city
+      return if city_id.blank? || character_id.blank?
+
+      unless character.city_id == city_id
+        errors.add(:character, :invalid_city_association)
+      end
+    end
+
+    def expression_must_belong_to_character
+      return if character_id.blank? || expression_id.blank?
+
+      unless expression.character_id == character_id
+        errors.add(:expression, :not_owned_by_character)
+      end
+    end
+
+    def post_interval_limit
+      return if sender_session_token.blank?
+
+      last_post = Post.where(sender_session_token: sender_session_token)
+                      .order(created_at: :desc)
+                      .first
+
+      if last_post && last_post.created_at > POST_INTERVAL.ago
+        wait_time = (POST_INTERVAL - (Time.current - last_post.created_at)).ceil
+        errors.add(:base, :too_soon, count: wait_time)
+      end
+    end
+
+    def limit_line_breaks
+      if content.present? && content.count("\n") > MAX_LINE_BREAKS
+        errors.add(:content, :line_break_limit)
+      end
+    end
+end

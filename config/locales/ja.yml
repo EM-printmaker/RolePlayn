@@ -1,0 +1,14 @@
+ja:
+  posts:
+    create:
+      failure: "投稿に失敗しました。"
+      city_not_found: "街が見つかりませんでした"
+  flash:
+    sessions:
+      welcome_and_setup_id: "ログインありがとうございます！まずはユーザーIDを設定しましょう。"
+  custom_errors:
+    messages:
+      account_suspended: "あなたのアカウントは凍結されました。強制的にログアウトします。"
+  avo:
+    alerts:
+      unauthorized: "権限がありません。"

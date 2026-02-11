@@ -1,0 +1,34 @@
+@use "../global" as *;
+
+.navbar-toggler-button {
+  background-color: transparent;
+  border: none;
+}
+
+.offcanvas__icon {
+  color: var(--main-text-color)
+}
+
+.side-nav {
+  &__logo {
+    display: none;
+    font-family: var(--font-cinzel);
+    font-size: 1.2em;
+    @include media-breakpoint-down(lg) {
+      display: block;
+    }
+  }
+}
+
+.nav-block {
+  width: 250px;
+  margin: 0 auto;
+
+  &__title {
+    font-family: var(--font-cinzel);
+  }
+
+  &__content {
+    background-color: var(--main-white);
+  }
+}

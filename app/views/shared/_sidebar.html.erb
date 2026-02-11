@@ -1,0 +1,63 @@
+<div class="offcanvas-xl offcanvas-end offcanvas--overlay" tabindex="-1" id="offcanvas-responsive-right">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title fw-bold text-muted small ps-2">SYSTEM MENU</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvas-responsive-right" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body offcanvas-body__right d-flex flex-column p-0">
+    <div class="mb-3">
+      <%= yield %>
+    </div>
+    <div class="mb-3">
+      <div class="nav-block">
+        <div class="nav-block__content p-3 rounded-3">
+          <% if user_signed_in? %>
+            <div class="mb-3">
+              <p class="text-muted small mb-1 font-cinzel">Signed in as</p>
+              <p class="fw-bold mb-0 text-truncate">
+                <%= current_user.login_id.presence || current_user.email %>
+              </p>
+            </div>
+            <div class="d-grid gap-2">
+              <%= link_to profile_path, class: "btn btn-sm btn-outline-secondary text-start" do %>
+                自分のページ
+              <% end %>
+              <% unless current_user.guest? %>
+                <%= link_to edit_user_registration_path, class: "btn btn-sm btn-outline-secondary text-start" do %>
+                  設定
+                <% end %>
+              <% end %>
+              <% if current_user.try(:can_access_admin?) %>
+                <%= link_to avo_path, class: "btn btn-sm btn-outline-dark text-start", data: { turbo: false } do %>
+                  管理パネル
+                <% end %>
+              <% end %>
+              <hr class="my-1 opacity-25">
+              <%= link_to destroy_user_session_path, 
+                  data: { turbo_method: :delete, turbo_confirm: "ログアウトしますか？" }, 
+                  class: "btn btn-sm btn-link text-danger text-decoration-none p-0 text-start ps-1" do %>
+                  ログアウト
+              <% end %>
+            </div>
+          <% else %>
+            <p class="small text-muted mb-3">ログインしてRolePlaynへ</p>
+            <div class="d-grid gap-2">
+              <%= link_to "ログイン", new_user_session_path, class: "btn btn-outline-secondary btn-sm" %>
+              <%= button_to users_guest_sign_in_path, method: :post, class: "btn btn-outline-secondary btn-sm w-100" do %>
+                ゲストログイン（一般）
+              <% end %>
+              <%= button_to users_guest_moderator_sign_in_path, method: :post, class: "btn btn-outline-secondary btn-sm w-100" do %>
+                ゲストログイン（管理者機能）
+              <% end %>
+              <%= link_to "新規登録", new_user_registration_path, class: "btn btn-secondary btn-sm" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="nav-list-group border-top mt-2 py-2">
+      <%= link_to "お問い合わせ", new_inquiry_path, class: "nav-list-item" %>
+      <%= link_to "利用規約", terms_path, class: "nav-list-item" %>
+      <%= link_to "プライバシーポリシー", privacy_path, class: "nav-list-item" %>
+    </div>
+  </div>
+</div>

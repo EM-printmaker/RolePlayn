@@ -1,0 +1,29 @@
+@use "../global" as *;
+
+.current-character {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+  justify-content: center;
+  @include media-breakpoint-down(sm) {
+    position: relative;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 1em;
+  }
+
+  &__image {
+    width: 150px;
+    height: 150px;
+  }
+
+  &__button {
+    width: 150px;
+    @include media-breakpoint-down(sm) {
+      position: absolute;
+      right: 0;
+      width: 50px;
+    }
+  }
+}

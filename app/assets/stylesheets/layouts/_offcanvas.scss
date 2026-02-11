@@ -1,0 +1,33 @@
+#offcanvas-responsive {
+  background-color: var(--main-color);
+
+  --bs-offcanvas-width: 300px;
+}
+
+#offcanvas-responsive-right{
+  background-color: var(--main-color);
+
+  --bs-offcanvas-width:300px;
+}
+
+.offcanvas-header {
+  background-color: var(--main-color);
+}
+
+.offcanvas-body {
+  display: flex;
+
+  &__left {
+    justify-content: flex-end;
+  }
+
+  &__right {
+    flex-direction: column;
+    justify-content: flex-start;
+    min-width: 250px;
+  }
+}
+
+.offcanvas-backdrop {
+  z-index: 1030;
+}

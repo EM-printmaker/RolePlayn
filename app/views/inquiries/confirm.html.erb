@@ -1,0 +1,47 @@
+<% provide(:title, "確認画面") %>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+      <h2 class="text-center mb-4 fw-bold">内容の確認</h2>
+      <p class="text-center text-muted mb-4">以下の内容で送信してもよろしいですか？</p>
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <%= form_with model: @inquiry, url: inquiries_path, local: true, data: { turbo: false } do |f| %>
+            <%= f.hidden_field :category %>
+            <%= f.hidden_field :name %>
+            <%= f.hidden_field :email %>
+            <%= f.hidden_field :message %>
+            <div class="mb-4">
+              <label class="text-muted small fw-bold">お問い合わせの種類</label>
+              <div class="fs-5 border-bottom pb-2">
+                <%= I18n.t("enums.inquiry.category.#{@inquiry.category}", default: @inquiry.category) %>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="text-muted small fw-bold">お名前</label>
+              <div class="fs-5 border-bottom pb-2">
+                <%= @inquiry.name %>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="text-muted small fw-bold">メールアドレス</label>
+              <div class="fs-5 border-bottom pb-2">
+                <%= @inquiry.email %>
+              </div>
+            </div>
+            <div class="mb-5">
+              <label class="text-muted small fw-bold">お問い合わせ内容</label>
+              <div class="bg-light p-3 rounded mt-1 text-break">
+                <%= simple_format(@inquiry.message, {}, sanitize: false) %>
+              </div>
+            </div>
+            <div class="d-grid gap-3">
+              <%= f.submit "送信する", class: "btn btn-primary btn-lg shadow-sm" %>
+              <%= f.submit "入力画面に戻る", name: "back", class: "btn btn-outline-secondary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="row post-section" data-controller="modal">
+  <div id="current_expression" class="current-character col-sm-4">
+    <% if current_character && current_expression %>
+      <%= render 'expressions/current_display' %>
+    <% end %>
+  </div>
+  <div class="col-sm-8 post-form-container">
+    <%= render 'posts/form', post: post %>
+  </div>
+
+  <dialog data-modal-target="dialog" id="expression-modal" data-action="click->modal#clickOutside" class="expression-modal">
+    <div id="expression-modal-content">
+      <%= render 'expressions/modal_inner', city: city %>
+    </div>
+  </dialog>
+</div>
