@@ -39,7 +39,7 @@ group :development do
   gem "rubocop-rspec", require: false
   gem "rubocop-factory_bot", require: false
   gem "brakeman", require: false
-  gem "prism", "1.2.0"
+  gem "prism", "1.9.0"
   gem "ruby-lsp", require: false
   gem "letter_opener_web"
 end
