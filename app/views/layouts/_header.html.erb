@@ -9,7 +9,9 @@
           <%= nav_icon(:hamburger) %>
         </button>
       <% end %>
-      <%= link_to "RolePlayn", root_path, class: "header-logo #{hide_sidebar? ? 'header-logo--appear' : 'header-logo--hide'}" %>
+      <%= link_to root_path, class: "header-logo #{hide_sidebar? ? 'header-logo--appear' : 'header-logo--hide'}" do %>
+        <%= image_tag "roleplayn_logo" %>
+      <% end %>
     </div>
 
     <div class="col-md-6 world-select text-center">
