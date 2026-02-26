@@ -16,7 +16,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "active_storage_validations"
 gem "image_processing", "~> 1.2"
 gem "aws-sdk-s3", require: false
-gem "pagy", "~> 9.4"
+gem "pagy", "~> 43.3"
 gem "rails-i18n"
 gem "devise"
 gem "devise-i18n"
