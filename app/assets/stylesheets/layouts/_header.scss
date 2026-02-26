@@ -17,27 +17,6 @@ $header-height: 60px;
 
 }
 
-.header-logo {
-  font-family: var(--font-cinzel);
-  font-size: 2em;
-
-  @include media-breakpoint-down(lg) {
-    font-size: 1.2em;
-  }
-
-  &--appear {
-    @include media-breakpoint-down(md) {
-      display: block;
-    }
-  }
-
-  &--hide {
-    @include media-breakpoint-down(md) {
-      display: none;
-    }
-  }
-}
-
 .world-select {
   text-align: center;
 }
@@ -47,10 +26,10 @@ $header-height: 60px;
 }
 
 .navbar-toggler-container {
-  width: 177px;
+  width: 150px;
   text-align: right;
   @include media-breakpoint-down(xl) {
-    width: 138px;
+    width: 142px;
   }
   @include media-breakpoint-down(md) {
     width: 20px;

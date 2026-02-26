@@ -9,17 +9,6 @@
   color: var(--main-text-color)
 }
 
-.side-nav {
-  &__logo {
-    display: none;
-    font-family: var(--font-cinzel);
-    font-size: 1.2em;
-    @include media-breakpoint-down(lg) {
-      display: block;
-    }
-  }
-}
-
 .nav-block {
   width: 250px;
   margin: 0 auto;

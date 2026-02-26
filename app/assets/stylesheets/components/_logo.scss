@@ -1,0 +1,38 @@
+@use "../global" as *;
+
+.header-logo {
+  width: 150px;
+  margin-top: 5px;
+  font-family: var(--font-cinzel);
+  font-size: 2em;
+  filter: blur(0.3px);
+
+  @include media-breakpoint-down(lg) {
+    width: 110px;
+    margin-top: 7px;
+    font-size: 1.2em;
+  }
+
+  &--appear {
+    @include media-breakpoint-down(md) {
+      display: block;
+    }
+  }
+
+  &--hide {
+    @include media-breakpoint-down(md) {
+      display: none;
+    }
+  }
+}
+
+.side-nav__logo {
+  display: none;
+  width: 110px;
+  margin-top: 7px;
+  font-family: var(--font-cinzel);
+  font-size: 1.2em;
+  @include media-breakpoint-down(lg) {
+    display: block;
+  }
+}
