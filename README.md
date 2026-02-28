@@ -15,6 +15,13 @@
 **[https://roleplayn.com](https://roleplayn.com)**
 ※ ゲストユーザー・ゲストモデレーターとして、登録なしですぐにログイン可能です。
 
+## 画面イメージ
+
+<div align="center">
+  <img src="images/roleplayn_screenshot.png" width="70%">
+  <img src="images/roleplayn_screenshot_small.png" width="22%">
+</div>
+
 ## 開発背景
 
 > スマートフォンのメモ帳に物語のセリフを一節書き留めることで、気持ちが落ち着く瞬間があります。「SNSに今の思いを吐き出したいけれど、固定された名前やIDに縛られない匿名の場所が欲しい」。そんな願いを形にするために辿り着いたのが、日常の延長で気軽に「演じる」ことができるロールプレイ型SNSでした。
