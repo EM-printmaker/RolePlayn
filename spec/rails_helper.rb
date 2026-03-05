@@ -85,6 +85,10 @@ RSpec.configure do |config|
 
   config.include Devise::Test::IntegrationHelpers, type: :request
 
+  config.before(:each, type: :system) do
+    driven_by(:rack_test)
+  end
+
   config.define_derived_metadata do |meta|
     meta[:aggregate_failures] = true unless meta.key?(:aggregate_failures)
   end
