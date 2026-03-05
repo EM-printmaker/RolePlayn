@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "Operations::Expressions", type: :system do
-  before do
-    driven_by(:rack_test)
-  end
-
-  pending "add some scenarios (or delete) #{__FILE__}"
+  it "表情を選択すると画面の表情が更新される"
+  it "ログインユーザーが表情を選択するとDBに保存される"
 end

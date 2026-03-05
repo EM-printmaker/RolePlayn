@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Posts", type: :system do
-  before do
-    driven_by(:rack_test)
-  end
+  it "投稿一覧が表示される"
+  it "投稿を作成できる"
 
-  pending "add some scenarios (or delete) #{__FILE__}"
+  context "ログインユーザーの場合" do
+    it "投稿を削除できる"
+  end
 end
