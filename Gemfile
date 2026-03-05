@@ -46,5 +46,6 @@ end
 
 group :test do
   gem "capybara"
+  gem "cuprite"
   gem "simplecov", require: false
 end
