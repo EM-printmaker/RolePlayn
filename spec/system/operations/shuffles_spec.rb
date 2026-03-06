@@ -10,7 +10,7 @@ RSpec.describe "Operations::Shuffles", type: :system do
     create(:character, :with_expressions, city: other_city)
   end
 
-  it "シャッフルすると別の街が表示される" do
+  it "シャッフルすると別の街が表示されること" do
     visit city_path(current_city)
     click_button "他の街へ移動"
     expect(page).to have_css(".city-select-button", text: other_city.name)
