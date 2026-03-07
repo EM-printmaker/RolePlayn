@@ -81,6 +81,8 @@ RSpec.configure do |config|
 
   config.include ActiveSupport::Testing::TimeHelpers
 
+  config.include ActionView::RecordIdentifier, type: :system
+
   config.include Capybara::RSpecMatchers, type: :request
 
   config.include Devise::Test::IntegrationHelpers, type: :request
