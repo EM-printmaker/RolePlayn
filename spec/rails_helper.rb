@@ -16,6 +16,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 # that will avoid rails generators crashing because migrations haven't been run yet
 # return unless Rails.env.test?
 require 'rspec/rails'
+require 'capybara/rspec'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -76,13 +77,22 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  config.include UsersHelper, type: :system
+
   config.include FactoryBot::Syntax::Methods
 
   config.include ActiveSupport::Testing::TimeHelpers
 
+  config.include ActionView::RecordIdentifier, type: :system
+
   config.include Capybara::RSpecMatchers, type: :request
 
   config.include Devise::Test::IntegrationHelpers, type: :request
+  config.include Devise::Test::IntegrationHelpers, type: :system
+
+  config.before(:each, type: :system) do
+    driven_by(:rack_test)
+  end
 
   config.define_derived_metadata do |meta|
     meta[:aggregate_failures] = true unless meta.key?(:aggregate_failures)
