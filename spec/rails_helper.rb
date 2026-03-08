@@ -77,6 +77,8 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  config.include UsersHelper, type: :system
+
   config.include FactoryBot::Syntax::Methods
 
   config.include ActiveSupport::Testing::TimeHelpers
