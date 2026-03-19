@@ -12,7 +12,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "importmap-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
-gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.22"
 gem "active_storage_validations"
 gem "image_processing", "~> 1.2"
 gem "aws-sdk-s3", require: false
