@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 7.2.3"
+gem "rails", "~> 8.1.2"
 gem "bootsnap", require: false
 gem "jbuilder"
 gem "dartsass-rails"
